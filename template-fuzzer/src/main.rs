@@ -7,7 +7,7 @@ use frame_support::{
     traits::{IntegrityTest, TryState, TryStateSelect},
     weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 };
-use parachain_template_runtime::{
+use educhain_runtime::{
     AllPalletsWithSystem, Balance, Balances, BlockNumber, Executive, Runtime, RuntimeCall,
     RuntimeOrigin, SudoConfig, UncheckedExtrinsic, SLOT_DURATION,
 };
@@ -25,7 +25,7 @@ fn main() {
     let endowed_accounts: Vec<AccountId> = (0..5).map(|i| [i; 32].into()).collect();
 
     let genesis_storage: Storage = {
-        use parachain_template_runtime::{
+        use educhain_runtime::{
             BalancesConfig, CollatorSelectionConfig, RuntimeGenesisConfig, SessionConfig,
             SessionKeys,
         };

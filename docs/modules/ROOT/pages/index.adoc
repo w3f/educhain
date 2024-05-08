@@ -33,7 +33,7 @@ cargo build --release
 ** Generate a plain chainspec with this command:
 +
 ```bash
-./target/release/parachain-template-node build-spec --disable-default-nodes > plain-parachain-chainspec.json
+./target/release/educhain-node build-spec --disable-default-nodes > plain-parachain-chainspec.json
 ```
 
 ** Edit the chainspec:
@@ -45,13 +45,13 @@ cargo build --release
 ** Generate a raw chainspec with this command:
 +
 ```bash
-./target/release/parachain-template-node build-spec --chain plain-parachain-chainspec.json --disable-default-bootnode --raw > raw-parachain-chainspec.json
+./target/release/educhain-node build-spec --chain plain-parachain-chainspec.json --disable-default-bootnode --raw > raw-parachain-chainspec.json
 ```
 
 * Run two nodes and wait till it syncs with the Rococo relay chain (it may take up to two days to sync it):
 +
 ```bash
-./target/release/parachain-template-node \
+./target/release/educhain-node \
     --alice \
     --collator \
     --force-authoring \
@@ -67,7 +67,7 @@ cargo build --release
 ```
 +
 ```bash
-./target/release/parachain-template-node \
+./target/release/educhain-node \
     --bob \
     --collator \
     --force-authoring \
@@ -87,12 +87,12 @@ cargo build --release
 ** Generate a genesis state:
 +
 ```bash
-./target/release/parachain-template-node export-genesis-state --chain raw-parachain-chainspec.json para-<paraId>-genesis-state
+./target/release/educhain-node export-genesis-state --chain raw-parachain-chainspec.json para-<paraId>-genesis-state
 ```
 ** Generate a genesis wasm:
 +
 ```bash
-./target/release/parachain-template-node export-genesis-wasm --chain raw-parachain-chainspec.json para-<paraId>-wasm
+./target/release/educhain-node export-genesis-wasm --chain raw-parachain-chainspec.json para-<paraId>-wasm
 ```
 ** Go to link:https://polkadot.js.org/apps[PolkadotJS]. Check that it points to Rococo testnet.
 ** Go to `Network` > `Parachains`.

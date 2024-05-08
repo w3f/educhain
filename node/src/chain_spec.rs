@@ -1,5 +1,5 @@
 use cumulus_primitives_core::ParaId;
-use parachain_template_runtime::{
+use educhain_runtime::{
     constants::currency::EXISTENTIAL_DEPOSIT, AccountId, AuraId, Signature,
 };
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
@@ -10,7 +10,7 @@ use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type ChainSpec =
-    sc_service::GenericChainSpec<parachain_template_runtime::RuntimeGenesisConfig, Extensions>;
+    sc_service::GenericChainSpec<educhain_runtime::RuntimeGenesisConfig, Extensions>;
 
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
@@ -61,8 +61,8 @@ where
 ///
 /// The input must be a tuple of individual keys (a single arg for now since we
 /// have just one key).
-pub fn template_session_keys(keys: AuraId) -> parachain_template_runtime::SessionKeys {
-    parachain_template_runtime::SessionKeys { aura: keys }
+pub fn template_session_keys(keys: AuraId) -> educhain_runtime::SessionKeys {
+    educhain_runtime::SessionKeys { aura: keys }
 }
 
 pub fn development_config() -> ChainSpec {
@@ -73,7 +73,7 @@ pub fn development_config() -> ChainSpec {
     properties.insert("ss58Format".into(), 42.into());
 
     ChainSpec::builder(
-        parachain_template_runtime::WASM_BINARY
+        educhain_runtime::WASM_BINARY
             .expect("WASM binary was not built, please build it!"),
         Extensions {
             relay_chain: "rococo-local".into(),
@@ -125,7 +125,7 @@ pub fn local_testnet_config() -> ChainSpec {
 
     #[allow(deprecated)]
     ChainSpec::builder(
-        parachain_template_runtime::WASM_BINARY
+        educhain_runtime::WASM_BINARY
             .expect("WASM binary was not built, please build it!"),
         Extensions {
             relay_chain: "rococo-local".into(),
