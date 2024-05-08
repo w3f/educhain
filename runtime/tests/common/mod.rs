@@ -1,6 +1,6 @@
 // ExtBuilder impl for all runtime integration tests
-use frame_support::weights::Weight;
 use educhain_runtime::{BuildStorage, Runtime, System};
+use frame_support::weights::Weight;
 
 pub fn run_with_system_weight<F: FnMut()>(w: Weight, mut assertions: F) {
     let mut t: sp_io::TestExternalities =

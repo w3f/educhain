@@ -1,7 +1,5 @@
 use cumulus_primitives_core::ParaId;
-use educhain_runtime::{
-    constants::currency::EXISTENTIAL_DEPOSIT, AccountId, AuraId, Signature,
-};
+use educhain_runtime::{constants::currency::EXISTENTIAL_DEPOSIT, AccountId, AuraId, Signature};
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use serde::{Deserialize, Serialize};
@@ -73,8 +71,7 @@ pub fn development_config() -> ChainSpec {
     properties.insert("ss58Format".into(), 42.into());
 
     ChainSpec::builder(
-        educhain_runtime::WASM_BINARY
-            .expect("WASM binary was not built, please build it!"),
+        educhain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
         Extensions {
             relay_chain: "rococo-local".into(),
             // You MUST set this to the correct network!
@@ -125,8 +122,7 @@ pub fn local_testnet_config() -> ChainSpec {
 
     #[allow(deprecated)]
     ChainSpec::builder(
-        educhain_runtime::WASM_BINARY
-            .expect("WASM binary was not built, please build it!"),
+        educhain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
         Extensions {
             relay_chain: "rococo-local".into(),
             // You MUST set this to the correct network!

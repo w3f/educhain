@@ -19,8 +19,8 @@ mod constant_tests {
 }
 
 mod runtime_tests {
-    use frame_support::{pallet_prelude::Weight, traits::TypedGet, PalletId};
     use educhain_runtime::{constants::currency::*, *};
+    use frame_support::{pallet_prelude::Weight, traits::TypedGet, PalletId};
     use xcm::latest::prelude::BodyId;
 
     #[test]
@@ -198,8 +198,8 @@ mod runtime_tests {
 }
 
 mod xcm_tests {
-    use frame_support::weights::Weight;
     use educhain_runtime::xcm_config::*;
+    use frame_support::weights::Weight;
 
     #[test]
     fn xcm_executor_constants() {
@@ -212,6 +212,9 @@ mod xcm_tests {
     fn pallet_xcm_constants() {
         assert_eq!(MaxLockers::get(), 8);
         assert_eq!(MaxRemoteLockConsumers::get(), 0);
-        assert_eq!(<educhain_runtime::Runtime as pallet_xcm::Config>::VERSION_DISCOVERY_QUEUE_SIZE, 100);
+        assert_eq!(
+            <educhain_runtime::Runtime as pallet_xcm::Config>::VERSION_DISCOVERY_QUEUE_SIZE,
+            100
+        );
     }
 }
