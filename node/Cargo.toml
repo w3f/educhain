@@ -78,9 +78,9 @@ default = []
 async-backing = []
 experimental = []
 runtime-benchmarks = [
+	"educhain-runtime/runtime-benchmarks",
 	"frame-benchmarking-cli/runtime-benchmarks",
 	"frame-benchmarking/runtime-benchmarks",
-	"educhain-runtime/runtime-benchmarks",
 	"polkadot-cli/runtime-benchmarks",
 	"polkadot-primitives/runtime-benchmarks",
 	"sc-service/runtime-benchmarks",

@@ -41,18 +41,18 @@ cumulus-test-relay-sproof-builder = { workspace = true }
 [features]
 default = [ "std", "try-runtime" ]
 std = [
+	"educhain-runtime/std",
 	"frame-support/std",
 	"pallet-timestamp/std",
-	"educhain-runtime/std",
 	"parity-scale-codec/std",
 	"sp-consensus-aura/std",
 	"sp-runtime/std",
 ]
 try-runtime = [
+	"educhain-runtime/try-runtime",
 	"frame-support/try-runtime",
 	"frame-system/try-runtime",
 	"pallet-timestamp/try-runtime",
-	"educhain-runtime/try-runtime",
 	"sp-runtime/try-runtime",
 ]
 
