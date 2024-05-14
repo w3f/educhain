@@ -3,7 +3,7 @@ use educhain_runtime::{constants::currency::EXISTENTIAL_DEPOSIT, AccountId, Aura
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use serde::{Deserialize, Serialize};
-use sp_core::{sr25519, Pair, Public};
+use sp_core::{bytes::from_hex, sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
@@ -12,6 +12,10 @@ pub type ChainSpec =
 
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
+
+const ROCOCO_PARA_ID: u32 = 4424;
+
+pub const ROOT_ACCOUNT: &'static str = "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -55,12 +59,64 @@ where
     AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
+
+pub fn pub_to_account_id(pubkey: &str) -> AccountId {
+	let pubkey = sr25519::Public::from_raw(
+		from_hex(pubkey)
+			.expect("Unable to parse hex")
+			.try_into()
+			.expect("Unable to parse public key"),
+	);
+	//dbg!(pubkey.clone().into_account().to_string());
+	pubkey.into_account().into()
+}
+
 /// Generate the session keys from individual elements.
 ///
 /// The input must be a tuple of individual keys (a single arg for now since we
 /// have just one key).
 pub fn template_session_keys(keys: AuraId) -> educhain_runtime::SessionKeys {
     educhain_runtime::SessionKeys { aura: keys }
+}
+
+pub fn live_config() -> ChainSpec {
+    // Give your base currency a unit name and decimal places
+    let mut properties = sc_chain_spec::Properties::new();
+    properties.insert("tokenSymbol".into(), "EDU".into());
+    properties.insert("tokenDecimals".into(), 12.into());
+    properties.insert("ss58Format".into(), 42.into());
+
+    #[allow(deprecated)]
+    ChainSpec::builder(
+        educhain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+        Extensions {
+            relay_chain: "rococo".into(),
+            // You MUST set this to the correct network!
+            para_id: ROCOCO_PARA_ID,
+        },
+    )
+    .with_name("Educhain Rococo")
+    .with_id("live")
+    .with_chain_type(ChainType::Live)
+    .with_genesis_config_patch(testnet_genesis(
+        // initial collators.
+        vec![
+            (
+                get_account_id_from_seed::<sr25519::Public>("Alice"),
+                get_collator_keys_from_seed("Alice"),
+            ),
+        ],
+        vec![
+            get_account_id_from_seed::<sr25519::Public>("Alice"),
+            pub_to_account_id(ROOT_ACCOUNT),
+
+        ],
+        pub_to_account_id(ROOT_ACCOUNT),
+        ROCOCO_PARA_ID.into(),
+    ))
+    .with_protocol_id("educhain-live")
+    .with_properties(properties)
+    .build()
 }
 
 pub fn development_config() -> ChainSpec {

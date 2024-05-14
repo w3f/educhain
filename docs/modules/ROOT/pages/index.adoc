@@ -1,16 +1,18 @@
 :source-highlighter: highlight.js
 :highlightjs-languages: bash
 
-= Substrate Parachain Runtimes
+= Educhain
 
-A collection of runtimes that describe parachains with different purposes.
+A collection of runtimes that describe parachains for educational purposes.
 
-== Quick start
+== How Educhain is built
 
 * Begin by visiting our link:https://github.com/OpenZeppelin/polkadot-runtime-template[repository]. You can fork it, use it as a template, or simply clone it to your local directory.
 ```bash
 git clone git@github.com:OpenZeppelin/polkadot-runtime-template.git
 ```
+
+* Replace parachain template text instances with educhain through this link:https://github.com/w3f/educhain/commit/1c8b7d5e4ed3407e64b74b8f8ba57cb2c0e37bff[commit]
 
 * Build a release version of the runtime and node:
 ```bash
@@ -30,10 +32,10 @@ cargo build --release
 
 * Generate and customize a chainspec:
 
-** Generate a plain chainspec with this command:
+** Generate a plain chainspec with this command (live chain spec was defined):
 +
 ```bash
-./target/release/educhain-node build-spec --disable-default-nodes > plain-parachain-chainspec.json
+./target/release/educhain-node build-spec --chain live --disable-default-bootnode > plain-parachain-chainspec.json
 ```
 
 ** Edit the chainspec:
@@ -48,7 +50,7 @@ cargo build --release
 ./target/release/educhain-node build-spec --chain plain-parachain-chainspec.json --disable-default-bootnode --raw > raw-parachain-chainspec.json
 ```
 
-* Run two nodes and wait till it syncs with the Rococo relay chain (it may take up to two days to sync it):
+* Run a collator node and wait till it syncs with the Rococo relay chain (it may take up to two days to sync it):
 +
 ```bash
 ./target/release/educhain-node \
