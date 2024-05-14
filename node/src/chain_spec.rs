@@ -15,7 +15,7 @@ const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
 
 const ROCOCO_PARA_ID: u32 = 4424;
 
-pub const ROOT_ACCOUNT: &'static str =
+pub const ROOT_ACCOUNT: &str_ =
     "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
 
 /// Helper function to generate a crypto pair from seed
