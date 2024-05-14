@@ -13,10 +13,11 @@ pub type ChainSpec =
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
 
-const ROCOCO_PARA_ID: u32 = 4424;
+const ROCOCO_PARA_ID: u32 = 4425;
 
-pub const ROOT_ACCOUNT: &str_ =
+pub const ROOT_ACCOUNT: &str =
     "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
+pub const COLLATOR: &str = "0x38a2edbf7cd629e10700376f941122bf6c6a7b705bb70d6eb15359099055015b";
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -71,6 +72,19 @@ pub fn pub_to_account_id(pubkey: &str) -> AccountId {
     pubkey.into_account().into()
 }
 
+pub fn pub_to_collator_key(pubkey: &str) -> AuraId {
+    let pubkey = sr25519::Public::from_raw(
+        from_hex(pubkey)
+            .expect("Unable to parse hex")
+            .try_into()
+            .expect("Unable to parse public key"),
+    );
+
+    //dbg!(pubkey);
+
+    AuraId::from(pubkey)
+}
+
 /// Generate the session keys from individual elements.
 ///
 /// The input must be a tuple of individual keys (a single arg for now since we
@@ -100,11 +114,8 @@ pub fn live_config() -> ChainSpec {
     .with_chain_type(ChainType::Live)
     .with_genesis_config_patch(testnet_genesis(
         // initial collators.
-        vec![(
-            get_account_id_from_seed::<sr25519::Public>("Alice"),
-            get_collator_keys_from_seed("Alice"),
-        )],
-        vec![get_account_id_from_seed::<sr25519::Public>("Alice"), pub_to_account_id(ROOT_ACCOUNT)],
+        vec![(pub_to_account_id(COLLATOR), pub_to_collator_key(COLLATOR))],
+        vec![pub_to_account_id(COLLATOR), pub_to_account_id(ROOT_ACCOUNT)],
         pub_to_account_id(ROOT_ACCOUNT),
         ROCOCO_PARA_ID.into(),
     ))

@@ -11,7 +11,7 @@
     "tokenSymbol": "EDU"
   },
   "relay_chain": "rococo",
-  "para_id": 4424,
+  "para_id": 4425,
   "codeSubstitutes": {},
   "genesis": {
     "runtimeGenesis": {
@@ -20,7 +20,7 @@
         "balances": {
           "balances": [
             [
-              "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+              "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
               1152921504606846976
             ],
             [
@@ -32,11 +32,11 @@
         "collatorSelection": {
           "candidacyBond": 16000000000,
           "invulnerables": [
-            "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+            "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg"
           ]
         },
         "parachainInfo": {
-          "parachainId": 4424
+          "parachainId": 4425
         },
         "polkadotXcm": {
           "safeXcmVersion": 4
@@ -44,10 +44,10 @@
         "session": {
           "keys": [
             [
-              "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-              "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+              "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+              "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
               {
-                "aura": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+                "aura": "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg"
               }
             ]
           ]
