@@ -54,34 +54,19 @@ cargo build --release
 +
 ```bash
 ./target/release/educhain-node \
+    --sync fast-unsafe \
     --alice \
     --collator \
     --force-authoring \
     --chain raw-parachain-chainspec.json \
-    --base-path <path to datadir> \
+    --base-path /tmp/parachain/alice-collator \
     --port 40333 \
     --rpc-port 8844 \
     -- \
     --execution wasm \
-    --chain <path to the Rococo chainspec> \
+    --chain rococo.json \
     --port 30343 \
-    --rpc-port 9977
-```
-+
-```bash
-./target/release/educhain-node \
-    --bob \
-    --collator \
-    --force-authoring \
-    --chain raw-parachain-chainspec.json \
-    --base-path <path to datadir> \
-    --port 40333 \
-    --rpc-port 8845 \
-    -- \
-    --execution wasm \
-    --chain <path to the Rococo chainspec> \
-    --port 30343 \
-    --rpc-port 9977
+    --rpc-port 9977 \
 ```
 
 * Register a parathread:
