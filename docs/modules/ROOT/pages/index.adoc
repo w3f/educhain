@@ -53,20 +53,7 @@ cargo build --release
 * Run a collator node and wait till it syncs with the Rococo relay chain (it may take up to two days to sync it):
 +
 ```bash
-./target/release/educhain-node \
-    --sync fast-unsafe \
-    --alice \
-    --collator \
-    --force-authoring \
-    --chain raw-parachain-chainspec.json \
-    --base-path /tmp/parachain/alice-collator \
-    --port 40333 \
-    --rpc-port 8844 \
-    -- \
-    --execution wasm \
-    --chain rococo.json \
-    --port 30343 \
-    --rpc-port 9977 \
+./target/release/educhain-node -- --chain rococo.json --base-path /tmp/parachain/alice-collator  --sync fast-unsafe
 ```
 
 * Register a parathread:
