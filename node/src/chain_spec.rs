@@ -15,9 +15,19 @@ const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
 
 const ROCOCO_PARA_ID: u32 = 4425;
 
-pub const ROOT_ACCOUNT: &str =
-    "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
-pub const COLLATOR: &str = "0x38a2edbf7cd629e10700376f941122bf6c6a7b705bb70d6eb15359099055015b";
+// Sudo priviliges
+pub const ROOT_ACCOUNT: &str = "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
+
+// Collator accounts that produce blocks and earn rewards. Typically, private key is in cold storage
+
+pub const COLLATOR1: &str = "0x38a2edbf7cd629e10700376f941122bf6c6a7b705bb70d6eb15359099055015b";
+pub const COLLATOR2: &str = "0x3090de03bda721f91d4ea242c63c4220832194e63d2c5b61dbcbdd458224350f";
+
+// The private key of these session keys needs to be inserted into the collator node for it to start
+// producing blocks.
+
+pub const SESSION1: &str = "0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d4307986ce0ddf0d8530";
+pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374";
 
 /// Helper function to generate a crypto pair from seed
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -114,8 +124,15 @@ pub fn live_config() -> ChainSpec {
     .with_chain_type(ChainType::Live)
     .with_genesis_config_patch(testnet_genesis(
         // initial collators.
-        vec![(pub_to_account_id(COLLATOR), pub_to_collator_key(COLLATOR))],
-        vec![pub_to_account_id(COLLATOR), pub_to_account_id(ROOT_ACCOUNT)],
+        vec![
+            (pub_to_account_id(COLLATOR1), pub_to_collator_key(SESSION1)),
+            (pub_to_account_id(COLLATOR2), pub_to_collator_key(SESSION2)),
+        ],
+        vec![
+            pub_to_account_id(COLLATOR1),
+            pub_to_account_id(COLLATOR2),
+            pub_to_account_id(ROOT_ACCOUNT),
+        ],
         pub_to_account_id(ROOT_ACCOUNT),
         ROCOCO_PARA_ID.into(),
     ))
