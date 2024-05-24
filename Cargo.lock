@@ -2920,7 +2920,7 @@ dependencies = [
 
 [[package]]
 name = "educhain-runtime"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "assets-common",
  "cumulus-pallet-aura-ext",
@@ -2946,6 +2946,7 @@ dependencies = [
  "pallet-balances",
  "pallet-collator-selection",
  "pallet-conviction-voting",
+ "pallet-identity",
  "pallet-message-queue",
  "pallet-multisig",
  "pallet-preimage",

@@ -80,6 +80,8 @@ use xcm_builder::PayOverXcm;
 #[cfg(not(feature = "runtime-benchmarks"))]
 use xcm_builder::ProcessXcmMessage;
 
+use pallet_identity::legacy::IdentityInfo;
+
 use crate::{
     constants::currency::{deposit, CENTS, EXISTENTIAL_DEPOSIT, MICROCENTS, MILLICENTS},
     weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight},
@@ -823,6 +825,40 @@ impl pallet_treasury::Config for Runtime {
     type WeightInfo = pallet_treasury::weights::SubstrateWeight<Runtime>;
 }
 
+parameter_types! {
+	// Minimum 4 CENTS/byte
+	pub const BasicDeposit: Balance = deposit(1, 258);
+	pub const ByteDeposit: Balance = deposit(0, 1);
+	pub const SubAccountDeposit: Balance = deposit(1, 53);
+	pub const MaxSubAccounts: u32 = 100;
+	pub const MaxAdditionalFields: u32 = 100;
+	pub const MaxRegistrars: u32 = 20;
+}
+
+impl pallet_identity::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type BasicDeposit = BasicDeposit;
+	type ByteDeposit = ByteDeposit;
+	type SubAccountDeposit = SubAccountDeposit;
+	type MaxSubAccounts = MaxSubAccounts;
+	type IdentityInformation = IdentityInfo<MaxAdditionalFields>;
+	type MaxRegistrars = MaxRegistrars;
+	type Slashed = Treasury;
+	type ForceOrigin = EnsureRoot<Self::AccountId>;
+	type RegistrarOrigin = EnsureRoot<Self::AccountId>;
+	type OffchainSignature = Signature;
+	type SigningPublicKey = <Signature as Verify>::Signer;
+	type UsernameAuthorityOrigin = EnsureRoot<Self::AccountId>;
+	type PendingUsernameExpiration = ConstU32<{ 7 * DAYS }>;
+	type MaxSuffixLength = ConstU32<7>;
+	type MaxUsernameLength = ConstU32<32>;
+	type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
+}
+
+
+
+
 // Create the runtime by composing the FRAME pallets that were previously
 // configured.
 construct_runtime!(
@@ -846,6 +882,7 @@ construct_runtime!(
         Treasury: pallet_treasury::{Pallet, Call, Storage, Config<T>, Event<T>} = 13,
 
         // Governance
+        Identity: pallet_identity = 14,
         Sudo: pallet_sudo = 15,
         ConvictionVoting: pallet_conviction_voting::{Pallet, Call, Storage, Event<T>} = 16,
         Referenda: pallet_referenda::{Pallet, Call, Storage, Event<T>} = 17,
