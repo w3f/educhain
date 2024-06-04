@@ -21,6 +21,7 @@ use crate::{
 fn load_spec(id: &str) -> std::result::Result<Box<dyn ChainSpec>, String> {
     Ok(match id {
         "live" => Box::new(chain_spec::live_config()),
+        "paseo-live" => Box::new(chain_spec::paseo_live_config()),
         "dev" => Box::new(chain_spec::development_config()),
         "template-rococo" => Box::new(chain_spec::local_testnet_config()),
         "" | "local" => Box::new(chain_spec::local_testnet_config()),

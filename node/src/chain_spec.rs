@@ -15,6 +15,8 @@ const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
 
 const ROCOCO_PARA_ID: u32 = 4428;
 
+const PASEO_PARA_ID: u32 = 4012;
+
 // Sudo priviliges
 pub const ROOT_ACCOUNT: &str = "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
 
@@ -140,6 +142,45 @@ pub fn live_config() -> ChainSpec {
     .with_properties(properties)
     .build()
 }
+
+pub fn paseo_live_config() -> ChainSpec {
+    // Give your base currency a unit name and decimal places
+    let mut properties = sc_chain_spec::Properties::new();
+    properties.insert("tokenSymbol".into(), "EDU".into());
+    properties.insert("tokenDecimals".into(), 12.into());
+    properties.insert("ss58Format".into(), 42.into());
+
+    #[allow(deprecated)]
+    ChainSpec::builder(
+        educhain_runtime::WASM_BINARY.expect("WASM binary was not built, please build it!"),
+        Extensions {
+            relay_chain: "paseo".into(),
+            // You MUST set this to the correct network!
+            para_id: PASEO_PARA_ID,
+        },
+    )
+    .with_name("Educhain Paseo")
+    .with_id("live")
+    .with_chain_type(ChainType::Live)
+    .with_genesis_config_patch(testnet_genesis(
+        // initial collators.
+        vec![
+            (pub_to_account_id(COLLATOR1), pub_to_collator_key(SESSION1)),
+            (pub_to_account_id(COLLATOR2), pub_to_collator_key(SESSION2)),
+        ],
+        vec![
+            pub_to_account_id(COLLATOR1),
+            pub_to_account_id(COLLATOR2),
+            pub_to_account_id(ROOT_ACCOUNT),
+        ],
+        pub_to_account_id(ROOT_ACCOUNT),
+        ROCOCO_PARA_ID.into(),
+    ))
+    .with_protocol_id("educhain-live")
+    .with_properties(properties)
+    .build()
+}
+
 
 pub fn development_config() -> ChainSpec {
     // Give your base currency a unit name and decimal places
