@@ -1,4 +1,5 @@
 /target/
+/site/
 /.idea
 .DS_Store
 .thumbs.db
