@@ -1,3 +1,5 @@
 site_name: Web3 Educhain
 theme:
   name: readthedocs
+extra_css:
+  - css/custom.css

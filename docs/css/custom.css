@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "Unbounded";
+  src: url("../fonts/Unbounded-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+}
+
+body {
+  font-family: var(--sansFontFamily);
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+h1 {
+  /* 
+    custom font-family needs to be once assigned directly to class from font-face definition
+    otherwise it will be omitted in the css bundle by webpack
+  */
+  font-family: "Unbounded", sans-serif !important;;
+  line-height: 1.333333;
+  padding-top: 1.2rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--sansFontFamily);
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  margin-top: 0;
+}
+
+.text-heading {
+  font-family: var(--headingFontFamily);
+  line-height: 1.333333;
+}
+
+.font-weight-medium {
+  font-weight: 500 !important;
+}
+
+.font-weight-bolder {
+  font-weight: 900 !important;
+}
