@@ -1,4 +1,5 @@
 site_name: Web3 Educhain
+site_url: https://web3educhain.xyz/
 theme:
   name: readthedocs
 extra_css:
