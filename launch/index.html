@@ -47,19 +47,19 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">Launching on Rococo</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#personalizing-the-template">Personalizing the Template</a>
+    <li class="toctree-l2"><a class="reference internal" href="#personalize-template">Personalize Template</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#creating-production-ready-genesis-config">Creating Production Ready Genesis Config</a>
+    <li class="toctree-l2"><a class="reference internal" href="#set-genesis-config">Set Genesis Config</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#setting-up-an-rpc-collator-node">Setting up an RPC Collator Node</a>
+    <li class="toctree-l2"><a class="reference internal" href="#collator-node-setup">Collator Node Setup</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#on-demand-block-production">On-demand Block Production</a>
+    <li class="toctree-l2"><a class="reference internal" href="#block-production">Block Production</a>
     </li>
     </ul>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Integrating with Asset Hub</a>
+                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Asset Hub Integration</a>
                 </li>
               </ul>
       </div>
@@ -90,17 +90,17 @@
 was chosen as a candidate for launching Educhain. They crafted the pallet list to be as minimalistic and 
 preserved important pallets that are used in the Polkadot ecosystem. Their <a href="https://docs.openzeppelin.com/substrate-runtimes/1.0.0/">docs</a>
 serve as a good starting point to understand the launch process of a parachain on Polkadot testnet Rococo.</p>
-<h2 id="personalizing-the-template">Personalizing the Template</h2>
+<h2 id="personalize-template">Personalize Template</h2>
 <p>In a single shot, you can (almost) rebrand the runtime template to your own project by replacing 
 the occurrences of <code>parachain-runtime</code> and <code>parachain_runtime</code> with your project name.</p>
-<h2 id="creating-production-ready-genesis-config">Creating Production Ready Genesis Config</h2>
+<h2 id="set-genesis-config">Set Genesis Config</h2>
 <p>It is common that most of the tutorials and templates use Alice or Bob keys for the root account, and for
 collator's keys and session keys. It is obvious that these should be replaced by custom keys. It is 
 recommended that you use an account created on a cold wallet for the root account. It is also important
 for the collator key and its session key to be different. The collator key is recommended to be created on a 
 cold wallet and the session key can be generated from a hot wallet, as you need to enter its seed/private key
 into the collator's key store to start producing blocks. The session keys are rotated often for this reason.</p>
-<h2 id="setting-up-an-rpc-collator-node">Setting up an RPC Collator Node</h2>
+<h2 id="collator-node-setup">Collator Node Setup</h2>
 <p>You can spin up a collator on your local machine or on a cloud instance of your choice. Educhain node runs as 
 a <a href="https://www.digitalocean.com/pricing/droplets">Digital Ocean droplet</a>. If you like to interact with your
 collator through <a href="https://polkadot.js.org/">Polkadot JS UI</a>, the connection needs to be secure and hence not
@@ -108,17 +108,18 @@ possible to just use the ip address. We had to secure a domain for Educhain and 
 for the rpc address to be able to interact with it using Polkadot JS UI. The 
 <a href="https://github.com/substrate-developer-hub/substrate-front-end-template">Substrate Front-end template</a> does
 not have this restriction, if you like to try it out.</p>
-<h2 id="on-demand-block-production">On-demand Block Production</h2>
+<h2 id="block-production">Block Production</h2>
 <p>Educhain is deployed on Rococo as an on-demand parachain. Transactions can be submitted to the collator node 
 and they enter the transaction pool. When you like to execute these transactions, an order can be placed on 
 Rococo relay chain for the parachain block production and validation through <code>onDemandAssignmentProvider</code> 
-pallet call.</p>
+pallet call. If you intend to have a parachain that produces blocks continously, you can purchase bulk 
+coretime through awesome interfaces from <a href="https://www.lastic.xyz/">Lastic</a> or <a href="https://app.regionx.tech/">RegionX</a>.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href=".." class="btn btn-neutral float-left" title="Web3 Educhain"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../asset-hub/" class="btn btn-neutral float-right" title="Integrating with Asset Hub">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../asset-hub/" class="btn btn-neutral float-right" title="Asset Hub Integration">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
