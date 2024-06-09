@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/launch/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Launching on Rococo - Web3 Educhain</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Launching on Rococo";
+        var mkdocs_page_input_path = "launch.md";
+        var mkdocs_page_url = "/launch/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Web3 Educhain
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Web3 Educhain</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Launching on Rococo</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#personalizing-the-template">Personalizing the Template</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-production-ready-genesis-config">Creating Production Ready Genesis Config</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-an-rpc-collator-node">Setting up an RPC Collator Node</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#on-demand-block-production">On-demand Block Production</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Web3 Educhain</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Launching on Rococo</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="launching-on-rococo">Launching on Rococo</h1>
+<p><a href="https://github.com/OpenZeppelin/polkadot-runtime-templates">OpenZepppelin Polkadot Generic Runtime Template</a> 
+was chosen as a candidate for launching Educhain. They crafted the pallet list to be as minimalistic and 
+preserved important pallets that are used in the Polkadot ecosystem. Their <a href="https://docs.openzeppelin.com/substrate-runtimes/1.0.0/">docs</a>
+serve as a good starting point to understand the launch process of a parachain on Polkadot testnet Rococo.</p>
+<h2 id="personalizing-the-template">Personalizing the Template</h2>
+<p>In a single shot, you can (almost) rebrand the runtime template to your own project by replacing 
+the occurrences of <code>parachain-runtime</code> and <code>parachain_runtime</code> with your project name.</p>
+<h2 id="creating-production-ready-genesis-config">Creating Production Ready Genesis Config</h2>
+<p>It is common that most of the tutorials and templates use Alice or Bob keys for the root account, and for
+collator's keys and session keys. It is obvious that these should be replaced by custom keys. It is 
+recommended that you use an account created on a cold wallet for the root account. It is also important
+for the collator key and its session key to be different. The collator key is recommended to be created on a 
+cold wallet and the session key can be generated from a hot wallet, as you need to enter its seed/private key
+into the collator's key store to start producing blocks. The session keys are rotated often for this reason.</p>
+<h2 id="setting-up-an-rpc-collator-node">Setting up an RPC Collator Node</h2>
+<p>You can spin up a collator on your local machine or on a cloud instance of your choice. Educhain node runs as 
+a <a href="https://www.digitalocean.com/pricing/droplets">Digital Ocean droplet</a>. If you like to interact with your
+collator through <a href="https://polkadot.js.org/">Polkadot JS UI</a>, the connection needs to be secure and hence not
+possible to just use the ip address. We had to secure a domain for Educhain and then setup a custom domain 
+for the rpc address to be able to interact with it using Polkadot JS UI. The 
+<a href="https://github.com/substrate-developer-hub/substrate-front-end-template">Substrate Front-end template</a> does
+not have this restriction, if you like to try it out.</p>
+<h2 id="on-demand-block-production">On-demand Block Production</h2>
+<p>Educhain is deployed on Rococo as an on-demand parachain. Transactions can be submitted to the collator node 
+and they enter the transaction pool. When you like to execute these transactions, an order can be placed on 
+Rococo relay chain for the parachain block production and validation through <code>onDemandAssignmentProvider</code> 
+pallet call.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Web3 Educhain"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

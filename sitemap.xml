@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://web3educhain.xyz/</loc>
-         <lastmod>2024-06-07</lastmod>
+         <lastmod>2024-06-09</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://web3educhain.xyz/launch/</loc>
+         <lastmod>2024-06-09</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
