@@ -23,8 +23,9 @@ Along with the efficient utility of coretime and blockspace, a parachain deploye
 
 With Agile Coretime, para chains can now produce blocks continuously or on demand. By activating Async Backing
 feature, parachains can produce blocks every 6 seconds whose transactions get finalized in 20-60 seconds, and
-[around 800 TPS](https://polkadot.network/blog/the-way-to-a-10x-throughput-lift-on-parachains/). With
-[elastic scaling](https://github.com/paritytech/polkadot-sdk/issues/1829) feature, the throughput of 
+[around 800 TPS](https://polkadot.network/blog/the-way-to-a-10x-throughput-lift-on-parachains/). 
+
+With [elastic scaling](https://github.com/paritytech/polkadot-sdk/issues/1829) feature, the throughput of 
 parachains is expected to improve further. In the near future, parachains can subscribe to the parachains 
 service of [JAM chain](https://graypaper.com/) which enables advanced features that makes blockchain 
 technology feasible for majority of its usecases.
