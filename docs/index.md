@@ -14,11 +14,11 @@ Web3 Educhain intends to address these issues.
 
 Along with the efficient utility of coretime and blockspace, a parachain deployed on Polkadot has access to
 
-- Multi-billion dollar security backed finality from block number one.
+- Multi-billion dollar crypto-economic security backed finality from block number one.
 - Secure interoperability with multiple chains within and outside of the Polkadot ecosystem.
 - Customizable blockchain runtimes written in Rust and executed as Wasm code.
 - Decentralized network and networking stack with light-client prioritized design.
-- Visionary, intellectual, smart (and at times oversmart) developer community. Welcome to the world of open-source development.
+- Visionary, intellectual, smart (and at times oversmart) developer community.
 - Polkadot OpenGov and its Treasury, which pays [OECD grade salaries](https://polkadot-fellows.github.io/dashboard/#/membership) to the Technical Fellowship and funds numerous development initiatives through bounties.
 
 With Agile Coretime, para chains can now produce blocks continuously or on demand. By activating Async Backing
