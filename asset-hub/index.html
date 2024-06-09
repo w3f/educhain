@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/asset-hub/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Integrating with Asset Hub - Web3 Educhain</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Integrating with Asset Hub";
+        var mkdocs_page_input_path = "asset-hub.md";
+        var mkdocs_page_url = "/asset-hub/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Web3 Educhain
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Web3 Educhain</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../launch/">Launching on Rococo</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Integrating with Asset Hub</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#establish-channels-with-asset-hub">Establish Channels with Asset Hub</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#register-as-foreign-asset">Register as Foreign Asset</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Web3 Educhain</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Integrating with Asset Hub</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="integrating-with-asset-hub">Integrating with Asset Hub</h1>
+<p>Asset Hub is a system chain of Rococo test network which allows for minting and managing fungible
+and non-fungible assets. </p>
+<h2 id="establish-channels-with-asset-hub">Establish Channels with Asset Hub</h2>
+<p>Through <a href="https://github.com/paritytech/polkadot-sdk/pull/3721">this PR</a>, the bi-directional HRMP channel 
+setup with Asset Hub became permissionless and can be done through an XCM call from the parachain to Rococo 
+relaychain. Here is the sudo XCM call used by the educhain for reference
+<code>0x0f001f000301000314000400000000070010a5d4e81300000000070010a5d4e80006000300c16678419c183c0ae8030000140d01000001003145</code>.</p>
+<h2 id="register-as-foreign-asset">Register as Foreign Asset</h2>
+<p>The native token of a parachain can be registered as a Foriegn Asset on Asset Hub. This can be accomplished 
+through an XCM call from the parachain to the Asset Hub that invokes <code>create</code> call of the <code>foreignAssets</code> 
+pallet. Here is the call that needed to be executed on the Asset Hub to register its native token as a foreign asset <code>0x3500010100314500706172614c11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000</code>. As this call cannot be directly executed on Rococo Asset Hub, it is wrapped in a sudo XCM call from the educhain 
+<code>0x0f001f0003010100a10f0314000400010000070010a5d4e81300010000070010a5d4e80006030248fa7b419ce03500010100314500706172614c11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000140d01000001003145</code></p>
+<p>The next step is to create metadata for the asset on Asset Hub. Here is the call that needed to be executed 
+on the AssetHub via the XCM message from Educhain <code>0x3511010100314520456475636861696e0c4544550a</code> and here is 
+the sudo XCM call used by the educhain to embed that call
+<code>0x0f001f0003010100a10f0314000400010000070010a5d4e81300010000070010a5d4e800060302389c1c419ce03500010100314500706172614c11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000140d01000001003145</code></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../launch/" class="btn btn-neutral float-left" title="Launching on Rococo"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../launch/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
