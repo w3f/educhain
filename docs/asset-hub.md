@@ -1,16 +1,16 @@
-# Integrating with Asset Hub
+# Asset Hub Integration
 
 Asset Hub is a system chain of Rococo test network which allows for minting and managing fungible
 and non-fungible assets. 
 
-## Establish Channels with Asset Hub
+## Asset Hub Channel Setup
 
 Through [this PR](https://github.com/paritytech/polkadot-sdk/pull/3721), the bi-directional HRMP channel 
 setup with Asset Hub became permissionless and can be done through an XCM call from the parachain to Rococo 
 relaychain. Here is the sudo XCM call used by the educhain for reference
 `0x0f001f000301000314000400000000070010a5d4e81300000000070010a5d4e80006000300c16678419c183c0ae8030000140d01000001003145`.
 
-## Register as Foreign Asset
+## Foreign Asset Registry
 
 The native token of a parachain can be registered as a Foriegn Asset on Asset Hub. This can be accomplished 
 through an XCM call from the parachain to the Asset Hub that invokes `create` call of the `foreignAssets` 
