@@ -4,3 +4,8 @@ theme:
   name: readthedocs
 extra_css:
   - css/custom.css
+nav:
+  - 'index.md'
+  - 'launch.md'
+  - 'asset-hub.md'
+
