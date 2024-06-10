@@ -10,5 +10,5 @@ extra_css:
 nav:
   - 'index.md'
   - 'launch.md'
+  - 'collator.md'
   - 'asset-hub.md'
-

@@ -17,7 +17,7 @@ const ROCOCO_PARA_ID: u32 = 4428;
 
 const PASEO_PARA_ID: u32 = 4012;
 
-// Sudo priviliges
+// Sudo privileges
 pub const ROOT_ACCOUNT: &str = "0x6cfbd47775c5fa20eedf7275360885c5f77c64a426c4fd0d67272784ae5e346c";
 
 // Collator accounts that produce blocks and earn rewards. Typically, private key is in cold storage

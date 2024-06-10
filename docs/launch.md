@@ -22,12 +22,11 @@ into the collator's key store to start producing blocks. The session keys are ro
 ## Collator Node Setup 
 
 You can spin up a collator on your local machine or on a cloud instance of your choice. Educhain node runs as 
-a [Digital Ocean droplet](https://www.digitalocean.com/pricing/droplets). If you like to interact with your
-collator through [Polkadot JS UI](https://polkadot.js.org/), the connection needs to be secure and hence not
-possible to just use the ip address. We had to secure a domain for Educhain and then setup a custom domain 
-for the rpc address to be able to interact with it using Polkadot JS UI. The 
-[Substrate Front-end template](https://github.com/substrate-developer-hub/substrate-front-end-template) does
-not have this restriction, if you like to try it out.
+a [Digital Ocean droplet](https://www.digitalocean.com/pricing/droplets). 
+
+If you like to interact with your collator through the [Polkadot JS UI](https://polkadot.js.org/), the connection needs to be secured via SSL. This requires securing a domain (such as web3educhain.xyz) and then setting up SSL to access your Droplet (or other VPS) for the RPC address to be able to interact with it using Polkadot JS UI. Securing via SSL requires a proxy setup for the RPC interfaces of your node.
+
+See [the collator section](./collator.md) of this wiki to learn more about launching collators.
 
 ## Block Production
 
