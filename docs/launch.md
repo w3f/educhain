@@ -36,3 +36,5 @@ Rococo relay chain for the parachain block production and validation through `on
 pallet call. If you intend to have a parachain that produces blocks continously, you can purchase bulk 
 coretime through awesome interfaces from [Lastic](https://www.lastic.xyz/) or [RegionX](https://app.regionx.tech/).
 
+For more details and tips on ordering coretime, see [the ordering coretime page](./ordering-coretime.md).
+

@@ -4,9 +4,18 @@ A collator is a type of node that produces blocks for a parachain.  These blocks
 
 A collator could also hold the role of an RPC node, which may be fine for testing, but is not ideal for production.  Ideally, one would have a set of dedicated collators (often acting as bootnodes), and a set of RPC nodes *separately*.
 
-> In production, it is recommended to setup your collators and RPCs on separate machines, however for testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.
+> **In production, it is recommended to setup your collators and RPCs on separate machines with proper load balancing and security. However for testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.**
 
 If you wish to test an IP-only setup, then either Polkadot JS or the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template) can be run locally, allowing insecure connections to be accessed.
+
+## The Collator Selection Pallet
+
+Assuming you are using the [`collator-section`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet (which is the default in most templates, and what EduChain uses), there are two concepts you will see: 
+
+- **Candidates** - Candidates for collation, which may or may not be selected.  A bond is required to participate.
+- **Invulnerables** - An account that is *guaranteed* to be participating in block production, bond or not.  They will participate round-robin style in accordance to Aura.
+
+Both invulnerables and candidates can be added to a running chain.  **Invulnerables**, however, are usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily, that way you can always gurantee a collator that can produce good, honest blocks.
 
 ## Setting up collators in the chain spec
 
@@ -27,17 +36,6 @@ pub const COLLATOR2: &str = "0x3090de03bda721f91d4ea242c63c4220832194e63d2c5b61d
 pub const SESSION1: &str = "0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d4307986ce0ddf0d8530";
 pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374";
 ```
-
-> Please note that the session keys are initial, and should ideally be rotated every once in a while for security purposes (so no one can impersonate your collator and make blocks on your behalf).
-
-Assuming you are using the [`collator-section`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet (which is the default in most templates), there are two concepts you will see: 
-
-- **Candidates** - Candidates for collation, which may or may not be selected.  A bond is required to participate.
-- **Invulnerables** - An account that is *guaranteed* to be participating in block production, bond or not.  They will participate round-robin style in accordance to Aura.
-
-Both invulnerables and candidates can be added to a running chain.  **Invulnerables**, however, are usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily, that way you can always gurantee a collator that can produce good, honest blocks.
-
-> For testing, one may use a well-known account, such as `Alice` or `Bob`, however this is not good for production. If one does use `Alice`, for example, then they can run their collator with `--alice` as a start-up flag.
 
 ## Running a "bootnode" collator
 
@@ -136,3 +134,46 @@ Jun 10 20:48:12 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:12 [
 Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [Parachain] 💤 Idle (0 peers), best: #153 (0x998c…e0d8), finali>
 Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [Relaychain] 💤 Idle (15 peers), best: #10834778 (0x7a52…93f6),>
 ```
+
+## Setting up SSL and nginx proxy
+
+This doesn't aim to be an exhaustive devops guide on nginx.  You should have the following already obtained:
+
+- A domain.
+- `nginx` installed.
+- A free SSL certificate via [Lets Encrypt](https://letsencrypt.org/) via `certbot`.
+
+Once that is in place, navigate to your site's nginx config, and go to the server block that with Certbot's SSL settings, and paste the following:
+
+```nginx
+location / {
+    proxy_buffers 16 4k;
+    proxy_buffer_size 2k;
+    proxy_pass http://localhost:8844;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+}
+```
+
+> **Please note that the URL "http://localhost:8844"'s port must match your running collator.**
+
+```nginx
+server {
+        server_name rpc.web3educhain.xyz www.rpc.web3educhain.xyz;
+        location / {
+            proxy_buffers 16 4k;
+            proxy_buffer_size 2k;
+            proxy_pass http://localhost:8844;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+            proxy_set_header Host $host;
+        }
+    listen 443 ssl; # managed by Certbot
+    # other SSL info here...
+}
+```
+
+Once this is in place, restart nginx, and you should be able to access the node via port `443`.
