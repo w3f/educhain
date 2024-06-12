@@ -48,6 +48,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../launch/">Launching on Rococo</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Dependencies</a>
+                </li>
+              </ul>
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Collator Setup</a>
     <ul class="current">
@@ -67,11 +71,15 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Asset Hub Integration</a>
+                <li class="toctree-l1"><a class="reference internal" href="../ordering-coretime/">Ordering Coretime</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../ordering-coretime/">Ordering Coretime</a>
+                <li class="toctree-l1"><a class="reference internal" href="../upgrade/">Upgrading Your Runtime</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Asset Hub Integration</a>
                 </li>
               </ul>
       </div>
@@ -90,7 +98,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Collator Setup</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/w3f/educhain/edit/master/docs/collator.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/w3f/educhain/tree/main/docs/collator.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -102,7 +110,7 @@
 <p>A collator is a type of node that produces blocks for a parachain.  These blocks are not finalized; that's the job of the relay chain.  As such, collation is not a secure task, a parachain only really needs one honest collator (honest as in, providing the correct information regarding its the state transitions within) to finalize with the relay chain.</p>
 <p>A collator could also hold the role of an RPC node, which may be fine for testing, but is not ideal for production.  Ideally, one would have a set of dedicated collators (often acting as bootnodes), and a set of RPC nodes <em>separately</em>.</p>
 <blockquote>
-<p><strong>In production, it is recommended to setup your collators and RPCs on separate machines with proper load balancing and security. However for testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.</strong></p>
+<p><strong>In production, it is recommended to set up your collators and RPCs on separate machines with proper load balancing and security. For testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.</strong></p>
 </blockquote>
 <p>If you wish to test an IP-only setup, then either Polkadot JS or the <a href="https://github.com/substrate-developer-hub/substrate-front-end-template">Substrate frontend template</a> can be run locally, allowing insecure connections to be accessed.</p>
 <h2 id="the-collator-selection-pallet">The Collator Selection Pallet</h2>
@@ -258,8 +266,8 @@ Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../launch/" class="btn btn-neutral float-left" title="Launching on Rococo"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../asset-hub/" class="btn btn-neutral float-right" title="Asset Hub Integration">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../install/" class="btn btn-neutral float-left" title="Dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ordering-coretime/" class="btn btn-neutral float-right" title="Ordering Coretime">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -287,10 +295,10 @@ Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [
         </span>
     
     
-      <span><a href="../launch/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../install/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../asset-hub/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../ordering-coretime/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/upgrade/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Upgrading Your Runtime - Web3 Educhain</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Upgrading Your Runtime";
+        var mkdocs_page_input_path = "upgrade.md";
+        var mkdocs_page_url = "/upgrade/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Web3 Educhain
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Web3 Educhain</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../launch/">Launching on Rococo</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Dependencies</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../collator/">Collator Setup</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ordering-coretime/">Ordering Coretime</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Upgrading Your Runtime</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#compiling-your-wasm-blob">Compiling your WASM Blob</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#obtaining-your-runtime-hash">Obtaining your runtime hash</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#upgrade-via-polkadotjs">Upgrade Via PolkadotJS</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#upgrade-via-substrate-frontend">Upgrade Via Substrate Frontend</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Asset Hub Integration</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Web3 Educhain</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Upgrading Your Runtime</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/w3f/educhain/tree/main/docs/upgrade.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="upgrading-your-runtime">Upgrading Your Runtime</h1>
+<blockquote>
+<p><strong>⚠️ You need access to a <em>sudo</em> account to authorize and apply upgrades!</strong></p>
+</blockquote>
+<p>Every parachain runtime (that is, the code inside of <code>src/runtime/*</code>) can be boiled down to a single <code>.wasm</code> blob.  This blob is what the relay chain uses to validate state transitions from the parachain's collators.  Part of the reason behind this design was the concept of forkless upgrades, where essentially we can replace the WebAssembly blob with another, upgraded version.</p>
+<p>On solo chains, it's usually as easy as calling <code>system.setCode(new_wasm)</code>, which quite literally replaces the WebAssembly runtime with another within the storage layer of the node(s) and will be utilized after the extrinsic is executed.</p>
+<p>On a parachain, the process is essentially <em>two</em> steps instead of <em>one</em> due to the involvement of the relay chain, which must be notified before you upgrade your parachain's code using the <code>system.authorizeUpgrade</code> extrinsic, then you can apply that upgrade using <code>system.applyAuthorizedUpgrade</code>.  This lets the relay chain know that:</p>
+<ol>
+<li>An upgrade is going to commence, and it expects a new state transition function for validation</li>
+<li>The upgrade / new code gets applied.</li>
+</ol>
+<h2 id="compiling-your-wasm-blob">Compiling your WASM Blob</h2>
+<p>Getting your WASM blob is as simple as compiling your runtime:</p>
+<pre><code class="language-sh">cargo build --release
+</code></pre>
+<p>Your blob should be under <code>target/release/wbuild/educhain-runtime/educhain_runtime.compressed.wasm</code></p>
+<h2 id="obtaining-your-runtime-hash">Obtaining your runtime hash</h2>
+<p>Since <code>system.authorizeUpgrade</code> requires a <code>Blake2b_256</code> hash of the runtime, <a href="https://toolkitbay.com/tkb/tool/BLAKE2b_256">which you can get via this tool.</a>.  You can also  get the hash of the file via the <code>system.authorizeUpgrade</code> extrinsic in the PolkadotJS UI, and hash the file there.</p>
+<h2 id="upgrade-via-polkadotjs">Upgrade Via PolkadotJS</h2>
+<ol>
+<li>
+<p>With your hash, authorize the upgrade (<code>system.authorizeUpgrade</code>) (replace <code>HASH_HERE</code> with your new hash and <code>YOUR_RPC_HERE</code> with your RPC URL). Keep in mind this done on the parachain:</p>
+</li>
+<li>
+<p>If you're using on-demand coretime, ensure you order a block accordingly.  You should see the upgrade being queued.</p>
+</li>
+<li>
+<p>Call <code>system.applyAuthorizedUpgrade</code> and upload your <em>compressed</em> (i.e., <code>educhain_runtime.compressed.wasm</code>) WASM blob.  <em>Be sure to also order coretime if needed!</em></p>
+</li>
+</ol>
+<h2 id="upgrade-via-substrate-frontend">Upgrade Via Substrate Frontend</h2>
+<blockquote>
+<p><strong>⚠️ You will need to <a href="https://github.com/CrackTheCode016/substrate-front-end-template">clone a modified version of the template</a> in order to perform this upgrade!</strong>
+<strong>Change <code>src/config/development.json</code> to feature your node as well!</strong></p>
+</blockquote>
+<p>This requires a few more steps, but you could also use the frontend template's upgrade function.  Remember to still use the pallet interactor to authorize the upgrade.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../ordering-coretime/" class="btn btn-neutral float-left" title="Ordering Coretime"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../asset-hub/" class="btn btn-neutral float-right" title="Asset Hub Integration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>No Rights Reserved</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/w3f/educhain" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../ordering-coretime/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../asset-hub/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

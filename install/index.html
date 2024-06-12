@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/ordering-coretime/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/install/" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Ordering Coretime - Web3 Educhain</title>
+    <title>Dependencies - Web3 Educhain</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,9 +13,9 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Ordering Coretime";
-        var mkdocs_page_input_path = "ordering-coretime.md";
-        var mkdocs_page_url = "/ordering-coretime/";
+        var mkdocs_page_name = "Dependencies";
+        var mkdocs_page_input_path = "install.md";
+        var mkdocs_page_url = "/install/";
       </script>
     
     <!--[if lt IE 9]>
@@ -48,28 +48,22 @@
                 <li class="toctree-l1"><a class="reference internal" href="../launch/">Launching on Rococo</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../install/">Dependencies</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Dependencies</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-omninode">The "Omninode"</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#chain-spec-builder">Chain Spec Builder</a>
+    </li>
+    </ul>
                 </li>
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../collator/">Collator Setup</a>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Ordering Coretime</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#ordering-on-demand-coretime">Ordering on-demand coretime</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#ordering-via-cli">Ordering via CLI</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#ordering-via-polkadotjs">Ordering via PolkadotJS</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#ordering-bulk-coretime">Ordering Bulk Coretime</a>
-    </li>
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ordering-coretime/">Ordering Coretime</a>
                 </li>
               </ul>
               <ul>
@@ -94,9 +88,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Ordering Coretime</li>
+      <li class="breadcrumb-item active">Dependencies</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/w3f/educhain/tree/main/docs/ordering-coretime.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/w3f/educhain/tree/main/docs/install.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -104,49 +98,50 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="ordering-coretime">Ordering Coretime</h1>
-<p>There are two types of coretime:</p>
-<ul>
-<li>Bulk coretime - rent computation for an amount of time in advance (i.e., 28 days), requires renewal.</li>
-<li>On-demand coretime - buy computation on-demand on a per block basis, requires sending an extrinsic to order a block.</li>
-</ul>
-<p>For EduChain, we mostly use on-demand coretime and place order when we need to test something.</p>
-<h2 id="ordering-on-demand-coretime">Ordering on-demand coretime</h2>
-<h3 id="ordering-via-cli">Ordering via CLI</h3>
-<p>You can use the <a href="https://www.npmjs.com/package/@polkadot/api-cli"><code>polkadot-js-api</code></a> to call any extrinsic, including on-demand coretime for your parachain.</p>
-<p>Ensure you have it installed:</p>
-<pre><code class="language-sh">yarn global add @polkadot/api-cli
-# or
-npm -g install @polkadot/api-cli
+                <h1 id="dependencies">Dependencies</h1>
+<p><a href="https://guide.kusama.network/docs/build-guides-install-deps/">The Wiki details how to install the necessary prerequisites</a>, including Rust and its tooling. You will need <code>cargo</code>, amongst other dependencies, before progressing.</p>
+<h2 id="the-omninode">The "Omninode"</h2>
+<p>The <code>polkadot-parachain</code> can be used a universal collator instance for running a parachain (an "omninode"), and can be installed follows:</p>
+<pre><code class="language-sh">cargo install --git https://github.com/paritytech/polkadot-sdk --tag polkadot-v1.10.0 --force polkadot-parachain-bin
 </code></pre>
-<p>Once installed, you can send the extrinsic as follows. Be sure to supplement a seed phrase with ROC (<a href="https://faucet.polkadot.io/">faucet here</a>) and also replace <code>PARA_ID</code> with your parachain's ID on Rococo:</p>
-<pre><code class="language-sh">polkadot-js-api tx.onDemandAssignmentProvider.placeOrderAllowDeath \
-1000000000000 \
-PARA_ID \
---seed &quot;your seed here&quot; \
---ws &quot;wss://rococo-rpc.polkadot.io&quot;
+<blockquote>
+<p><strong>You can change <code>--tag</code> to the specific release of your choice.</strong></p>
+</blockquote>
+<p>Which will allow you to run the <code>polkadot-parachain</code>:</p>
+<pre><code class="language-sh">❯ polkadot-parachain --version
+polkadot-parachain 1.10.0-7049c3c9883 # or, which ever release you cloned.
 </code></pre>
-<p>If you wanted, you could even do something a bit silly, such as have a shell script which orders a block every six seconds:</p>
-<pre><code class="language-sh">while :
-do
-    polkadot-js-api tx.onDemandAssignmentProvider.placeOrderAllowDeath \
-        1000000000000 \
-        PARA_ID \
-        --seed &quot;your seed here&quot; \
-        --ws &quot;wss://rococo-rpc.polkadot.io&quot;
-    sleep 6
-done
+<h2 id="chain-spec-builder">Chain Spec Builder</h2>
+<p>The <a href="https://paritytech.github.io/polkadot-sdk/master/staging_chain_spec_builder/index.html"><code>chain-spec-builder</code></a> tool is used for building a chain specification from a Wasm binary. It can be installed as follows:</p>
+<pre><code class="language-sh">cargo install staging-chain-spec-builder
 </code></pre>
-<h3 id="ordering-via-polkadotjs">Ordering via PolkadotJS</h3>
-<p>Use the <a href="https://wiki.polkadot.network/docs/learn-guides-coretime-parachains#run-a-parachain-with-on-demand-coretime">following guides to order on-demand coretime through PolkadotJS.</a></p>
-<h2 id="ordering-bulk-coretime">Ordering Bulk Coretime</h2>
-<p>Use the <a href="https://wiki.polkadot.network/docs/learn-guides-coretime-parachains#run-a-parachain-with-bulk-coretime">following guides to order bulk coretime.</a></p>
+<p>And can be used as follows:</p>
+<pre><code class="language-sh">❯ chain-spec-builder --help
+A utility to easily create a chain spec definition
+
+Usage: chain-spec-builder [OPTIONS] &lt;COMMAND&gt;
+
+Commands:
+  create          Create a new chain spec by interacting with the provided runtime wasm blob
+  verify          Verifies the provided input chain spec
+  update-code     Updates the code in the provided input chain spec
+  convert-to-raw  Converts the given chain spec into the raw format
+  list-presets    Lists available presets
+  display-preset  Displays given preset
+  help            Print this message or the help of the given subcommand(s)
+
+Options:
+  -c, --chain-spec-path &lt;CHAIN_SPEC_PATH&gt;
+          The path where the chain spec should be saved [default: ./chain_spec.json]
+  -h, --help
+          Print help
+</code></pre>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../collator/" class="btn btn-neutral float-left" title="Collator Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../upgrade/" class="btn btn-neutral float-right" title="Upgrading Your Runtime">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../launch/" class="btn btn-neutral float-left" title="Launching on Rococo"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../collator/" class="btn btn-neutral float-right" title="Collator Setup">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -174,10 +169,10 @@ done
         </span>
     
     
-      <span><a href="../collator/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../launch/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../upgrade/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../collator/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

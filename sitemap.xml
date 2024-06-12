@@ -16,12 +16,22 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://web3educhain.xyz/install/</loc>
+         <lastmod>2024-06-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://web3educhain.xyz/launch/</loc>
          <lastmod>2024-06-12</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://web3educhain.xyz/ordering-coretime/</loc>
+         <lastmod>2024-06-12</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://web3educhain.xyz/upgrade/</loc>
          <lastmod>2024-06-12</lastmod>
          <changefreq>daily</changefreq>
     </url>

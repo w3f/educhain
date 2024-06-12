@@ -47,6 +47,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#why-polkadot">Why Polkadot?</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#launch-a-parachain">Launch a Parachain</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -55,15 +57,23 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="install/">Dependencies</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="collator/">Collator Setup</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="asset-hub/">Asset Hub Integration</a>
+                <li class="toctree-l1"><a class="reference internal" href="ordering-coretime/">Ordering Coretime</a>
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="ordering-coretime/">Ordering Coretime</a>
+                <li class="toctree-l1"><a class="reference internal" href="upgrade/">Upgrading Your Runtime</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="asset-hub/">Asset Hub Integration</a>
                 </li>
               </ul>
       </div>
@@ -82,7 +92,7 @@
     <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Web3 Educhain</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/w3f/educhain/edit/master/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/w3f/educhain/tree/main/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -91,13 +101,16 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="web3-educhain">Web3 Educhain</h1>
-<p>Educating Web3 through <a href="https://github.com/paritytech/polkadot-sdk">Polkadot SDK.</a></p>
+<p>Educating Web3 through <a href="https://github.com/paritytech/polkadot-sdk">Polkadot SDK.</a>.</p>
+<blockquote>
+<p><a href="https://polkadot.js.org/apps/?rpc=wss://rpc.web3educhain.xyz:443#/explorer"><strong>Check out the EduChain on PolkadotJS here</strong></a></p>
+</blockquote>
 <h2 id="why-educhain">Why Educhain?</h2>
-<p>When creating <a href="https://github.com/w3f/educhain">Web3 Educhain</a> project, there were around 50 parachains on the Polkadot network but no
-concrete guides on launching a production-grade parachain and its maintenance. Also, there are very limited 
-tutorials that demonstrate <a href="https://github.com/paritytech/polkadot-sdk">Polkadot SDK</a> features that are 
-shipped with <a href="https://github.com/paritytech/polkadot-sdk/tree/master/substrate/frame">FRAME</a> library.
-Web3 Educhain intends to address these issues.</p>
+<p>When creating the <a href="https://github.com/w3f/educhain">Web3 Educhain</a> project, there were around 50 parachains on the Polkadot network but no
+concrete guides on launching and maintaining a production-grade parachain. There are also very limited 
+tutorials that demonstrate the <a href="https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/index.html">Polkadot SDK</a> features that are 
+shipped with <a href="https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html">FRAME</a> library.</p>
+<p>Web3 Educhain intends to address these issues by providing a realtime, running example <em>with</em> documentation on how to replicate what achieve here.</p>
 <h2 id="why-polkadot">Why Polkadot?</h2>
 <p>Along with the efficient utility of coretime and blockspace, a parachain deployed on Polkadot has access to</p>
 <ul>
@@ -108,14 +121,14 @@ Web3 Educhain intends to address these issues.</p>
 <li>Visionary, intellectual, smart (and at times oversmart) developer community.</li>
 <li>Polkadot OpenGov and its Treasury, which pays <a href="https://polkadot-fellows.github.io/dashboard/#/membership">OECD grade salaries</a> to the Technical Fellowship and funds numerous development initiatives through bounties.</li>
 </ul>
-<p>With Agile Coretime, para chains can now produce blocks continuously or on demand. By activating Async Backing
-feature, parachains can produce blocks every 6 seconds whose transactions get finalized in 20-60 seconds, and
+<p>With Agile Coretime, parachains can now produce blocks continuously or on demand. By activating Async Backing, parachains can produce blocks every 6 seconds whose transactions get finalized in 20-60 seconds, and
 <a href="https://polkadot.network/blog/the-way-to-a-10x-throughput-lift-on-parachains/">around 800 TPS</a>. </p>
-<p>With <a href="https://github.com/paritytech/polkadot-sdk/issues/1829">elastic scaling</a> feature, the throughput of 
-parachains is expected to improve further. In the near future, parachains can subscribe to the parachains 
-service of <a href="https://graypaper.com/">JAM chain</a> which enables advanced features that makes blockchain 
-technology feasible for majority of its usecases.</p>
-<p>You can now launch a production-grade blockchain in a day! To learn how, navigate to the next page.</p>
+<p>With <a href="https://github.com/paritytech/polkadot-sdk/issues/1829">elastic scaling</a>, the throughput of 
+parachains is expected to improve further, with multiple cores being utilized at the same time. In the near future, parachains can subscribe to the parachains 
+service of the <a href="https://graypaper.com/">JAM chain</a>, which enables advanced features that makes blockchain 
+technology feasible for the majority of its use cases.</p>
+<h2 id="launch-a-parachain">Launch a Parachain</h2>
+<p>With the available templates, you can now launch a production-grade blockchain in a day! To learn how, navigate to the next page.</p>
               
             </div>
           </div><footer>
@@ -169,5 +182,5 @@ technology feasible for majority of its usecases.</p>
 
 <!--
 MkDocs version : 1.6.0
-Build Date UTC : 2024-06-12 17:42:21.190518+00:00
+Build Date UTC : 2024-06-12 23:11:22.746408+00:00
 -->
