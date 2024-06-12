@@ -29,18 +29,9 @@ h1 {
   padding-top: 1.2rem;
 }
 
-.wy-side-nav-search {
-  font-family: "Unbounded", sans-serif !important;
-}
-
 .wy-side-nav-search input {
   border-radius: 4px !important;
   border: none;
-}
-
-.wy-menu {
-  font-family: "Unbounded", sans-serif !important;
-  font-size: 14px;
 }
 
 h2,
