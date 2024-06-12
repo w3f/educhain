@@ -3,6 +3,7 @@ site_url: https://web3educhain.xyz/
 repo_url: https://github.com/w3f/educhain
 site_description: Educating Web3 through Polkadot SDK
 copyright: No Rights Reserved
+edit_uri: tree/main/docs
 theme:
   name: readthedocs
 extra_css:
