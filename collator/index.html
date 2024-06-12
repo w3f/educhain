@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/collator/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Collator Setup - Web3 Educhain</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/custom.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Collator Setup";
+        var mkdocs_page_input_path = "collator.md";
+        var mkdocs_page_url = "/collator/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Web3 Educhain
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Web3 Educhain</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../launch/">Launching on Rococo</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Collator Setup</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-collator-selection-pallet">The Collator Selection Pallet</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-collators-in-the-chain-spec">Setting up collators in the chain spec</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-a-bootnode-collator">Running a "bootnode" collator</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#systemd-and-collators">systemd and Collators</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-ssl-and-nginx-proxy">Setting up SSL and nginx proxy</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Asset Hub Integration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ordering-coretime/">Ordering Coretime</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Web3 Educhain</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Collator Setup</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/w3f/educhain/edit/master/docs/collator.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="collator-setup">Collator Setup</h1>
+<p>A collator is a type of node that produces blocks for a parachain.  These blocks are not finalized; that's the job of the relay chain.  As such, collation is not a secure task, a parachain only really needs one honest collator (honest as in, providing the correct information regarding its the state transitions within) to finalize with the relay chain.</p>
+<p>A collator could also hold the role of an RPC node, which may be fine for testing, but is not ideal for production.  Ideally, one would have a set of dedicated collators (often acting as bootnodes), and a set of RPC nodes <em>separately</em>.</p>
+<blockquote>
+<p><strong>In production, it is recommended to setup your collators and RPCs on separate machines with proper load balancing and security. However for testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.</strong></p>
+</blockquote>
+<p>If you wish to test an IP-only setup, then either Polkadot JS or the <a href="https://github.com/substrate-developer-hub/substrate-front-end-template">Substrate frontend template</a> can be run locally, allowing insecure connections to be accessed.</p>
+<h2 id="the-collator-selection-pallet">The Collator Selection Pallet</h2>
+<p>Assuming you are using the <a href="https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html"><code>collator-section</code></a> pallet (which is the default in most templates, and what EduChain uses), there are two concepts you will see: </p>
+<ul>
+<li><strong>Candidates</strong> - Candidates for collation, which may or may not be selected.  A bond is required to participate.</li>
+<li><strong>Invulnerables</strong> - An account that is <em>guaranteed</em> to be participating in block production, bond or not.  They will participate round-robin style in accordance to Aura.</li>
+</ul>
+<p>Both invulnerables and candidates can be added to a running chain.  <strong>Invulnerables</strong>, however, are usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily, that way you can always gurantee a collator that can produce good, honest blocks.</p>
+<h2 id="setting-up-collators-in-the-chain-spec">Setting up collators in the chain spec</h2>
+<p>If you are using the parachain template, you can immediately add collators into <a href="https://github.com/w3f/educhain/blob/main/node/src/chain_spec.rs"><code>src/node/chain_spec.rs</code></a>.  You may configure:</p>
+<ul>
+<li>The initial <em>public</em> session key(s).</li>
+<li>The collator(s) public keys which are used for rewards.</li>
+</ul>
+<p>As an example, EduChain sets <strong>two</strong> initial collation and session public keys, allowing the chain to hit the ground running with two collators other than Bob or Alice:</p>
+<pre><code class="language-rust">// Collator accounts that produce blocks and earn rewards.
+pub const COLLATOR1: &amp;str = &quot;0x38a2edbf7cd629e10700376f941122bf6c6a7b705bb70d6eb15359099055015b&quot;;
+pub const COLLATOR2: &amp;str = &quot;0x3090de03bda721f91d4ea242c63c4220832194e63d2c5b61dbcbdd458224350f&quot;;
+
+// The private key of these session keys needs to be inserted into the collator node for it to start
+// producing blocks.
+pub const SESSION1: &amp;str = &quot;0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d4307986ce0ddf0d8530&quot;;
+pub const SESSION2: &amp;str = &quot;0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374&quot;;
+</code></pre>
+<h2 id="running-a-bootnode-collator">Running a "bootnode" collator</h2>
+<p>To run a bootnode collator, one just needs to make sure that: </p>
+<ul>
+<li>The collator is synced with the relay chain (a local copy is needed, pruning is <em>highly</em> recommended)</li>
+<li>The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through (<code>polkadot-parachain key insert</code>)</li>
+</ul>
+<p>Check out this sample command, which runs a parachain collator using the <code>polkadot-parachain</code> binary:</p>
+<pre><code class="language-sh">polkadot-parachain --name COLLATOR_NAME \
+--collator \
+--chain plain-parachain-chainspec.json \
+--base-path ./educhain \
+--rpc-cors=all \
+--port 30333 \
+--rpc-port 8844 \
+-- \
+--chain rococo \
+--sync fast-unsafe \
+--blocks-pruning 256
+--state-pruning 256
+</code></pre>
+<blockquote>
+<p>Note that a few of the arguments, such as <code>--name</code>, <code>--chain</code>, <code>--base-path</code> should be substituted with your own collator name, chain spec, and base path accordingly.</p>
+</blockquote>
+<p>Once your collator has synced with its respective relay-chain, and as long as you have coretime (either bulk or on-demand) then your collator should be making blocks.</p>
+<h3 id="systemd-and-collators"><code>systemd</code> and Collators</h3>
+<p>Once you've achieved a stable setup, you can look into automating the launch of your collator upon startup. Here is an example of a service which automatically starts a shell script using <code>systemd</code> on Ubuntu Linux:</p>
+<ul>
+<li><code>start.node.sh</code>:</li>
+</ul>
+<pre><code class="language-sh">polkadot-parachain --name C2_EDU \
+--collator \
+--chain plain-parachain-chainspec.json \
+--base-path ./educhain \
+--rpc-cors=all \
+--port 30333 \
+--rpc-port 8844 \
+-- \
+--chain rococo \
+--sync fast-unsafe \
+--blocks-pruning 256
+</code></pre>
+<ul>
+<li><code>collator.service</code>:</li>
+</ul>
+<pre><code class="language-ini">[Unit]
+Description=Collator for EduChain
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root
+ExecStart=/bin/sh start.node.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>This way, now we can manage our elegantly collator with <code>systemctl</code>:</p>
+<ul>
+<li><code>systemctl restart collator</code> - Restarts the collator</li>
+<li><code>systemctl stop collator</code> - Stops the collator</li>
+<li><code>systemctl start collator</code> - Starts the collator</li>
+<li><code>systemctl status collator</code> - Retrieves and displays the status of the collator</li>
+</ul>
+<p>Here is an example of how a functioning collator looks in action, via the status command: </p>
+<pre><code class="language-sh">root@ubuntu-s-2vcpu-4gb-amd-nyc3-01:~# systemctl status collator
+● collator.service - Collator for EduChain
+     Loaded: loaded (/usr/lib/systemd/system/collator.service; disabled; preset: enabled)
+     Active: active (running) since Wed 2024-06-05 18:02:23 UTC; 5 days ago
+   Main PID: 132465 (sh)
+      Tasks: 46 (limit: 4658)
+     Memory: 2.1G (peak: 2.5G)
+        CPU: 8h 23min 34.532s
+     CGroup: /system.slice/collator.service
+             ├─132465 /bin/sh start.node.sh
+             └─132466 polkadot-parachain --name C2_EDU --collator --chain plain-parachain-chainspec.json --base-path ./educhain --rpc-cors=all&gt;
+
+Jun 10 20:48:00 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:00 [Relaychain] ♻️  Reorg on #10834776,0xf566…ab31 to #10834776,0x1&gt;
+Jun 10 20:48:00 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:00 [Relaychain] ✨ Imported #10834776 (0x1583…c83f)
+Jun 10 20:48:05 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:05 [Parachain] 💤 Idle (0 peers), best: #153 (0x998c…e0d8), finali&gt;
+Jun 10 20:48:05 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:05 [Relaychain] 💤 Idle (15 peers), best: #10834776 (0x1583…c83f),&gt;
+Jun 10 20:48:06 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:06 [Relaychain] ✨ Imported #10834777 (0x705d…63cb)
+Jun 10 20:48:10 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:10 [Parachain] 💤 Idle (0 peers), best: #153 (0x998c…e0d8), finali&gt;
+Jun 10 20:48:10 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:10 [Relaychain] 💤 Idle (15 peers), best: #10834777 (0x705d…63cb),&gt;
+Jun 10 20:48:12 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:12 [Relaychain] ✨ Imported #10834778 (0x7a52…93f6)
+Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [Parachain] 💤 Idle (0 peers), best: #153 (0x998c…e0d8), finali&gt;
+Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [Relaychain] 💤 Idle (15 peers), best: #10834778 (0x7a52…93f6),&gt;
+</code></pre>
+<h2 id="setting-up-ssl-and-nginx-proxy">Setting up SSL and nginx proxy</h2>
+<p>This doesn't aim to be an exhaustive devops guide on nginx.  You should have the following already obtained:</p>
+<ul>
+<li>A domain.</li>
+<li><code>nginx</code> installed.</li>
+<li>A free SSL certificate via <a href="https://letsencrypt.org/">Lets Encrypt</a> via <code>certbot</code>.</li>
+</ul>
+<p>Once that is in place, navigate to your site's nginx config, and go to the server block that with Certbot's SSL settings, and paste the following:</p>
+<pre><code class="language-nginx">location / {
+    proxy_buffers 16 4k;
+    proxy_buffer_size 2k;
+    proxy_pass http://localhost:8844;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection &quot;Upgrade&quot;;
+    proxy_set_header Host $host;
+}
+</code></pre>
+<blockquote>
+<p><strong>Please note that the URL "http://localhost:8844"'s port must match your running collator.</strong></p>
+</blockquote>
+<pre><code class="language-nginx">server {
+        server_name rpc.web3educhain.xyz www.rpc.web3educhain.xyz;
+        location / {
+            proxy_buffers 16 4k;
+            proxy_buffer_size 2k;
+            proxy_pass http://localhost:8844;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection &quot;Upgrade&quot;;
+            proxy_set_header Host $host;
+        }
+    listen 443 ssl; # managed by Certbot
+    # other SSL info here...
+}
+</code></pre>
+<p>Once this is in place, restart nginx, and you should be able to access the node via port <code>443</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../launch/" class="btn btn-neutral float-left" title="Launching on Rococo"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../asset-hub/" class="btn btn-neutral float-right" title="Asset Hub Integration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>No Rights Reserved</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/w3f/educhain" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../launch/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../asset-hub/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

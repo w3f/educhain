@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/asset-hub/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://web3educhain.xyz/ordering-coretime/" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Asset Hub Integration - Web3 Educhain</title>
+    <title>Ordering Coretime - Web3 Educhain</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,9 +13,9 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Asset Hub Integration";
-        var mkdocs_page_input_path = "asset-hub.md";
-        var mkdocs_page_url = "/asset-hub/";
+        var mkdocs_page_name = "Ordering Coretime";
+        var mkdocs_page_input_path = "ordering-coretime.md";
+        var mkdocs_page_url = "/ordering-coretime/";
       </script>
     
     <!--[if lt IE 9]>
@@ -52,18 +52,24 @@
                 <li class="toctree-l1"><a class="reference internal" href="../collator/">Collator Setup</a>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Asset Hub Integration</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#asset-hub-channel-setup">Asset Hub Channel Setup</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#foreign-asset-registry">Foreign Asset Registry</a>
-    </li>
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../asset-hub/">Asset Hub Integration</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../ordering-coretime/">Ordering Coretime</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Ordering Coretime</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#ordering-on-demand-coretime">Ordering on-demand coretime</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ordering-via-cli">Ordering via CLI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ordering-via-polkadotjs">Ordering via PolkadotJS</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ordering-bulk-coretime">Ordering Bulk Coretime</a>
+    </li>
+    </ul>
                 </li>
               </ul>
       </div>
@@ -80,9 +86,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Asset Hub Integration</li>
+      <li class="breadcrumb-item active">Ordering Coretime</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/w3f/educhain/edit/master/docs/asset-hub.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/w3f/educhain/edit/master/docs/ordering-coretime.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -90,29 +96,29 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="asset-hub-integration">Asset Hub Integration</h1>
-<p>Asset Hub is a system chain of Rococo test network which allows for minting and managing fungible
-and non-fungible assets. </p>
-<h2 id="asset-hub-channel-setup">Asset Hub Channel Setup</h2>
-<p>Through <a href="https://github.com/paritytech/polkadot-sdk/pull/3721">this PR</a>, the bi-directional HRMP channel 
-setup with Asset Hub became permissionless and can be done through an XCM call from the parachain to Rococo 
-relaychain. Here is the sudo XCM call used by the educhain for reference
-<code>0x0f001f000301000314000400000000070010a5d4e81300000000070010a5d4e80006000300c16678419c183c0ae8030000140d01000001003145</code>.</p>
-<h2 id="foreign-asset-registry">Foreign Asset Registry</h2>
-<p>The native token of a parachain can be registered as a Foriegn Asset on Asset Hub. This can be accomplished 
-through an XCM call from the parachain to the Asset Hub that invokes <code>create</code> call of the <code>foreignAssets</code> 
-pallet. Here is the call that needed to be executed on the Asset Hub to register its native token as a foreign asset <code>0x3500010100314500706172614c11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000</code>. As this call cannot be directly executed on Rococo Asset Hub, it is wrapped in a sudo XCM call from the educhain 
-<code>0x0f001f0003010100a10f0314000400010000070010a5d4e81300010000070010a5d4e80006030248fa7b419ce03500010100314500706172614c11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000140d01000001003145</code></p>
-<p>The next step is to create metadata for the asset on Asset Hub. Here is the call that needed to be executed 
-on the AssetHub via the XCM message from Educhain <code>0x3511010100314520456475636861696e0c4544550a</code> and here is 
-the sudo XCM call used by the educhain to embed that call
-<code>0x0f001f0003010100a10f0314000400010000070010a5d4e81300010000070010a5d4e800060302389c1c419ce03500010100314500706172614c11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000140d01000001003145</code></p>
+                <h1 id="ordering-coretime">Ordering Coretime</h1>
+<p>There are two types of coretime:</p>
+<ul>
+<li>Bulk coretime</li>
+<li>On-demand coretime</li>
+</ul>
+<h2 id="ordering-on-demand-coretime">Ordering on-demand coretime</h2>
+<h3 id="ordering-via-cli">Ordering via CLI</h3>
+<pre><code class="language-sh">polkadot-js-api tx.onDemandAssignmentProvider.placeOrderAllowDeath \
+1000000000000 \
+4428 \
+--seed &quot;your seed here&quot; \
+--ws &quot;wss://rococo-rpc.polkadot.io&quot;
+</code></pre>
+<h3 id="ordering-via-polkadotjs">Ordering via PolkadotJS</h3>
+<p>Use the <a href="https://wiki.polkadot.network/docs/learn-guides-coretime-parachains#run-a-parachain-with-on-demand-coretime">following guides to order on-demand coretime through PolkadotJS.</a></p>
+<h2 id="ordering-bulk-coretime">Ordering Bulk Coretime</h2>
+<p>Use the <a href="https://wiki.polkadot.network/docs/learn-guides-coretime-parachains#run-a-parachain-with-bulk-coretime">following guides to order bulk coretime.</a></p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../collator/" class="btn btn-neutral float-left" title="Collator Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../ordering-coretime/" class="btn btn-neutral float-right" title="Ordering Coretime">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../asset-hub/" class="btn btn-neutral float-left" title="Asset Hub Integration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
     </div>
 
   <hr/>
@@ -140,10 +146,8 @@ the sudo XCM call used by the educhain to embed that call
         </span>
     
     
-      <span><a href="../collator/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../asset-hub/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
-    
-      <span><a href="../ordering-coretime/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

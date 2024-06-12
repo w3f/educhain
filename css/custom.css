@@ -8,6 +8,13 @@ body {
   font-family: var(--sansFontFamily);
 }
 
+.wy-side-nav-search {
+  background-color: #E6007A;
+}
+.wy-menu-vertical a:active {
+  background-color: #E6007A;
+}
+
 /* ==========================================================================
    Typography
    ========================================================================== */
@@ -17,9 +24,23 @@ h1 {
     custom font-family needs to be once assigned directly to class from font-face definition
     otherwise it will be omitted in the css bundle by webpack
   */
-  font-family: "Unbounded", sans-serif !important;;
+  font-family: "Unbounded", sans-serif !important;
   line-height: 1.333333;
   padding-top: 1.2rem;
+}
+
+.wy-side-nav-search {
+  font-family: "Unbounded", sans-serif !important;
+}
+
+.wy-side-nav-search input {
+  border-radius: 4px !important;
+  border: none;
+}
+
+.wy-menu {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 14px;
 }
 
 h2,
