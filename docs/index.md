@@ -1,6 +1,8 @@
 # Web3 Educhain
 
-Educating Web3 through [Polkadot SDK.](https://github.com/paritytech/polkadot-sdk)
+Educating Web3 through [Polkadot SDK.](https://github.com/paritytech/polkadot-sdk).
+
+> [**Check out the EduChain on PolkadotJS here**](https://polkadot.js.org/apps/?rpc=wss://rpc.web3educhain.xyz:443#/explorer)
 
 ## Why Educhain?
 

@@ -12,5 +12,6 @@ nav:
   - 'launch.md'
   - 'install.md'
   - 'collator.md'
-  - 'asset-hub.md'
   - 'ordering-coretime.md'
+  - 'upgrade.md'
+  - 'asset-hub.md'

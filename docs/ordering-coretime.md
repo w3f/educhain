@@ -31,6 +31,20 @@ PARA_ID \
 --ws "wss://rococo-rpc.polkadot.io"
 ```
 
+If you wanted, you could even do something a bit silly, such as have a shell script which orders a block every six seconds:
+
+```sh
+while :
+do
+    polkadot-js-api tx.onDemandAssignmentProvider.placeOrderAllowDeath \
+        1000000000000 \
+        PARA_ID \
+        --seed "your seed here" \
+        --ws "wss://rococo-rpc.polkadot.io"
+    sleep 6
+done
+```
+
 ### Ordering via PolkadotJS
 
 Use the [following guides to order on-demand coretime through PolkadotJS.](https://wiki.polkadot.network/docs/learn-guides-coretime-parachains#run-a-parachain-with-on-demand-coretime)
