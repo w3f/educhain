@@ -4,7 +4,7 @@ A collator is a type of node that produces blocks for a parachain.  These blocks
 
 A collator could also hold the role of an RPC node, which may be fine for testing, but is not ideal for production.  Ideally, one would have a set of dedicated collators (often acting as bootnodes), and a set of RPC nodes *separately*.
 
-> **In production, it is recommended to setup your collators and RPCs on separate machines with proper load balancing and security. However for testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.**
+> **In production, it is recommended to set up your collators and RPCs on separate machines with proper load balancing and security. For testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.**
 
 If you wish to test an IP-only setup, then either Polkadot JS or the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template) can be run locally, allowing insecure connections to be accessed.
 

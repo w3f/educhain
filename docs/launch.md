@@ -10,14 +10,19 @@ serve as a good starting point to understand the launch process of a parachain o
 In a single shot, you can (almost) rebrand the runtime template to your own project by replacing 
 the occurrences of `parachain-runtime` and `parachain_runtime` with your project name.
 
+You may also add, remove, or create new pallets and add them to the runtime.  Adding new pallets involves correctly configuring their associated types and ensuring they are a part of the `construct_runtime!` macro.
+
+You can view more about h[ow pallets work](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html#pallets) in the Polkadot SDK docs.
+
 ## Set Genesis Config
 
-It is common that most of the tutorials and templates use Alice or Bob keys for the root account, and for
-collator's keys and session keys. It is obvious that these should be replaced by custom keys. It is 
+It is common that most of the tutorials and templates use Alice or Bob keys for the root, collator and session keys. It is obvious that these should be replaced by custom keys. It is 
 recommended that you use an account created on a cold wallet for the root account. It is also important
 for the collator key and its session key to be different. The collator key is recommended to be created on a 
 cold wallet and the session key can be generated from a hot wallet, as you need to enter its seed/private key
 into the collator's key store to start producing blocks. The session keys are rotated often for this reason.
+
+The genesis config can be used to also configure the initial state of your pallets.  For more information on the genesis config, [see these Polkadot SDK docs.](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/chain_spec_genesis/index.html) For generating a chain spec, you can either view our process here or refer to the [corresponding Polkadot SDK docs.](https://paritytech.github.io/polkadot-sdk/master/staging_chain_spec_builder/index.html)
 
 ## Collator Node Setup 
 
