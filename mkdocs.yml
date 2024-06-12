@@ -10,6 +10,7 @@ extra_css:
 nav:
   - 'index.md'
   - 'launch.md'
+  - 'install.md'
   - 'collator.md'
   - 'asset-hub.md'
   - 'ordering-coretime.md'
