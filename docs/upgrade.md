@@ -14,13 +14,13 @@ On a parachain, the process is essentially *two* steps instead of *one* due to t
 
 ## Compiling your WASM Blob
 
-Getting your wasm blob is as simple as compiling your runtime:
+Getting your WASM blob is as simple as compiling your runtime:
 
 ```sh
 cargo build --release
 ```
 
-Your blob should be under `target/release/wbuild`
+Your blob should be under `target/release/wbuild/educhain-runtime/educhain_runtime.compressed.wasm`
 
 ## Obtaining your runtime hash
 
@@ -32,7 +32,7 @@ Since `system.authorizeUpgrade` requires a `Blake2b_256` hash of the runtime, [w
 
 2. If you're using on-demand coretime, ensure you order a block accordingly.  You should see the upgrade being queued.
 
-3. Call `system.applyAuthorizedUpgrade` and upload your code.  *Be sure to also order coretime if needed!*
+3. Call `system.applyAuthorizedUpgrade` and upload your *compressed* (i.e., `educhain_runtime.compressed.wasm`) WASM blob.  *Be sure to also order coretime if needed!*
 
 ## Upgrade Via Substrate Frontend
 
