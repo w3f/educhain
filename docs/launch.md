@@ -29,9 +29,9 @@ The genesis config can be used to also configure the initial state of your palle
 You can spin up a collator on your local machine or on a cloud instance of your choice. Educhain node runs as 
 a [Digital Ocean droplet](https://www.digitalocean.com/pricing/droplets). 
 
-If you like to interact with your collator through the [Polkadot JS UI](https://polkadot.js.org/), the connection needs to be secured via SSL. This requires securing a domain (such as web3educhain.xyz) and then setting up SSL to access your Droplet (or other VPS) for the RPC address to be able to interact with it using Polkadot JS UI. Securing via SSL requires a proxy setup for the RPC interfaces of your node.
+If you like to interact with your collator through the [Polkadot JS UI](https://polkadot.js.org/), the connection needs to be secured via SSL. This requires securing a domain (such as web3educhain.xyz) and then setting up SSL to access your server instance for the RPC address to be able to interact with it using Polkadot JS UI. Securing via SSL requires a proxy setup for the RPC interfaces of your node.
 
-See [the collator section](./collator.md) of this wiki to learn more about launching collators.
+See [the collator section](./collator.md) to learn more about collator node setup and launch.
 
 ## Block Production
 
