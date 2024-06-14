@@ -33,6 +33,14 @@ If you like to interact with your collator through the [Polkadot JS UI](https://
 
 See [the collator section](./collator.md) to learn more about collator node setup and launch.
 
+## Local Development
+
+If you wish to simply run EduChain locally, you can use pop! (install it here).  Once installed, you can utilize the included Zombienet config.  This will spawn a relay chain, parachain collators, which are all accessible through PolkadotJS:
+
+```sh
+pop up parachain -f ./zombienet-config/devnet.toml
+```
+
 ## Block Production
 
 Educhain is deployed on Rococo as an on-demand parachain. Transactions can be submitted to the collator node 

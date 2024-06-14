@@ -1,23 +1,10 @@
-# Zombienet configuration
+# Zombienet Configuration
 
-Zombienet aims to be a testing framework for Substrate based blockchains, providing a simple cli tool that allows users to spawn and test ephemeral networks.
+Zombienet aims to be a testing framework for Substrate based blockchains, providing a simple cli tool that allows users to spawn and test **local** ephemeral networks. You can use the [`pop-cli`](https://github.com/r0gue-io/pop-cli?tab=readme-ov-file#install) to run this configuration.
 
-## Start a development chain
+## Running a local test network
 
-Firstly build Polkadot binaries with:
-
+Once [`pop-cli`](https://github.com/r0gue-io/pop-cli?tab=readme-ov-file#install) is installed, you can run it as follows:
 ```sh
-$ scripts/zombienet.sh build
-```
-
-This process can take some time, so please be patient. If on Linux, you can alternatively download the binaries to speed up the process with:
-
-```shell
-$ scripts/zombinet.sh init
-```
-
-Once Polkadot binaries are in place you can spawn a local testnet by running the following command:
-
-```shell
-$ scripts/zombienet.sh devnet
+pop up parachain -f ./zombienet-config/devnet.toml
 ```
