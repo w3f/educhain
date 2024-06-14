@@ -1,6 +1,6 @@
 # Collator Setup
 
-A collator is a node that collates the transactions on the parachain network into blocks that are sent for validation to the relay chain network. Hence, parachain transactions achieve finality when the parablock is validated and their Proof of Validity is finalized on the relay chain. Hence, the securty assumptions of the collator node are minimal as the transaction validity checks actually happen on the relay chain. A parachain can work fine with a single collator or a small collator set. If you plan to decentralize the parachain network, the network just needs one honest collator to avoid the problem of transaction censorship.
+A collator is a node that collates the transactions on the parachain network into blocks and send them for validation to the relay chain network. Hence, parachain transactions achieve finality when the parablock is validated and their Proof of Validity is finalized on the relay chain. Hence, the securty assumptions of the collator node are minimal as the transaction validity checks actually happen on the relay chain. A parachain can work fine with a single collator or a small collator set. If you plan to decentralize the parachain network, the network just needs one honest collator to avoid the problem of transaction censorship.
 
 Typically, a large decentralized parachain network would have a large set of collators, a set of dedicated parachain nodes (often acting as bootnodes), and a set of RPC nodes *separately*.
 
