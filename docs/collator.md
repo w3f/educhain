@@ -1,30 +1,31 @@
+
 # Collator Setup
 
-A collator is a type of node that produces blocks for a parachain.  These blocks are not finalized; that's the job of the relay chain.  As such, collation is not a secure task, a parachain only really needs one honest collator (honest as in, providing the correct information regarding its the state transitions within) to finalize with the relay chain.
+A collator is a node that collates the transactions on the parachain network into blocks and sends them for validation to the relay chain network. Hence, parachain transactions achieve finality when the parablock is validated, and their Proof of Validity is finalized on the relay chain. Hence, the security assumptions of the collator node are minimal as the transaction validity checks happen on the relay chain. A parachain can work fine with a single or small collator set. If you plan to decentralize the parachain network, the network needs just one honest collator to avoid the problem of transaction censorship.
 
-A collator could also hold the role of an RPC node, which may be fine for testing, but is not ideal for production.  Ideally, one would have a set of dedicated collators (often acting as bootnodes), and a set of RPC nodes *separately*.
+Typically, a large decentralized parachain network would have a large set of collators, dedicated parachain nodes (often acting as bootnodes), and a set of RPC nodes *separately*.
 
-> **In production, it is recommended to set up your collators and RPCs on separate machines with proper load balancing and security. For testing, it is entirely possible to allow for a single collator to also provide RPC capabilities.**
+> **For testing, it is possible to allow for a single collator to provide RPC capabilities. In production, setting up your collators and RPCs on separate machines with proper load balancing and security is recommended.**
 
-If you wish to test an IP-only setup, then either Polkadot JS or the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template) can be run locally, allowing insecure connections to be accessed.
+If you wish to connect an RPC Node through its IP address, then the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template) can be used, as it allows for insecure WebSocket connections. For using Polkadot JS UI to access an RPC node on a remote machine, you will need a [secure WebSocket connection](#setting-up-ssl-and-nginx-proxy). For an RPC node instance a local machine, both UIs work seamlessly. 
 
 ## The Collator Selection Pallet
 
-Assuming you are using the [`collator-section`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet (which is the default in most templates, and what EduChain uses), there are two concepts you will see: 
+Assuming you plan on using the [`collator-selection`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet (which is typically the default in most of the templates, and it is also what Educhain uses), there are two terms you need to be familiar with: 
 
-- **Candidates** - Candidates for collation, which may or may not be selected.  A bond is required to participate.
-- **Invulnerables** - An account that is *guaranteed* to be participating in block production, bond or not.  They will participate round-robin style in accordance to Aura.
+- **Candidates** - Accounts that have registered for becoming collators typically by bonding a deposit. These accounts receive authorization to collate if they meet the requirements set by the network. This ensures a permissionless way of registering to becoming a collator.
+- **Invulnerables** - Accounts that are *guaranteed* to participate in block production, irrespective of the boding requirements. If the collator selection mechanism is Aura, they will participate in block production round-robin style.
 
-Both invulnerables and candidates can be added to a running chain.  **Invulnerables**, however, are usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily, that way you can always gurantee a collator that can produce good, honest blocks.
+Candidates can add or remove themselves from collation on a live network. **Invulnerables**, however, can only be added or removed through through an account with sudo or root privileges. They are aslo usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily. That way you can always gurantee a collator that can produce blocks.
 
 ## Setting up collators in the chain spec
 
-If you are using the parachain template, you can immediately add collators into [`src/node/chain_spec.rs`](https://github.com/w3f/educhain/blob/main/node/src/chain_spec.rs).  You may configure:
+If you are using the parachain template, you can add collator account keys into [`src/node/chain_spec.rs`](https://github.com/w3f/educhain/blob/main/node/src/chain_spec.rs).  You may configure:
 
 - The initial *public* session key(s).
-- The collator(s) public keys which are used for rewards.
+- The collator(s) public keys which are used for setting identity and rewards (if any).
 
-As an example, EduChain sets **two** initial collation and session public keys, allowing the chain to hit the ground running with two collators other than Bob or Alice:
+As an example, EduChain sets **two** initial collator and session public keys, allowing the chain to hit the ground running with two collators which are not running with Bob or Alice keys:
 
 ```rust
 // Collator accounts that produce blocks and earn rewards.
@@ -37,11 +38,11 @@ pub const SESSION1: &str = "0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d43079
 pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374";
 ```
 
-## Running a "bootnode" collator
+## Running a "bootnode"
 
-To run a bootnode collator, one just needs to make sure that: 
+To run a bootnode, one just needs to make sure that: 
 
-- The collator is synced with the relay chain (a local copy is needed, pruning is *highly* recommended)
+- The node is synced with the relay chain (a local copy is needed, pruning is *highly* recommended)
 - The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through (`polkadot-parachain key insert`)
 
 Check out this sample command, which runs a parachain collator using the `polkadot-parachain` binary:
@@ -143,7 +144,7 @@ This doesn't aim to be an exhaustive devops guide on nginx.  You should have the
 - `nginx` installed.
 - A free SSL certificate via [Lets Encrypt](https://letsencrypt.org/) via `certbot`.
 
-Once that is in place, navigate to your site's nginx config, and go to the server block that with Certbot's SSL settings, and paste the following:
+Once that is in place, navigate to your site's nginx config, and go to the server block with Certbot's SSL settings, and paste the following:
 
 ```nginx
 location / {
@@ -176,4 +177,4 @@ server {
 }
 ```
 
-Once this is in place, restart nginx, and you should be able to access the node via port `443`.
+Once this is in place, restart nginx, and you can access the node via port `443`.
