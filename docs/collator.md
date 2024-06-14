@@ -1,10 +1,13 @@
+
+
+
 # Collator Setup
 
-A collator is a node that collates the transactions on the parachain network into blocks and send them for validation to the relay chain network. Hence, parachain transactions achieve finality when the parablock is validated and their Proof of Validity is finalized on the relay chain. Hence, the securty assumptions of the collator node are minimal as the transaction validity checks actually happen on the relay chain. A parachain can work fine with a single collator or a small collator set. If you plan to decentralize the parachain network, the network just needs one honest collator to avoid the problem of transaction censorship.
+A collator is a node that collates the transactions on the parachain network into blocks and sends them for validation to the relay chain network. Hence, parachain transactions achieve finality when the parablock is validated, and their Proof of Validity is finalized on the relay chain. Hence, the security assumptions of the collator node are minimal as the transaction validity checks happen on the relay chain. A parachain can work fine with a single or small collator set. If you plan to decentralize the parachain network, the network needs just one honest collator to avoid the problem of transaction censorship.
 
-Typically, a large decentralized parachain network would have a large set of collators, a set of dedicated parachain nodes (often acting as bootnodes), and a set of RPC nodes *separately*.
+Typically, a large decentralized parachain network would have a large set of collators, dedicated parachain nodes (often acting as bootnodes), and a set of RPC nodes *separately*.
 
-> **For testing, it is possible to allow for a single collator to provide RPC capabilities. In production, it is recommended to set up your collators and RPCs on separate machines with proper load balancing and security.**
+> **For testing, it is possible to allow for a single collator to provide RPC capabilities. In production, setting up your collators and RPCs on separate machines with proper load balancing and security is recommended.**
 
 If you wish to connect an RPC Node through its IP address, then the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template) can be used, as it allows for insecure WebSocket connections. For using Polkadot JS UI to access an RPC node on a remote machine, you will need a [secure WebSocket connection](#setting-up-ssl-and-nginx-proxy). For an RPC node instance a local machine, both UIs work seamlessly. 
 
@@ -143,7 +146,7 @@ This doesn't aim to be an exhaustive devops guide on nginx.  You should have the
 - `nginx` installed.
 - A free SSL certificate via [Lets Encrypt](https://letsencrypt.org/) via `certbot`.
 
-Once that is in place, navigate to your site's nginx config, and go to the server block that with Certbot's SSL settings, and paste the following:
+Once that is in place, navigate to your site's nginx config, and go to the server block with Certbot's SSL settings, and paste the following:
 
 ```nginx
 location / {
@@ -176,4 +179,4 @@ server {
 }
 ```
 
-Once this is in place, restart nginx, and you should be able to access the node via port `443`.
+Once this is in place, restart nginx, and you can access the node via port `443`.
