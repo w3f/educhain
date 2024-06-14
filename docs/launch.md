@@ -1,6 +1,6 @@
 # Launching on Rococo
 
-[OpenZepppelin Polkadot Generic Runtime Template](https://github.com/OpenZeppelin/polkadot-runtime-templates) 
+[OpenZeppelin Polkadot Generic Runtime Template](https://github.com/OpenZeppelin/polkadot-runtime-templates) 
 was chosen as a candidate for launching Educhain. They crafted the pallet list to be as minimalistic and 
 preserved important pallets that are used in the Polkadot ecosystem. Their [docs](https://docs.openzeppelin.com/substrate-runtimes/1.0.0/)
 serve as a good starting point to understand the launch process of a parachain on Polkadot testnet Rococo.
@@ -12,7 +12,7 @@ the occurrences of `parachain-runtime` and `parachain_runtime` with your project
 
 You may also add, remove, or create new pallets and add them to the runtime.  Adding new pallets involves correctly configuring their associated types and ensuring they are a part of the `construct_runtime!` macro.
 
-You can view more about h[ow pallets work](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html#pallets) in the Polkadot SDK docs.
+You can view more about [how pallets work](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html#pallets) in the Polkadot SDK docs.
 
 ## Set Genesis Config
 
@@ -22,7 +22,7 @@ for the collator key and its session key to be different. The collator key is re
 cold wallet and the session key can be generated from a hot wallet, as you need to enter its seed/private key
 into the collator's key store to start producing blocks. The session keys are rotated often for this reason.
 
-The genesis config can be used to also configure the initial state of your pallets.  For more information on the genesis config, [see these Polkadot SDK docs.](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/chain_spec_genesis/index.html) For generating a chain spec, you can either view our process here or refer to the [corresponding Polkadot SDK docs.](https://paritytech.github.io/polkadot-sdk/master/staging_chain_spec_builder/index.html)
+The genesis config can be used to also configure the initial state of your pallets.  For more information on the genesis config, [see these Polkadot SDK docs.](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/reference_docs/chain_spec_genesis/index.html) For generating a chain spec, you can either view our process here or refer to the [chain spec buider docs.](https://paritytech.github.io/polkadot-sdk/master/staging_chain_spec_builder/index.html)
 
 ## Collator Node Setup 
 
