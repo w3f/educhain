@@ -51,3 +51,6 @@ Options:
           Print help
 ```
 
+## pop! CLI
+
+[`pop-cli`](https://github.com/r0gue-io/pop-cli?tab=readme-ov-file#install) can be used to spin up a local development network with a parachain and relay chain setup, which can be configured in `devnet.toml` file inside `zombienet-config`.
