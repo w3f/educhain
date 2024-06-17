@@ -53,4 +53,4 @@ Options:
 
 ## pop! CLI
 
-If you wish to run the chain locally, complete with a local relay and parachain, install the [`pop-cli`](https://github.com/r0gue-io/pop-cli?tab=readme-ov-file#install), which can be used with the Zombienet configuration inside `zombienet-config` called `devnet.toml`.
+[`pop-cli`](https://github.com/r0gue-io/pop-cli?tab=readme-ov-file#install) can be used to spin up a local development network with a parachain and relay chain setup, which can be configured in `devnet.toml` file inside `zombienet-config`.
