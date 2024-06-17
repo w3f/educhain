@@ -11,7 +11,7 @@ concrete guides on launching and maintaining a production-grade parachain. There
 tutorials that demonstrate the [Polkadot SDK](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/index.html) features that are 
 shipped with [FRAME](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html) library.
 
-Web3 Educhain intends to address these issues by providing a realtime, running example *with* documentation on how to replicate what achieve here.
+Web3 Educhain intends to address these issues by providing insights, examples and tutorials *with* documentation on how to launch and maintain a parachain.
 
 ## Why Polkadot?
 
