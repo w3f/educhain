@@ -70,9 +70,7 @@ xcm-executor = { workspace = true }
 # Cumulus
 assets-common = { workspace = true }
 cumulus-pallet-aura-ext = { workspace = true }
-cumulus-pallet-parachain-system = { workspace = true, features = [
-	"parameterized-consensus-hook",
-] }
+cumulus-pallet-parachain-system = { workspace = true }
 cumulus-pallet-session-benchmarking = { workspace = true }
 cumulus-pallet-xcm = { workspace = true }
 cumulus-pallet-xcmp-queue = { workspace = true }
@@ -226,5 +224,3 @@ try-runtime = [
 	"polkadot-runtime-common/try-runtime",
 	"sp-runtime/try-runtime",
 ]
-
-experimental = [ "pallet-aura/experimental" ]
