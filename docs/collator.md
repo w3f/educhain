@@ -20,10 +20,10 @@ Candidates can add or remove themselves from collation on a live network. **Invu
 
 ## Setting up collators in the chain spec
 
-If you are using the parachain template, you can add collator account keys into [`src/node/chain_spec.rs`](https://github.com/w3f/educhain/blob/main/node/src/chain_spec.rs).  You may configure:
+If you are using the parachain template, you can add collator account keys into [`src/node/chain_spec.rs`](https://github.com/w3f/educhain/blob/main/node/src/chain_spec.rs).  You can configure:
 
 - The initial *public* session key(s).
-- The collator(s) public keys which are used for setting identity and rewards (if any).
+- The collator(s) public keys which are used for setting its identity and a destination for rewards (if any).
 
 As an example, EduChain sets **two** initial collator and session public keys, allowing the chain to hit the ground running with two collators which are not running with Bob or Alice keys:
 
@@ -43,9 +43,11 @@ pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d8
 To run a bootnode, one just needs to make sure that: 
 
 - The node is synced with the relay chain (a local copy is needed, pruning is *highly* recommended)
-- The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through (`polkadot-parachain key insert`)
+- The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) `key insert` command.
 
-Check out this sample command, which runs a parachain collator using the `polkadot-parachain` binary:
+![Set Aura key RPC](./img/collator/set-collator-aura-key.png)
+
+Check out this sample command, which runs a parachain collator using the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) binary:
 
 ```sh
 polkadot-parachain --name COLLATOR_NAME \

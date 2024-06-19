@@ -39,6 +39,7 @@ use governance::{
     origins::{pallet_custom_origins, Treasurer},
     TreasurySpender,
 };
+use pallet_identity::legacy::IdentityInfo;
 use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use parachains_common::message_queue::{NarrowOriginToSibling, ParaIdToSibling};
 use parity_scale_codec::{Decode, Encode, MaxEncodedLen};
@@ -79,8 +80,6 @@ use xcm::{
 use xcm_builder::PayOverXcm;
 #[cfg(not(feature = "runtime-benchmarks"))]
 use xcm_builder::ProcessXcmMessage;
-
-use pallet_identity::legacy::IdentityInfo;
 
 use crate::{
     constants::currency::{deposit, CENTS, EXISTENTIAL_DEPOSIT, MICROCENTS, MILLICENTS},
@@ -826,38 +825,35 @@ impl pallet_treasury::Config for Runtime {
 }
 
 parameter_types! {
-	// Minimum 4 CENTS/byte
-	pub const BasicDeposit: Balance = deposit(1, 258);
-	pub const ByteDeposit: Balance = deposit(0, 1);
-	pub const SubAccountDeposit: Balance = deposit(1, 53);
-	pub const MaxSubAccounts: u32 = 100;
-	pub const MaxAdditionalFields: u32 = 100;
-	pub const MaxRegistrars: u32 = 20;
+    // Minimum 4 CENTS/byte
+    pub const BasicDeposit: Balance = deposit(1, 258);
+    pub const ByteDeposit: Balance = deposit(0, 1);
+    pub const SubAccountDeposit: Balance = deposit(1, 53);
+    pub const MaxSubAccounts: u32 = 100;
+    pub const MaxAdditionalFields: u32 = 100;
+    pub const MaxRegistrars: u32 = 20;
 }
 
 impl pallet_identity::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type Currency = Balances;
-	type BasicDeposit = BasicDeposit;
-	type ByteDeposit = ByteDeposit;
-	type SubAccountDeposit = SubAccountDeposit;
-	type MaxSubAccounts = MaxSubAccounts;
-	type IdentityInformation = IdentityInfo<MaxAdditionalFields>;
-	type MaxRegistrars = MaxRegistrars;
-	type Slashed = Treasury;
-	type ForceOrigin = EnsureRoot<Self::AccountId>;
-	type RegistrarOrigin = EnsureRoot<Self::AccountId>;
-	type OffchainSignature = Signature;
-	type SigningPublicKey = <Signature as Verify>::Signer;
-	type UsernameAuthorityOrigin = EnsureRoot<Self::AccountId>;
-	type PendingUsernameExpiration = ConstU32<{ 7 * DAYS }>;
-	type MaxSuffixLength = ConstU32<7>;
-	type MaxUsernameLength = ConstU32<32>;
-	type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
+    type BasicDeposit = BasicDeposit;
+    type ByteDeposit = ByteDeposit;
+    type Currency = Balances;
+    type ForceOrigin = EnsureRoot<Self::AccountId>;
+    type IdentityInformation = IdentityInfo<MaxAdditionalFields>;
+    type MaxRegistrars = MaxRegistrars;
+    type MaxSubAccounts = MaxSubAccounts;
+    type MaxSuffixLength = ConstU32<7>;
+    type MaxUsernameLength = ConstU32<32>;
+    type OffchainSignature = Signature;
+    type PendingUsernameExpiration = ConstU32<{ 7 * DAYS }>;
+    type RegistrarOrigin = EnsureRoot<Self::AccountId>;
+    type RuntimeEvent = RuntimeEvent;
+    type SigningPublicKey = <Signature as Verify>::Signer;
+    type Slashed = Treasury;
+    type SubAccountDeposit = SubAccountDeposit;
+    type UsernameAuthorityOrigin = EnsureRoot<Self::AccountId>;
+    type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
 }
-
-
-
 
 // Create the runtime by composing the FRAME pallets that were previously
 // configured.
