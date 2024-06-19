@@ -181,7 +181,6 @@ pub fn paseo_live_config() -> ChainSpec {
     .build()
 }
 
-
 pub fn development_config() -> ChainSpec {
     // Give your base currency a unit name and decimal places
     let mut properties = sc_chain_spec::Properties::new();
