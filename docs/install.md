@@ -4,11 +4,13 @@
 
 ## The "Omninode"
 
-The `polkadot-parachain` can be used a universal collator instance for running a parachain (an "omninode"), and can be installed follows:
+The `polkadot-parachain` can be used a universal collator instance for running most of the parachains (an "[omninode beta](https://forum.polkadot.network/t/polkadot-parachain-omni-node-gathering-ideas-and-feedback/7823)"), and can be installed follows:
 
 ```sh
 cargo install --git https://github.com/paritytech/polkadot-sdk --tag polkadot-v1.10.0 --force polkadot-parachain-bin
 ```
+
+
 
 > **You can change `--tag` to the specific release of your choice.**
 
