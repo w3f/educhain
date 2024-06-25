@@ -13308,6 +13308,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "substrate-runtime-fuzzer"
+version = "0.1.0"
+source = "git+https://github.com/srlabs/substrate-runtime-fuzzer.git?tag=polkadot-v1.10.0#22deb9efeb711529213298a0a8cd57210541dbe8"
+dependencies = [
+ "parity-scale-codec",
+]
+
+[[package]]
 name = "substrate-state-trie-migration-rpc"
 version = "27.0.0"
 source = "git+https://github.com/paritytech/polkadot-sdk?tag=polkadot-v1.13.0#d5160c1d567cc73c7df6c816d41e21aa3adb188d"
@@ -13458,6 +13466,28 @@ dependencies = [
  "fastrand 2.1.0",
  "rustix 0.38.34",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "template-fuzzer"
+version = "0.1.0"
+dependencies = [
+ "cumulus-pallet-parachain-system",
+ "cumulus-primitives-core",
+ "cumulus-primitives-parachain-inherent",
+ "cumulus-test-relay-sproof-builder",
+ "educhain-runtime",
+ "frame-support",
+ "frame-system",
+ "pallet-balances",
+ "pallet-timestamp",
+ "parachains-common",
+ "parity-scale-codec",
+ "sp-consensus-aura",
+ "sp-runtime",
+ "sp-state-machine",
+ "substrate-runtime-fuzzer",
+ "ziggy",
 ]
 
 [[package]]
@@ -15321,6 +15351,12 @@ dependencies = [
  "quote",
  "syn 2.0.66",
 ]
+
+[[package]]
+name = "ziggy"
+version = "0.8.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fb5e78a55125184c68a96a438daa281fbc2bbcd1b13bad7e94812b48883721b"
 
 [[package]]
 name = "zstd"

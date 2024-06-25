@@ -17,7 +17,7 @@ use sp_runtime::{
     traits::{Dispatchable, Header},
     Digest, DigestItem, Storage,
 };
-use substrate_templates_fuzzers::{Data, INITIAL_TIMESTAMP, MAX_TIME_FOR_BLOCK};
+use substrate_runtime_fuzzer::{Data, INITIAL_TIMESTAMP, MAX_TIME_FOR_BLOCK};
 
 pub type Externalities = sp_state_machine::BasicExternalities;
 

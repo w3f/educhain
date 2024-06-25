@@ -130,7 +130,7 @@ parachain-info = { package = "staging-parachain-info", git = "https://github.com
 parachains-common = { git = "https://github.com/paritytech/polkadot-sdk", default-features = false, tag = "polkadot-v1.13.0" }
 
 # Fuzzer
-substrate-templates-fuzzers = { git = "https://github.com/srlabs/substrate-runtime-fuzzer.git", default-features = false }
+substrate-runtime-fuzzer = { git = "https://github.com/srlabs/substrate-runtime-fuzzer.git", default-features = false, tag = "polkadot-v1.10.0" }
 ziggy = { version = "0.8", default-features = false }
 
 

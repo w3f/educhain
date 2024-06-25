@@ -15,7 +15,7 @@ workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-substrate-templates-fuzzers = { workspace = true }
+substrate-runtime-fuzzer = { workspace = true }
 ziggy = { workspace = true }
 
 educhain-runtime = { path = "../runtime" }

@@ -19,7 +19,7 @@ use sp_version::RuntimeVersion;
 use super::{
     AccountId, Balance, Block, ConsensusHook, Executive, InherentDataExt, Nonce, ParachainSystem,
     Runtime, RuntimeCall, RuntimeGenesisConfig, SessionKeys, System, TransactionPayment,
-    SLOT_DURATION, VERSION,
+    SLOT_DURATION, VERSION, RuntimeBlockWeights
 };
 
 impl_runtime_apis! {
