@@ -2882,6 +2882,7 @@ dependencies = [
  "cumulus-primitives-core",
  "cumulus-primitives-parachain-inherent",
  "cumulus-relay-chain-interface",
+ "docify",
  "educhain-runtime",
  "frame-benchmarking",
  "frame-benchmarking-cli",
@@ -4553,15 +4554,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "itertools"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba291022dbbd398a455acf126c1e341954079855bc60dfdda641363bd6922569"
-dependencies = [
- "either",
-]
-
-[[package]]
 name = "itoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5608,6 +5600,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "808b50db46293432a45e63bc15ea51e0ab4c0a1647b8eb114e31a3e698dd6fbe"
 dependencies = [
  "hash-db",
+]
+
+[[package]]
+name = "merkleized-metadata"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f313fcff1d2a4bcaa2deeaa00bf7530d77d5f7bd0467a117dde2e29a75a7a17a"
+dependencies = [
+ "array-bytes",
+ "blake3",
+ "frame-metadata",
+ "parity-scale-codec",
+ "scale-decode",
+ "scale-info",
 ]
 
 [[package]]
@@ -9364,7 +9370,7 @@ checksum = "22505a5c94da8e3b7c2996394d1c933236c4d743e81a410bcca4e6989fc066a4"
 dependencies = [
  "bytes",
  "heck 0.5.0",
- "itertools 0.12.1",
+ "itertools 0.11.0",
  "log",
  "multimap 0.10.0",
  "once_cell",
@@ -9397,7 +9403,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "81bddcdb20abf9501610992b6759a4c888aef7d1a7247ef75e2404275ac24af1"
 dependencies = [
  "anyhow",
- "itertools 0.12.1",
+ "itertools 0.11.0",
  "proc-macro2",
  "quote",
  "syn 2.0.66",
@@ -11489,6 +11495,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "scale-bits"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e57b1e7f6b65ed1f04e79a85a57d755ad56d76fdf1e9bddcc9ae14f71fcdcf54"
+dependencies = [
+ "parity-scale-codec",
+ "scale-type-resolver",
+]
+
+[[package]]
+name = "scale-decode"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e98f3262c250d90e700bb802eb704e1f841e03331c2eb815e46516c4edbf5b27"
+dependencies = [
+ "derive_more",
+ "parity-scale-codec",
+ "scale-bits",
+ "scale-type-resolver",
+ "smallvec",
+]
+
+[[package]]
 name = "scale-info"
 version = "2.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -11513,6 +11542,12 @@ dependencies = [
  "quote",
  "syn 1.0.109",
 ]
+
+[[package]]
+name = "scale-type-resolver"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0cded6518aa0bd6c1be2b88ac81bf7044992f0f154bfbabd5ad34f43512abcb"
 
 [[package]]
 name = "schannel"
@@ -12394,7 +12429,7 @@ dependencies = [
 [[package]]
 name = "sp-crypto-ec-utils"
 version = "0.10.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "ark-bls12-377",
  "ark-bls12-377-ext",
@@ -12456,7 +12491,7 @@ dependencies = [
 [[package]]
 name = "sp-debug-derive"
 version = "14.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -12476,7 +12511,7 @@ dependencies = [
 [[package]]
 name = "sp-externalities"
 version = "0.25.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "environmental",
  "parity-scale-codec",
@@ -12692,7 +12727,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface"
 version = "24.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "bytes",
  "impl-trait-for-tuples",
@@ -12724,7 +12759,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface-proc-macro"
 version = "17.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "Inflector",
  "expander",
@@ -12813,7 +12848,7 @@ source = "git+https://github.com/paritytech/polkadot-sdk?tag=polkadot-v1.13.0#d5
 [[package]]
 name = "sp-std"
 version = "14.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 
 [[package]]
 name = "sp-storage"
@@ -12830,7 +12865,7 @@ dependencies = [
 [[package]]
 name = "sp-storage"
 version = "19.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "impl-serde",
  "parity-scale-codec",
@@ -12865,7 +12900,7 @@ dependencies = [
 [[package]]
 name = "sp-tracing"
 version = "16.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "parity-scale-codec",
  "tracing",
@@ -12962,7 +12997,7 @@ dependencies = [
 [[package]]
 name = "sp-wasm-interface"
 version = "20.0.0"
-source = "git+https://github.com/paritytech/polkadot-sdk#6daa939bc7c3f26c693a876d5a4b7ea00c6b2d7f"
+source = "git+https://github.com/paritytech/polkadot-sdk#74decbbdf22a7b109209448307563c6f3d62abac"
 dependencies = [
  "impl-trait-for-tuples",
  "log",
@@ -13290,22 +13325,26 @@ dependencies = [
 ]
 
 [[package]]
-name = "substrate-templates-fuzzers"
-version = "0.1.0"
-source = "git+https://github.com/srlabs/substrate-runtime-fuzzer.git#951708204d34cb8367a4f31ea8b0afb723e4c6a8"
-
-[[package]]
 name = "substrate-wasm-builder"
 version = "17.0.0"
 source = "git+https://github.com/paritytech/polkadot-sdk?tag=polkadot-v1.13.0#d5160c1d567cc73c7df6c816d41e21aa3adb188d"
 dependencies = [
+ "array-bytes",
  "build-helper",
  "cargo_metadata",
  "console",
  "filetime",
+ "frame-metadata",
+ "merkleized-metadata",
+ "parity-scale-codec",
  "parity-wasm",
  "polkavm-linker",
+ "sc-executor",
+ "sp-core",
+ "sp-io",
  "sp-maybe-compressed-blob",
+ "sp-tracing 16.0.0 (git+https://github.com/paritytech/polkadot-sdk?tag=polkadot-v1.13.0)",
+ "sp-version",
  "strum 0.26.2",
  "tempfile",
  "toml 0.8.14",
@@ -13419,28 +13458,6 @@ dependencies = [
  "fastrand 2.1.0",
  "rustix 0.38.34",
  "windows-sys 0.52.0",
-]
-
-[[package]]
-name = "template-fuzzer"
-version = "0.1.0"
-dependencies = [
- "cumulus-pallet-parachain-system",
- "cumulus-primitives-core",
- "cumulus-primitives-parachain-inherent",
- "cumulus-test-relay-sproof-builder",
- "educhain-runtime",
- "frame-support",
- "frame-system",
- "pallet-balances",
- "pallet-timestamp",
- "parachains-common",
- "parity-scale-codec",
- "sp-consensus-aura",
- "sp-runtime",
- "sp-state-machine",
- "substrate-templates-fuzzers",
- "ziggy",
 ]
 
 [[package]]
@@ -15304,12 +15321,6 @@ dependencies = [
  "quote",
  "syn 2.0.66",
 ]
-
-[[package]]
-name = "ziggy"
-version = "0.8.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fb5e78a55125184c68a96a438daa281fbc2bbcd1b13bad7e94812b48883721b"
 
 [[package]]
 name = "zstd"

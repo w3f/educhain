@@ -7,8 +7,7 @@ use sp_core::{bytes::from_hex, sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
-pub type ChainSpec =
-    sc_service::GenericChainSpec<educhain_runtime::RuntimeGenesisConfig, Extensions>;
+pub type ChainSpec = sc_service::GenericChainSpec<Extensions>;
 
 /// The default XCM version to set in genesis config.
 const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
@@ -180,7 +179,6 @@ pub fn paseo_live_config() -> ChainSpec {
     .with_properties(properties)
     .build()
 }
-
 
 pub fn development_config() -> ChainSpec {
     // Give your base currency a unit name and decimal places

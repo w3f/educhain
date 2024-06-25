@@ -17,6 +17,7 @@ log = { workspace = true }
 parity-scale-codec = { workspace = true }
 serde = { workspace = true, features = [ "derive" ] }
 serde_json = { workspace = true }
+docify = "0.2.8"
 
 # Local
 educhain-runtime = { path = "../runtime" }
