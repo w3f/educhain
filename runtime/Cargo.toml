@@ -70,9 +70,7 @@ xcm-executor = { workspace = true }
 # Cumulus
 assets-common = { workspace = true }
 cumulus-pallet-aura-ext = { workspace = true }
-cumulus-pallet-parachain-system = { workspace = true, features = [
-	"parameterized-consensus-hook",
-] }
+cumulus-pallet-parachain-system = { workspace = true }
 cumulus-pallet-session-benchmarking = { workspace = true }
 cumulus-pallet-xcm = { workspace = true }
 cumulus-pallet-xcmp-queue = { workspace = true }
@@ -93,6 +91,7 @@ substrate-wasm-builder = { workspace = true }
 default = [ "std" ]
 std = [
 	"assets-common/std",
+	"cumulus-primitives-aura/std",
 	"cumulus-pallet-aura-ext/std",
 	"cumulus-pallet-parachain-system/std",
 	"cumulus-pallet-session-benchmarking/std",
@@ -153,7 +152,6 @@ std = [
 	"xcm-executor/std",
 	"xcm/std",
 ]
-async-backing = []
 
 runtime-benchmarks = [
 	"assets-common/runtime-benchmarks",
@@ -227,4 +225,17 @@ try-runtime = [
 	"sp-runtime/try-runtime",
 ]
 
-experimental = [ "pallet-aura/experimental" ]
+# Enable the metadata hash generation.
+# This is hidden behind a feature because it increases the compile time.
+# The wasm binary needs to be compiled twice, once to fetch the metadata,
+# generate the metadata hash and then a second time with the
+# `RUNTIME_METADATA_HASH` environment variable set for the `CheckMetadataHash`
+# extension.
+
+metadata-hash = ["substrate-wasm-builder/metadata-hash"]
+
+# A convenience feature for enabling things when doing a build
+# for an on-chain release.
+
+on-chain-release-build = ["metadata-hash"]
+
