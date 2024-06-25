@@ -55,9 +55,8 @@ pub use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 pub use sp_runtime::BuildStorage;
 use sp_runtime::{
     create_runtime_str, generic, impl_opaque_keys,
-    traits::{
-        AccountIdLookup, BlakeTwo256, IdentifyAccount, IdentityLookup, Verify,
-    }, MultiSignature, RuntimeDebug,
+    traits::{AccountIdLookup, BlakeTwo256, IdentifyAccount, IdentityLookup, Verify},
+    MultiSignature, RuntimeDebug,
 };
 pub use sp_runtime::{MultiAddress, Perbill, Permill};
 use sp_std::prelude::*;
