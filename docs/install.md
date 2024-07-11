@@ -29,7 +29,7 @@ The [`chain-spec-builder`](https://paritytech.github.io/polkadot-sdk/master/stag
 cargo install staging-chain-spec-builder
 ```
 
-And can be used as follows:
+You may find more information in the link above and in the [Parity Devops documentation](https://paritytech.github.io/devops-guide/explanations/chainspecs.html):
 
 ```sh
 ❯ chain-spec-builder --help
