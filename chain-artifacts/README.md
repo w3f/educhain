@@ -17,7 +17,7 @@ The above command won't add all the parameters needed for a parachain. Copy and 
   "name": "Educhain Rococo",
   "id": "live",
   "chainType": "Live",
-  "bootNodes": [],
+  "bootNodes": ["/dns/rpc.web3educhain.xyz/tcp/443/wss/p2p/12D3KooWSsdvq9KGZePoVcK1GQoh2DCGRb9FHzytnk4kZgMGF33f"],
   "telemetryEndpoints": null,
   "protocolId": "educhain-live",
   "properties": {
