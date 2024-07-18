@@ -1,0 +1,53 @@
+{
+    "balances": {
+      "balances": [
+        [
+          "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+          1152921504606846976
+        ],
+        [
+          "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+          1152921504606846976
+        ],
+        [
+          "5EXbqYi8soYTWwVsTXBRRc7YVmUJFsEqzw8bmeFQLbX8AKBZ",
+          1152921504606846976
+        ]
+      ]
+    },
+    "collatorSelection": {
+      "candidacyBond": 16000000000,
+      "invulnerables": [
+        "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+        "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi"
+      ]
+    },
+    "parachainInfo": {
+      "parachainId": 4428
+    },
+    "polkadotXcm": {
+      "safeXcmVersion": 4
+    },
+    "session": {
+      "keys": [
+        [
+          "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+          "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+          {
+            "aura": "5Ck7qhcDuEScRc4Sg1MXYkA8HW8cx8EdaxoW7cva5sGrTWQZ"
+          }
+        ],
+        [
+          "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+          "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+          {
+            "aura": "5CkZxLvH2UjBtWLoddGaavPVAv88o1Cww1aWa8UPz9Sw4iyv"
+          }
+        ]
+      ]
+    },
+    "sudo": {
+      "key": "5EXbqYi8soYTWwVsTXBRRc7YVmUJFsEqzw8bmeFQLbX8AKBZ"
+    },
+    "treasury": {}
+  }
