@@ -20,9 +20,9 @@ Candidates can add or remove themselves from collation on a live network. **Invu
 
 ## Node Roles & Resources
 
-For simplicity, EduChain has combined multiple roles into a single instance.  However, for more robust networks, it is recommended to split your operations into several instances so as to not overburden a single piece of architecture.
+For simplicity, EduChain runs a single node with multiple roles. However, for robustness, it is recommended that you split the network operations into several instances of nodes.
 
-For more information and details about different roles, refer to the [Parity Devops Guide.](https://paritytech.github.io/devops-guide/deployments/roles.html)
+For more information and details about different roles, refer to the [Parity DevOps Guide.](https://paritytech.github.io/devops-guide/deployments/roles.html)
 
 ## Setting up collators in the chain spec
 
