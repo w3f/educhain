@@ -44,7 +44,7 @@ pub const SESSION1: &str = "0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d43079
 pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374";
 ```
 
-For an explanation on the types of keys, their specific types, and how to generate them, refer to the [Parity Devops documentation.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html)
+For an explanation on the types of keys, their specific types, and how to generate them, refer to the [Parity DevOps documentation.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html)
 
 ## Running a "bootnode"
 
