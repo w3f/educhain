@@ -16,7 +16,13 @@ Assuming you plan on using the [`collator-selection`](https://paritytech.github.
 - **Candidates** - Accounts that have registered for becoming collators typically by bonding a deposit. These accounts receive authorization to collate if they meet the requirements set by the network. This ensures a permissionless way of registering to becoming a collator.
 - **Invulnerables** - Accounts that are *guaranteed* to participate in block production, irrespective of the boding requirements. If the collator selection mechanism is Aura, they will participate in block production round-robin style.
 
-Candidates can add or remove themselves from collation on a live network. **Invulnerables**, however, can only be added or removed through through an account with sudo or root privileges. They are aslo usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily. That way you can always gurantee a collator that can produce blocks.
+Candidates can add or remove themselves from collation on a live network. **Invulnerables**, however, can only be added or removed through an account with sudo or root privileges. They are also usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily. That way you can always gurantee a collator that can produce blocks.
+
+## Node Roles & Resources
+
+For simplicity, EduChain runs a single node with multiple roles. However, for robustness, it is recommended that you split the network operations into several instances of nodes.
+
+For more information and details about different roles, refer to the [Parity DevOps Guide.](https://paritytech.github.io/devops-guide/deployments/roles.html)
 
 ## Setting up collators in the chain spec
 
@@ -37,6 +43,8 @@ pub const COLLATOR2: &str = "0x3090de03bda721f91d4ea242c63c4220832194e63d2c5b61d
 pub const SESSION1: &str = "0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d4307986ce0ddf0d8530";
 pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374";
 ```
+
+For an explanation on the types of keys, their specific types, and how to generate them, refer to the [Parity DevOps documentation.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html)
 
 ## Running a "bootnode"
 
@@ -67,6 +75,8 @@ polkadot-parachain --name COLLATOR_NAME \
 > Note that a few of the arguments, such as `--name`, `--chain`, `--base-path` should be substituted with your own collator name, chain spec, and base path accordingly.
 
 Once your collator has synced with its respective relay-chain, and as long as you have coretime (either bulk or on-demand) then your collator should be making blocks.
+
+For a bootnode, it may help to generate a static network key, [see this guide for more details.](https://paritytech.github.io/devops-guide/guides/parachain_deployment.html#generate-parachain-private-keys)
 
 ### `systemd` and Collators
 
@@ -140,7 +150,7 @@ Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [
 
 ## Setting up SSL and nginx proxy
 
-This doesn't aim to be an exhaustive devops guide on nginx.  You should have the following already obtained:
+This doesn't aim to be an exhaustive devops guide on nginx ([for that, you can refer here](https://paritytech.github.io/devops-guide/overview.html)).  You should have the following already obtained:
 
 - A domain.
 - `nginx` installed.
