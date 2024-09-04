@@ -174,6 +174,10 @@ fn start_consensus(
     overseer_handle: OverseerHandle,
     announce_block: Arc<dyn Fn(Hash, Option<Vec<u8>>) + Send + Sync>,
 ) -> Result<(), sc_service::Error> {
+    #[cfg(not(feature = "async-backing"))]
+    use cumulus_client_consensus_aura::collators::basic::{self as basic_aura, Params};
+    #[cfg(feature = "async-backing")]
+    use cumulus_client_consensus_aura::collators::lookahead::{self as aura, Params};
     let proposer_factory = sc_basic_authorship::ProposerFactory::with_proof_recording(
         task_manager.spawn_handle(),
         client.clone(),
@@ -181,6 +185,9 @@ fn start_consensus(
         prometheus_registry,
         telemetry.clone(),
     );
+
+    #[cfg(not(feature = "async-backing"))]
+    let slot_duration = cumulus_client_consensus_aura::slot_duration(&*client)?;
 
     let proposer = Proposer::new(proposer_factory);
 
@@ -191,14 +198,19 @@ fn start_consensus(
         client.clone(),
     );
 
-    let params = AuraParams {
+    let params = Params {
         create_inherent_data_providers: move |_, ()| async move { Ok(()) },
         block_import,
+        #[cfg(not(feature = "async-backing"))]
+        para_client: client,
+        #[cfg(feature = "async-backing")]
         para_client: client.clone(),
+        #[cfg(feature = "async-backing")]
         para_backend: backend,
         relay_client: relay_chain_interface,
+        #[cfg(feature = "async-backing")]
         code_hash_provider: move |block_hash| {
-            client.code_at(block_hash).ok().map(|c| ValidationCode::from(c).hash())
+            client.code_at(block_hash).ok().map(ValidationCode).map(|c| c.hash())
         },
         sync_oracle,
         keystore,
@@ -208,10 +220,23 @@ fn start_consensus(
         relay_chain_slot_duration,
         proposer,
         collator_service,
-        authoring_duration: Duration::from_millis(2000),
+        // Very limited proposal time.
+        #[cfg(not(feature = "async-backing"))]
+        authoring_duration: Duration::from_millis(500),
+        #[cfg(feature = "async-backing")]
+        authoring_duration: Duration::from_millis(1500),
+        #[cfg(not(feature = "async-backing"))]
+        collation_request_receiver: None,
+        #[cfg(feature = "async-backing")]
         reinitialize: false,
     };
 
+    #[cfg(not(feature = "async-backing"))]
+    let fut =
+        basic_aura::run::<Block, sp_consensus_aura::sr25519::AuthorityPair, _, _, _, _, _, _, _>(
+            params,
+        );
+    #[cfg(feature = "async-backing")]
     let fut =
         aura::run::<Block, sp_consensus_aura::sr25519::AuthorityPair, _, _, _, _, _, _, _, _, _>(
             params,

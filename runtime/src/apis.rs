@@ -1,9 +1,7 @@
-// External crates imports
 use frame_support::{
     genesis_builder_helper::{build_state, get_preset},
     weights::Weight,
 };
-use pallet_aura::Authorities;
 use sp_api::impl_runtime_apis;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -12,24 +10,32 @@ use sp_runtime::{
     transaction_validity::{TransactionSource, TransactionValidity},
     ApplyExtrinsicResult,
 };
-use sp_std::{prelude::Vec, vec};
+use sp_std::prelude::Vec;
 use sp_version::RuntimeVersion;
 
-// Local module imports
-use super::{
-    AccountId, Balance, Block, ConsensusHook, Executive, InherentDataExt, Nonce, ParachainSystem,
-    Runtime, RuntimeBlockWeights, RuntimeCall, RuntimeGenesisConfig, SessionKeys, System,
-    TransactionPayment, SLOT_DURATION, VERSION,
+#[cfg(not(feature = "async-backing"))]
+use crate::Aura;
+#[cfg(feature = "async-backing")]
+use crate::{constants::SLOT_DURATION, types::ConsensusHook};
+use crate::{
+    xcm_config, Multisig,
+    AccountId, Balance, Block, Executive, Nonce, ConsensusHook,
+    InherentDataExt, ParachainSystem, Runtime, RuntimeCall, RuntimeGenesisConfig, SessionKeys,
+    System, TransactionPayment, Box, AllPalletsWithSystem, ExistentialDeposit, TransactionByteFee, 
+    FeeAssetId, CENTS, RelayLocation, VERSION, RuntimeBlockWeights
 };
 
 impl_runtime_apis! {
     impl sp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
         fn slot_duration() -> sp_consensus_aura::SlotDuration {
-            sp_consensus_aura::SlotDuration::from_millis(SLOT_DURATION)
+            #[cfg(feature = "async-backing")]
+            return sp_consensus_aura::SlotDuration::from_millis(SLOT_DURATION);
+            #[cfg(not(feature = "async-backing"))]
+            sp_consensus_aura::SlotDuration::from_millis(Aura::slot_duration())
         }
 
         fn authorities() -> Vec<AuraId> {
-            Authorities::<Runtime>::get().into_inner()
+            pallet_aura::Authorities::<Runtime>::get().into_inner()
         }
     }
 
@@ -166,6 +172,7 @@ impl_runtime_apis! {
         }
     }
 
+    #[cfg(feature = "async-backing")]
     impl cumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
         fn can_build_upon(
             included_hash: <Block as BlockT>::Hash,
@@ -207,6 +214,8 @@ impl_runtime_apis! {
 
             use pallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
 
+            use super::*;
+
             let mut list = Vec::<BenchmarkList>::new();
             list_benchmarks!(list, extra);
 
@@ -218,8 +227,11 @@ impl_runtime_apis! {
             config: frame_benchmarking::BenchmarkConfig
         ) -> Result<Vec<frame_benchmarking::BenchmarkBatch>, sp_runtime::RuntimeString> {
             use frame_benchmarking::{BenchmarkError, Benchmarking, BenchmarkBatch};
-
+            use frame_support::parameter_types;
+            use cumulus_primitives_core::ParaId;
             use frame_system_benchmarking::Pallet as SystemBench;
+            use super::*;
+
             impl frame_system_benchmarking::Config for Runtime {
                 fn setup_set_code_requirements(code: &sp_std::vec::Vec<u8>) -> Result<(), BenchmarkError> {
                     ParachainSystem::initialize_for_set_code_benchmark(code.len() as u32);
@@ -302,16 +314,16 @@ impl_runtime_apis! {
     }
 
     impl sp_genesis_builder::GenesisBuilder<Block> for Runtime {
-        fn build_state(config: Vec<u8>) -> sp_genesis_builder::Result {
-            build_state::<RuntimeGenesisConfig>(config)
-        }
+		fn build_state(config: Vec<u8>) -> sp_genesis_builder::Result {
+			build_state::<RuntimeGenesisConfig>(config)
+		}
 
-        fn get_preset(id: &Option<sp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
-            get_preset::<RuntimeGenesisConfig>(id, |_| None)
-        }
+		fn get_preset(id: &Option<sp_genesis_builder::PresetId>) -> Option<Vec<u8>> {
+			get_preset::<RuntimeGenesisConfig>(id, |_| None)
+		}
 
-        fn preset_names() -> Vec<sp_genesis_builder::PresetId> {
-            vec![]
-        }
+		fn preset_names() -> Vec<sp_genesis_builder::PresetId> {
+			Default::default()
+		}
     }
 }
