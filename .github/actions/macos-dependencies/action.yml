@@ -7,6 +7,7 @@ runs:
     - run: |
         curl https://sh.rustup.rs -sSf -y | sh
         brew install protobuf
-        rustup target add wasm32-unknown-unknown --toolchain stable-aarch64-apple-darwin
-        rustup component add rust-src --toolchain stable-aarch64-apple-darwin
+        rustup default nightly-2024-08-07
+        rustup target add wasm32-unknown-unknown --toolchain nightly-2024-08-07
+        rustup component add rust-src --toolchain nightly-2024-08-07
       shell: sh
