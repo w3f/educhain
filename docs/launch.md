@@ -1,9 +1,9 @@
-# Launching on Rococo
+# Launching on Paseo
 
 [OpenZeppelin Polkadot Generic Runtime Template](https://github.com/OpenZeppelin/polkadot-runtime-templates) 
 was chosen as a candidate for launching Educhain. They crafted the pallet list to be as minimalistic and 
 preserved important pallets that are used in the Polkadot ecosystem. Their [docs](https://docs.openzeppelin.com/substrate-runtimes/1.0.0/)
-serve as a good starting point to understand the launch process of a parachain on Polkadot testnet Rococo.
+along with [POP network docs](https://learn.onpop.io/v/appchains/guides/launching-your-parachain-on-polkadot/launching-on-paseo) serve as a good starting point to understand the launch process of a parachain on Polkadot testnet Paseo.
 
 ## Personalize Template
 

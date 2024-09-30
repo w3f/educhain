@@ -2,7 +2,7 @@
 
 Educating Web3 through [Polkadot SDK.](https://github.com/paritytech/polkadot-sdk)
 
-> [**Educhain On-demand Parachain is now live on Rococo**](https://polkadot.js.org/apps/?rpc=wss://rpc.web3educhain.xyz:443#/explorer)
+> [**Educhain On-demand Parachain is now live on Paseo**](https://polkadot.js.org/apps/?rpc=wss://rpc.web3educhain.xyz:443#/explorer)
 
 ## Why Educhain?
 
