@@ -5,7 +5,7 @@
 
 <img height="70px" alt="Polkadot SDK Logo" src="https://github.com/paritytech/polkadot-sdk/raw/master/docs/images/Polkadot_Logo_Horizontal_Pink_Black.png#gh-light-mode-only"/>
 
-> EduChain was using the [parachain template](https://github.com/paritytech/polkadot-sdk-parachain-template).
+> EduChain is based on the [parachain template](https://github.com/paritytech/polkadot-sdk-parachain-template).
 >
 > This template is automatically updated after releases in the main [Polkadot SDK monorepo](https://github.com/paritytech/polkadot-sdk).
 
@@ -17,8 +17,7 @@ tutorials on a wide range of [Polkadot SDK](https://github.com/paritytech/polkad
 
 * ⏫ This template provides a starting point to build a [parachain](https://wiki.polkadot.network/docs/learn-parachains).
 
-* ☁️ It is based on the
-[Cumulus](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
+* ☁️ It is based on the [Cumulus](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
 
 * 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
 such as a [Balances pallet](https://paritytech.github.io/polkadot-sdk/master/pallet_balances/index.html).
