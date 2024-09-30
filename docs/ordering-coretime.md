@@ -21,7 +21,7 @@ yarn global add @polkadot/api-cli
 npm -g install @polkadot/api-cli
 ```
 
-Once installed, you can send the extrinsic as follows. Be sure to supplement a seed phrase with ROC ([faucet here](https://faucet.polkadot.io/)) and also replace `PARA_ID` with your parachain's ID on Rococo:
+Once installed, you can send the extrinsic as follows. Be sure to supplement a seed phrase with ROC ([faucet here](https://faucet.polkadot.io/)) and also replace `PARA_ID` with your parachain's ID on Paseo:
 
 ```sh
 polkadot-js-api tx.onDemand.placeOrderAllowDeath \
@@ -36,11 +36,11 @@ If you want to, you can also run a shell script which orders a block at regular 
 ```sh
 while :
 do
-    polkadot-js-api tx.onDemandAssignmentProvider.placeOrderAllowDeath \
+    polkadot-js-api tx.onDemand.placeOrderAllowDeath \
         1000000000000 \
         PARA_ID \
         --seed "your seed here" \
-        --ws "wss://rococo-rpc.polkadot.io"
+        --ws "wss://paseo.rpc.amforc.com"
     sleep 12
 done
 ```
