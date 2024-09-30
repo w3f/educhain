@@ -15,6 +15,8 @@ Parachain developed and maintained by Technical Education team at Web3 Foundatio
 tutorials on a wide range of [Polkadot SDK](https://github.com/paritytech/polkadot-sdk) enabled features.
 
 
+## Template Structure
+
 * ⏫ This template provides a starting point to build a [parachain](https://wiki.polkadot.network/docs/learn-parachains).
 
 * ☁️ It is based on the [Cumulus](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
@@ -23,8 +25,6 @@ tutorials on a wide range of [Polkadot SDK](https://github.com/paritytech/polkad
 such as a [Balances pallet](https://paritytech.github.io/polkadot-sdk/master/pallet_balances/index.html).
 
 * 👉 Learn more about parachains [here](https://wiki.polkadot.network/docs/learn-parachains)
-
-## Template Structure
 
 A Polkadot SDK based project such as this one consists of:
 
