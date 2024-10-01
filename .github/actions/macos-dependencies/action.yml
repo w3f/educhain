@@ -1,0 +1,14 @@
+name: Install macOS dependencies
+description: Installs dependencies required to compile the template on macOS
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        curl https://sh.rustup.rs -sSf -y | sh
+        brew install protobuf
+        rustup default nightly-2024-08-07
+        rustup target add wasm32-unknown-unknown --toolchain nightly-2024-08-07
+        rustup component add rust-src --toolchain nightly-2024-08-07
+        rustup component add clippy --toolchain nightly-2024-08-07
+      shell: sh
