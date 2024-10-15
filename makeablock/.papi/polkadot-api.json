@@ -1,0 +1,10 @@
+{
+  "version": 0,
+  "descriptorPath": ".papi/descriptors",
+  "entries": {
+    "pas": {
+      "chain": "paseo",
+      "metadata": ".papi/metadata/pas.scale"
+    }
+  }
+}
