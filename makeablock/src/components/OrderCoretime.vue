@@ -24,14 +24,13 @@ const disable = ref(false);
 const buttonText = ref("MAKE A BLOCK!");
 
 function buyBlock() {
-    console.log("test")
     // Only for EduChain on Pas!
     const tx = pasApi.tx.OnDemand.place_order_keep_alive({
         max_amount: 1000000000000000n,
         para_id: paraId.value
     });
 
-    tx.signSubmitAndWatch(useAppStore().$state.selectedAccount.polkadotSigner).subscribe((status) => {
+    tx.signSubmitAndWatch(useAppStore().$state.selectedAccount!.polkadotSigner).subscribe((status) => {
         console.log(status)
         disable.value = true;
         buttonText.value = "BLOCK ORDERED, WAITING FOR FINALIZATION...";
