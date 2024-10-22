@@ -20,35 +20,58 @@ Candidates can add or remove themselves from collation on a live network. **Invu
 
 ## Node Roles & Resources
 
-For simplicity, EduChain runs a single node with multiple roles. However, for robustness, it is recommended that you split the network operations into several instances of nodes.
+For simplicity, EduChain runs a single node with multiple roles (as an RPC node *and* collator). However, for robustness, it is recommended that you split the network operations into several instances of nodes, i.e., a separate VPS/instance for an RPC and collator node.
 
 For more information and details about different roles, refer to the [Parity DevOps Guide.](https://paritytech.github.io/devops-guide/deployments/roles.html)
 
 ## Setting up collators in the chain spec
 
-If you are using the parachain template, you can add collator account keys into [`src/node/chain_spec.rs`](https://github.com/w3f/educhain/blob/main/node/src/chain_spec.rs).  You can configure:
+If you are using the parachain template, you can configure a [patch file](https://github.com/w3f/educhain/blob/main/educhain.patch.json) to generate a chain specification, wherein you can setup:
 
 - The initial *public* session key(s).
 - The collator(s) public keys which are used for setting its identity and a destination for rewards (if any).
 
-As an example, EduChain sets **two** initial collator and session public keys, allowing the chain to hit the ground running with two collators which are not running with Bob or Alice keys:
+As an example, EduChain sets **two** initial collator and session public keys for Aura, allowing the chain to hit the ground running with two collators which are not running with Bob or Alice keys:
 
-```rust
+```json
 // Collator accounts that produce blocks and earn rewards.
-pub const COLLATOR1: &str = "0x38a2edbf7cd629e10700376f941122bf6c6a7b705bb70d6eb15359099055015b";
-pub const COLLATOR2: &str = "0x3090de03bda721f91d4ea242c63c4220832194e63d2c5b61dbcbdd458224350f";
+"collatorSelection": {
+    "candidacyBond": 16000000000,
+    "invulnerables": [
+    "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+    "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi"
+    ]
+},
 
-// The private key of these session keys needs to be inserted into the collator node for it to start
+// Note: The private key of these session keys needs to be inserted into the collator node for it to start
 // producing blocks.
-pub const SESSION1: &str = "0x1e0f4e48f26d802ce3699872c97e2ec7f8476a9b27a5d4307986ce0ddf0d8530";
-pub const SESSION2: &str = "0x1e673715db64783eadc6ca927e493ded30f2447efff0f6d5d84578e823f86374";
+"session": {
+    "keys": [
+    [
+        "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+        "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+        {
+        "aura": "5Ck7qhcDuEScRc4Sg1MXYkA8HW8cx8EdaxoW7cva5sGrTWQZ"
+        }
+    ],
+    [
+        "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+        "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+        {
+        "aura": "5CkZxLvH2UjBtWLoddGaavPVAv88o1Cww1aWa8UPz9Sw4iyv"
+        }
+    ]
+    ]
+},
 ```
+
+You can then use this patch file with `chain-spec-builder` and the Wasm runtime to generate the chain specification, [as shown here.](https://wiki.polkadot.network/docs/build-guides-template-basic#generating-the-chain-specification)
 
 For an explanation on the types of keys, their specific types, and how to generate them, refer to the [Parity DevOps documentation.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html)
 
-## Running a "bootnode"
+## Running your collator
 
-To run a bootnode, one just needs to make sure that: 
+To run a collator, one needs to make sure that:
 
 - The node is synced with the relay chain (a local copy is needed, pruning is *highly* recommended)
 - The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) `key insert` command.
@@ -63,11 +86,12 @@ polkadot-parachain --name COLLATOR_NAME \
 --chain plain-parachain-chainspec.json \
 --base-path ./educhain \
 --rpc-cors=all \
+--rpc-methods=safe \
 --port 30333 \
 --rpc-port 8844 \
 -- \
---chain rococo \
---sync fast-unsafe \
+--chain paseo \
+--sync warp \
 --blocks-pruning 256
 --state-pruning 256
 ```
@@ -89,13 +113,17 @@ polkadot-parachain --name C2_EDU \
 --chain plain-parachain-chainspec.json \
 --base-path ./educhain \
 --rpc-cors=all \
+--rpc-methods=safe \
 --port 30333 \
 --rpc-port 8844 \
 -- \
---chain rococo \
---sync fast-unsafe \
+--chain paseo \
+--sync warp \
 --blocks-pruning 256
+--state-pruning 256
 ```
+
+> Note that `--rpc-methods=safe` disables certain RPC calls from the outside world.  If you wish to call these unsafe calls externally, you may remove `--rpc-methods=safe`.  It is prudent that for production environments, you ensure that no one can access these crucial calls (i.e., setting the keys in your node).
 
 - `collator.service`:
 ```ini
@@ -152,9 +180,9 @@ Jun 10 20:48:15 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:15 [
 
 This doesn't aim to be an exhaustive devops guide on nginx ([for that, you can refer here](https://paritytech.github.io/devops-guide/overview.html)).  You should have the following already obtained:
 
-- A domain.
-- `nginx` installed.
-- A free SSL certificate via [Lets Encrypt](https://letsencrypt.org/) via `certbot`.
+- A domain
+- `nginx` installed
+- A free SSL certificate via [Lets Encrypt](https://letsencrypt.org/) via `certbot`
 
 Once that is in place, navigate to your site's nginx config, and go to the server block with Certbot's SSL settings, and paste the following:
 
