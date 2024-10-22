@@ -1,6 +1,7 @@
 <template>
   <v-container class="order" align="center" justify="center">
-    <h1>make blocks - paseo on demand</h1>
+    <h1>Make Blocks On-demand on Paseo Network</h1>
+    <a href="https://web3educhain.xyz/" target="_blank">Learn how to launch an on-demand parachain!</a>
     <a href="https://faucet.polkadot.io/" target="_blank">NEED $PAS? GO TO THE FAUCET!</a>
     <br />
     <AccountSelector />
