@@ -14,7 +14,7 @@ If you wish to connect an RPC Node through its IP address, then the [Substrate f
 Assuming you plan on using the [`collator-selection`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet (which is typically the default in most of the templates, and it is also what Educhain uses), there are two terms you need to be familiar with: 
 
 - **Candidates** - Accounts that have registered for becoming collators typically by bonding a deposit. These accounts receive authorization to collate if they meet the requirements set by the network. This ensures a permissionless way of registering to becoming a collator.
-- **Invulnerables** - Accounts that are *guaranteed* to participate in block production, irrespective of the boding requirements. If the collator selection mechanism is Aura, they will participate in block production round-robin style.
+- **Invulnerables** - Accounts that are *guaranteed* to participate in block production, irrespective of the bonding requirements. If the collator selection mechanism is Aura, they will participate in block production round-robin style.
 
 Candidates can add or remove themselves from collation on a live network. **Invulnerables**, however, can only be added or removed through an account with sudo or root privileges. They are also usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily. That way you can always gurantee a collator that can produce blocks.
 
@@ -43,8 +43,7 @@ As an example, EduChain sets **two** initial collator and session public keys fo
     ]
 },
 
-// Note: The private key of these session keys needs to be inserted into the collator node for it to start
-// producing blocks.
+// Note: The private key of these session keys needs to be inserted into the collator node for it to start producing blocks.
 "session": {
     "keys": [
     [
@@ -65,20 +64,31 @@ As an example, EduChain sets **two** initial collator and session public keys fo
 },
 ```
 
+You may notice that the collator and aura/session keys are different. For security reasons, the collator key should be stored in a secure location, i.e., a hardware wallet. The session key can change, and is effectively linked to the invulnerable key.
+
 You can then use this patch file with `chain-spec-builder` and the Wasm runtime to generate the chain specification, [as shown here.](https://wiki.polkadot.network/docs/build-guides-template-basic#generating-the-chain-specification)
 
 For an explanation on the types of keys, their specific types, and how to generate them, refer to the [Parity DevOps documentation.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html)
 
-## Running your collator
+## Configuring and running your collator
 
 To run a collator, one needs to make sure that:
 
 - The node is synced with the relay chain (a local copy is needed, pruning is *highly* recommended)
-- The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) `key insert` command.
+- The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) `key insert` command
+- To receive collator rewards, the session key and invulnerable address need to be linked. Otherwise, it will default to the first invulnerable in the configuration
+
+> **Note**: that it is recommended to insert the keys locally in your node, as RPC methods should not be exposed for external calls. In order for the below to work, `--rpc-methods` must be set to `unsafe`, or not set at all.
 
 ![Set Aura key RPC](./img/collator/set-collator-aura-key.png)
 
-Check out this sample command, which runs a parachain collator using the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) binary:
+Alternatively, with [`polkadot-parachain`, as seen in the Parity DevOps handbook.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html#insert-a-specific-key-onto-a-node-keystore-using-the-node-binary)
+
+### Running the collator
+
+Once your session keys are properly inserted, you can run your collator.
+
+This sample command runs a collator using the [`polkadot-parachain` (or "omninode")](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) binary:
 
 ```sh
 polkadot-parachain --name COLLATOR_NAME \
@@ -98,9 +108,18 @@ polkadot-parachain --name COLLATOR_NAME \
 
 > Note that a few of the arguments, such as `--name`, `--chain`, `--base-path` should be substituted with your own collator name, chain spec, and base path accordingly.
 
-Once your collator has synced with its respective relay-chain, and as long as you have coretime (either bulk or on-demand) then your collator should be making blocks.
+Once your collator has synced with its respective relay-chain, and as long as you have coretime (either bulk or on-demand are suitable) then your collator should be capable of blocks.
 
 For a bootnode, it may help to generate a static network key, [see this guide for more details.](https://paritytech.github.io/devops-guide/guides/parachain_deployment.html#generate-parachain-private-keys)
+
+### Changing / rotating session keys
+
+Because the genesis already sets the keys for the invulnerable and session keys, we do not need to call `session.setKeys` explicitly. As long as the correct session keys in the genesis are inserted for the collator, then it will use that account for rewards and block production.
+
+However, if wish rotate keys, then we need to ensure that the mapping is properly updated:
+
+- Calling `author.rotateKeys()` and copying the public key
+- Setting the new key via ``
 
 ### `systemd` and Collators
 
