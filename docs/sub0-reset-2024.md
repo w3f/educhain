@@ -6,13 +6,23 @@ The journey of any production grade application always starts on a test network.
 [Paseo Network](https://github.com/paseo-network), maintained by the community. Paseo network mirrors Polkadot and its system chain
 runtimes, making it a play ground to test apps as well as appchains! 
 
+## Who is the audience?
+
+Anyone who wants to understand the process of launching their own chain on Polkadot. Some pre-requisite skills that help:
+
+- Familiarity with Polkadot JS UI
+- Have Substrate runtime development experience
+- Tinkered with [minimal chain](https://github.com/paritytech/polkadot-sdk-minimal-template) and [solochain](https://github.com/paritytech/polkadot-sdk-solochain-template) templates
+
+Anyone who likes to understand how to leverage the powerful system chain integration options available on Polkadot.
+
 ## Tasks
 
-- (Easy) Register a ParaID on Paseo Network
-- (Easy) Build the parachain template node
+- (Easy) [Register a ParaID](#register-a-paraid) on Paseo Network
+- (Easy) Build the [parachain template](#build-parachain-template)
 
 - (Intermediate) Build Chainspec with custom collator keys
-- (Intermediate) Register genesis state and wasm blob of the parachain (You will need the support of Paseo network maintainers to get sufficient PAS tokens for this)
+- (Intermediate) Register genesis state and wasm blob of the parachain ()
 - (Intermediate) Run collator nodes and set collator keys
 
 After the parachain is onboarded
@@ -26,6 +36,18 @@ Integrations with System chains
 - (Easy) Establish a channel with Paseo Asset Hub
 - (Intermediate) Register the parachain native token as a foreign asset on Paseo Asset Hub
 
+### Register a ParaID
 
+- If you have not already, Create an account using any of the awesome [Polkadot wallets](https://polkadot.com/get-started/wallets) for browsers.
+- Get the PAS tokens from the [Polkadot Faucet](https://faucet.polkadot.io/).
+- Navigate to [Parachains tab on Polkadot JS UI](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.rpc.amforc.com#/parachains/parathreads) on Paseo Network and click on ParaID and do the needful to register a unique `ParaID`
 
+### Build Parachain Template
+
+- Setup the [Polkadot Parachain template](https://github.com/paritytech/polkadot-sdk-parachain-template) repository
+- Follow the installation instructions and build the parachain template
+- Explore all the commands available `./target/release/parachain-template-node --help`
+- Start the parachain node locally with `./target/release/parachain-template-node --dev` and connect to it at the endpoint `ws://127.0.0.1:9944` using Polkadot JS UI. No blocks are produced in this mode.
+
+![Connect to Parachain Template Node](./img/template/parachain-template-dev.png)
 
