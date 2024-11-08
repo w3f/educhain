@@ -8,13 +8,11 @@ runtimes, making it a play ground to test apps as well as appchains!
 
 ## Who is the audience?
 
-Anyone who wants to understand the process of launching their own chain on Polkadot. Some pre-requisite skills that help:
+Anyone who wants to understand the process of launching their own chain on Polkadot and to leverage the powerful system chain integration options available. Some pre-requisite skills that help:
 
-- Familiarity with Polkadot JS UI
-- Have Substrate runtime development experience
-- Tinkered with [minimal chain](https://github.com/paritytech/polkadot-sdk-minimal-template) and [solochain](https://github.com/paritytech/polkadot-sdk-solochain-template) templates
-
-Anyone who likes to understand how to leverage the powerful system chain integration options available on Polkadot.
+- familiarity with Polkadot JS UI
+- have Substrate runtime development experience
+- tinkered with [minimal chain](https://github.com/paritytech/polkadot-sdk-minimal-template) and [solochain](https://github.com/paritytech/polkadot-sdk-solochain-template) templates
 
 ## Tasks
 
@@ -28,13 +26,16 @@ Anyone who likes to understand how to leverage the powerful system chain integra
 After the parachain is onboarded
 
 - (Easy) Produce the first parachain block on-demand
-- (Intermediate) Add a new pallet to the parachain runtime
-- (Advanced) Perform a runtime upgrade
 
 Integrations with System chains
 
-- (Easy) Establish a channel with Paseo Asset Hub
+- (Easy) [Establish a communication channel](#establish-hrmp-channel-with-asset-hub) with Paseo Asset Hub
 - (Intermediate) Register the parachain native token as a foreign asset on Paseo Asset Hub
+
+More tinkering to do!
+
+- (Intermediate) Add a new pallet to the parachain runtime
+- (Advanced) Perform a runtime upgrade
 
 ### Register a ParaID
 
@@ -50,4 +51,20 @@ Integrations with System chains
 - Start the parachain node locally with `./target/release/parachain-template-node --dev` and connect to it at the endpoint `ws://127.0.0.1:9944` using Polkadot JS UI. No blocks are produced in this mode.
 
 ![Connect to Parachain Template Node](./img/template/parachain-template-dev.png)
+
+### Establish HRMP Channel with Asset Hub
+
+- Check Educhain < > Asset Hub channel setup instructions [here](asset-hub.md#asset-hub-channel-setup)
+- If you are not familiar with sending XCM calls from your parachain, you can view a live demo on Asset Hub channel setup [here](https://www.youtube.com/watch?v=4vq12vY0uYs&t=1445s)
+
+### Establish HRMP Channel with Asset Hub
+
+- Check Educhain < > Asset Hub channel setup instructions [here](asset-hub.md#asset-hub-channel-setup)
+- If you are not familiar with constructing/sending XCM calls from your parachain, you can view a live demo on Asset Hub channel setup [here](https://www.youtube.com/watch?v=4vq12vY0uYs&t=1445s)
+
+### Register Foreign Asset
+
+- Check the instructions for the registration of parachain native token as a foreign asset [here](asset-hub.md#foreign-asset-registry)
+- If you are not familiar with constructing/sending XCM calls from your parachain, you can view a live demo on Foreign Asset Registration [here](https://youtu.be/4vq12vY0uYs?si=JwPMBHKz1_njIZBc&t=1373)
+
 
