@@ -1,4 +1,6 @@
-# Sub0 Reset 2024 Workshop - Lauch your Appchain to Production
+# Sub0 Reset 2024 Workshop
+
+## Launch your Appchain to Production
 
 The journey of any production grade application always starts on a test network. Polkadot is privileged to have a high quality testnet: 
 [Paseo Network](https://github.com/paseo-network), maintained by the community. Paseo network mirrors Polkadot and its system chain
