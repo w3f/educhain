@@ -20,7 +20,7 @@ Anyone who wants to understand the process of launching their own chain on Polka
 - (Easy) Build the [parachain template](#build-parachain-template)
 
 - (Intermediate) Build Chainspec with custom collator keys
-- (Intermediate) Register genesis state and wasm blob of the parachain ()
+- (Intermediate) Register genesis state and wasm blob of the parachain
 - (Intermediate) Run collator nodes and set collator keys
 
 After the parachain is onboarded
@@ -56,11 +56,6 @@ More tinkering to do!
 
 - Check Educhain < > Asset Hub channel setup instructions [here](asset-hub.md#asset-hub-channel-setup)
 - If you are not familiar with sending XCM calls from your parachain, you can view a live demo on Asset Hub channel setup [here](https://www.youtube.com/watch?v=4vq12vY0uYs&t=1445s)
-
-### Establish HRMP Channel with Asset Hub
-
-- Check Educhain < > Asset Hub channel setup instructions [here](asset-hub.md#asset-hub-channel-setup)
-- If you are not familiar with constructing/sending XCM calls from your parachain, you can view a live demo on Asset Hub channel setup [here](https://www.youtube.com/watch?v=4vq12vY0uYs&t=1445s)
 
 ### Register Foreign Asset
 
