@@ -4,7 +4,7 @@
 
 The journey of any production grade application always starts on a test network. Polkadot is privileged to have a high quality testnet: 
 [Paseo Network](https://github.com/paseo-network), maintained by the community. Paseo network mirrors Polkadot and its system chain
-runtimes, making it a play ground to test apps as well as appchains! 
+runtimes, making it a play ground for testing apps as well as appchains! 
 
 ## Who is the audience?
 
