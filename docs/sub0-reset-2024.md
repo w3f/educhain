@@ -16,12 +16,16 @@ Anyone who wants to understand the process of launching their own chain on Polka
 
 ## Tasks
 
+### Before attending the workshop
+
 - (Easy) [Register a ParaID](#register-a-paraid) on Paseo Network
 - (Easy) Build the [parachain template](#build-parachain-template)
 
-- (Intermediate) Build Chainspec with custom collator keys
-- (Intermediate) Register genesis state and wasm blob of the parachain
+- (Intermediate) Build [Chainspec](#chain-spec-with-genesis-state-and-wasm) with custom collator keys
+- (Easy) Register genesis state and wasm blob of the parachain
 - (Intermediate) Run collator nodes and set collator keys
+
+### During the Workshop
 
 After the parachain is onboarded
 
@@ -33,6 +37,8 @@ Integrations with System chains
 - (Intermediate) Register the parachain native token as a foreign asset on Paseo Asset Hub
 
 More tinkering to do!
+
+### After the Workshop
 
 - (Intermediate) Add a new pallet to the parachain runtime
 - (Advanced) Perform a runtime upgrade
@@ -51,6 +57,32 @@ More tinkering to do!
 - Start the parachain node locally with `./target/release/parachain-template-node --dev` and connect to it at the endpoint `ws://127.0.0.1:9944` using Polkadot JS UI. No blocks are produced in this mode.
 
 ![Connect to Parachain Template Node](./img/template/parachain-template-dev.png)
+
+### Chain Spec with Genesis State and Wasm
+
+The Genesis state paired with Wasm (State Transition function) contains all the info that is needed for a node to start producing blocks. It includes the information that uniquely identifies the Parachain (ParaID), relay chain, collator keys etc.
+
+Although, dev keys like Alice, Bob etc. help with tinkering with the node, it is important to remove them and work with the keys generated
+by you. The genesis state can be used include accounts with pre-minted balance, accounts with root (sudo) privileges, collator identity
+and session keys etc. In case of chain migrations, the genesis could be the snapshot of the entire chain state. 
+
+For the workshop you can work on
+
+- Adding an account or multiple accounts with funds
+- Adding at least one account with root privileges to issue sudo calls
+- [Adding at least one pair of collator keys (identity and session)](collator.md#setting-up-collators-in-the-chain-spec)
+
+Do not make the mistake of reusing the collator identity keys for session keys. The session keys are placed on a hot wallet and are 
+[rotated often](collator.md#changing--rotating-session-keys). The collator identity key remains the same. That key is the identifier for the node that produces a block. 
+
+### Register Genesis State and Wasm
+
+Navigate to [Parachains tab on Polkadot JS UI](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.rpc.amforc.com#/parachains/parathreads) on Paseo Network and click on ParaID and do the needful to register Genesis state and wasm.
+
+
+### Set Collator Session Keys
+
+Follow the instructions on configuring the collator keys [here](collator.md#configuring-and-running-your-collator)
 
 ### Establish HRMP Channel with Asset Hub
 
