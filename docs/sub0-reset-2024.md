@@ -36,9 +36,9 @@ Integrations with System chains
 - (Easy) [Establish a communication channel](#establish-hrmp-channel-with-asset-hub) with Paseo Asset Hub
 - (Intermediate) Register the parachain native token as a foreign asset on Paseo Asset Hub
 
-More tinkering to do!
-
 ### After the Workshop
+
+More tinkering to do!
 
 - (Intermediate) Add a new pallet to the parachain runtime
 - (Advanced) Perform a runtime upgrade
