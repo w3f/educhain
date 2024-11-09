@@ -23,7 +23,7 @@ Anyone who wants to understand the process of launching their own chain on Polka
 
 - (Intermediate) Build [Chainspec](#chain-spec-with-genesis-state-and-wasm) with custom collator keys
 - (Easy) Register genesis state and wasm blob of the parachain
-- (Intermediate) Run collator nodes and set collator keys
+- (Easy) Run collator nodes and set collator keys
 
 ### During the Workshop
 
@@ -33,7 +33,7 @@ After the parachain is onboarded
 
 Integrations with System chains
 
-- (Easy) [Establish a communication channel](#establish-hrmp-channel-with-asset-hub) with Paseo Asset Hub
+- (Intermediate) [Establish a communication channel](#establish-hrmp-channel-with-asset-hub) with Paseo Asset Hub
 - (Intermediate) Register the parachain native token as a foreign asset on Paseo Asset Hub
 
 ### After the Workshop
@@ -73,11 +73,29 @@ For the workshop you can work on
 - [Adding at least one pair of collator keys (identity and session)](collator.md#setting-up-collators-in-the-chain-spec)
 
 Do not make the mistake of reusing the collator identity keys for session keys. The session keys are placed on a hot wallet and are 
-[rotated often](collator.md#changing--rotating-session-keys). The collator identity key remains the same. That key is the identifier for the node that produces a block. 
+[rotated often](collator.md#changing--rotating-session-keys). The collator identity key remains the same. That key is the identifier for 
+the node that produces a block. 
+
+After defining a live chain config in `chain_spec.rs` file, generate plain and raw parachain specs using the commands below, followed by
+commands to generate genesis state and wasm. 4540 was the ParaID used to create a parachain for Sub0 Reset following the instructions on
+this document.
+
+`./target/release/parachain-template-node build-spec --disable-default-bootnode --chain live  > plain-parachain-chainspec.json`
+
+`./target/release/parachain-template-node build-spec --chain plain-parachain-chainspec.json --disable-default-bootnode --raw > raw-parachain-chainspec.json`
+
+`./target/release/parachain-template-node export-genesis-state --chain raw-parachain-chainspec.json para-4540-genesis-state`
+
+`./target/release/parachain-template-node export-genesis-wasm --chain raw-parachain-chainspec.json para-4540-wasm`
+
 
 ### Register Genesis State and Wasm
 
 Navigate to [Parachains tab on Polkadot JS UI](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fpaseo.rpc.amforc.com#/parachains/parathreads) on Paseo Network and click on ParaID and do the needful to register Genesis state and wasm.
+
+It takes two hours for the parachain to be on-boarded.
+
+![Parachain Onboarding](./img/template/parachain-template-dev.png)
 
 
 ### Set Collator Session Keys
