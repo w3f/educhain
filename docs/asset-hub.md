@@ -21,7 +21,7 @@ on Paseo chain to send tokens to.
 The native token of a parachain can be registered as a Foriegn Asset on Asset Hub. This can be accomplished 
 through an XCM call from the parachain to the Asset Hub that invokes `create` call of the `foreignAssets` 
 pallet. Here is the call that needed to be executed on the Asset Hub to register its native token as a foreign asset `0x3500010100f146007369626cbc11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000`. As this call cannot be directly executed on Paseo Asset Hub, it is wrapped in a sudo XCM call from the parachain 
-`0x0f001f0003010100a10f0314000400010000070010a5d4e81300010000070010a5d4e800060382acd84fc542e03500010100f146007369626cbc11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000140d0100000100f146`
+`0x0f001f0003010100a10f03140004000100000700e876481713000100000700e876481700060382acd84fc542e03500010100f146007369626cbc11000000000000000000000000000000000000000000000000000000ca9a3b000000000000000000000000140d0100000100f146`
 
 The next step is to create metadata for the asset on Asset Hub. Here is the call that needed to be executed 
 on the Asset Hub via the XCM message from parachain `0x3511010100314520456475636861696e0c4544550a`. Repeat the same procedure as above.
