@@ -14,6 +14,12 @@ Anyone who wants to understand the process of launching their own chain on Polka
 - have Substrate runtime development experience
 - tinkered with [minimal chain](https://github.com/paritytech/polkadot-sdk-minimal-template) and [solochain](https://github.com/paritytech/polkadot-sdk-solochain-template) templates
 
+## Having Trouble following the instructions?
+
+As there are several moving parts, it is undertsandable that first time learners of Polkadot SDK can get a bit  overwhelmed. For
+the code changes that need to be made to successfully complete this workshop,  you can find the repository 
+[here](https://github.com/DrW3RK/polkadot-sdk-parachain-template/commit/7be19b80afa5c5df8c284f02ca50e22b76088510)
+
 ## Tasks
 
 ### Before attending the workshop
