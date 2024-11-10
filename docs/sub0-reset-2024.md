@@ -100,7 +100,48 @@ It takes two hours for the parachain to be on-boarded.
 
 ### Set Collator Session Keys
 
-Follow the instructions on configuring the collator keys [here](collator.md#configuring-and-running-your-collator)
+If you try to start are a collator without ssetting the keys in the storage, you will be presented with the following options:
+
+```
+Starting an authorithy without network key in ./sub0-reset/chains/live/network/secret_ed25519.
+      
+       This is not a safe operation because other authorities in the network may depend on your node having a stable identity.
+      
+       Otherwise these other authorities may not being able to reach you.
+      
+       If it is the first time running your node you could use one of the following methods:
+      
+       1. [Preferred] Separately generate the key with: <NODE_BINARY> key generate-node-key --base-path <YOUR_BASE_PATH>
+      
+       2. [Preferred] Separately generate the key with: <NODE_BINARY> key generate-node-key --file <YOUR_PATH_TO_NODE_KEY>
+      
+       3. [Preferred] Separately generate the key with: <NODE_BINARY> key generate-node-key --default-base-path
+      
+       4. [Unsafe] Pass --unsafe-force-node-key-generation and make sure you remove it for subsequent node restarts
+```
+
+Below is a hacky way to start the collator without a session key in its key store, with the `--unsafe-force-node-key-generation` flag and 
+then use Polkadot JS UI to set the collator keys via an RPC call to the collator node. Follow the instructions on configuring the collator keys [here](collator.md#configuring-and-running-your-collator)
+
+```
+./target/release/parachain-template-node \
+    --collator \
+    --force-authoring \
+    --chain raw-parachain-chainspec.json \
+    --base-path ./data \
+    --port 40333 \
+    --rpc-port 8844 \
+    --unsafe-force-node-key-generation\
+    -- \
+    --execution wasm \
+    --chain paseo.raw.json \
+    --port 30343 \
+    --rpc-port 9977 \
+    --sync fast-unsafe
+```
+
+This should start syncing Paseo relaychainw which can take several hours.
+
 
 ### Establish HRMP Channel with Asset Hub
 
