@@ -146,7 +146,7 @@ then use Polkadot JS UI to set the collator keys via an RPC call to the collator
     --sync fast-unsafe
 ```
 
-This should start syncing Paseo relaychainw which can take several hours.
+This should start syncing Paseo relaychain which can take several hours.
 
 
 ### Establish HRMP Channel with Asset Hub
