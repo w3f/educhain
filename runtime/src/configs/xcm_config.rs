@@ -70,19 +70,19 @@ pub type LocationToAccountId = (
     AccountId32Aliases<RelayNetwork, AccountId>,
 );
 
-/// Means for transacting assets on this chain.
-pub type LocalAssetTransactor = FungibleAdapter<
-    // Use this currency:
-    Balances,
-    // Use this currency when it is a fungible asset matching the given location or name:
-    IsConcrete<RelayLocation>,
-    // Do a simple punn to convert an AccountId32 Location into a native chain account ID:
-    LocationToAccountId,
-    // Our chain's account ID type (we can't get away without mentioning it explicitly):
-    AccountId,
-    // We don't track any teleports.
-    ()
->;
+// /// Means for transacting assets on this chain.
+// pub type LocalAssetTransactor = FungibleAdapter<
+//     // Use this currency:
+//     Balances,
+//     // Use this currency when it is a fungible asset matching the given location or name:
+//     IsConcrete<RelayLocation>,
+//     // Do a simple punn to convert an AccountId32 Location into a native chain account ID:
+//     LocationToAccountId,
+//     // Our chain's account ID type (we can't get away without mentioning it explicitly):
+//     AccountId,
+//     // We don't track any teleports.
+//     ()
+// >;
 
 parameter_types! {
 		pub ParentRelayLocation: Location = Location::parent();
@@ -107,6 +107,8 @@ pub type FungibleTransactor = FungibleAdapter<
     // This recipe only uses reserve asset transfers to handle the Relay Chain token.
     ()
 >;
+
+pub type AssetTransactor = FungibleTransactor;
 
 /// This is the type we use to convert an (incoming) XCM origin into a local `Origin` instance,
 /// ready for dispatching a transaction with Xcm's `Transact`. There is an `OriginKind` which can
@@ -177,7 +179,7 @@ impl xcm_executor::Config for XcmConfig {
     type RuntimeCall = RuntimeCall;
     type XcmSender = XcmRouter;
     // How to withdraw and deposit an asset.
-    type AssetTransactor = FungibleTransactor;
+    type AssetTransactor = AssetTransactor;
     type OriginConverter = XcmOriginToTransactDispatchOrigin;
     type IsReserve = IsReserve;
     type IsTeleporter = (); // Teleporting is disabled.

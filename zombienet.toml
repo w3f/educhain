@@ -1,6 +1,7 @@
 [relaychain]
 default_command = "polkadot"
 chain = "rococo-local"
+chain_spec_path = "./rococo.json"
 
 [[relaychain.nodes]]
 name = "alice"
@@ -14,8 +15,9 @@ ws_port = 9955
 
 [[parachains]]
 id = 1000
+chain_spec_path = "./dev_spec.json"
 
 [parachains.collator]
-name = "charlie"
+name = "alice"
 ws_port = 9988
-command = "educhain-node"
+command = "./target/release/educhain-node"
