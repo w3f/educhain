@@ -46,16 +46,18 @@ use xcm_builder::{
     UsingComponents,
     WithComputedOrigin,
     WithUniqueTopic,
+    AllowKnownQueryResponses,
+    AllowSubscriptionsFrom
 };
 use xcm_executor::XcmExecutor;
 
 parameter_types! {
 	pub const RelayLocation: Location = Location::parent();
-	pub const RelayNetwork: Option<NetworkId> = None;
+	pub const RelayNetwork: Option<NetworkId> = Some(NetworkId::Polkadot);
 	pub RelayChainOrigin: RuntimeOrigin = cumulus_pallet_xcm::Origin::Relay.into();
 	// For the real deployment, it is recommended to set `RelayNetwork` according to the relay chain
 	// and prepend `UniversalLocation` with `GlobalConsensus(RelayNetwork::get())`.
-	pub UniversalLocation: InteriorLocation = Parachain(ParachainInfo::parachain_id().into()).into();
+	pub UniversalLocation: InteriorLocation = [GlobalConsensus(NetworkId::Polkadot), Parachain(2000)].into();
 }
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used
@@ -70,45 +72,56 @@ pub type LocationToAccountId = (
     AccountId32Aliases<RelayNetwork, AccountId>,
 );
 
-// /// Means for transacting assets on this chain.
-// pub type LocalAssetTransactor = FungibleAdapter<
-//     // Use this currency:
-//     Balances,
-//     // Use this currency when it is a fungible asset matching the given location or name:
-//     IsConcrete<RelayLocation>,
-//     // Do a simple punn to convert an AccountId32 Location into a native chain account ID:
-//     LocationToAccountId,
-//     // Our chain's account ID type (we can't get away without mentioning it explicitly):
-//     AccountId,
-//     // We don't track any teleports.
-//     ()
-// >;
+/// Configuration related to asset transactors
+mod asset_transactor {
+    use super::*;
 
-parameter_types! {
+    parameter_types! {
 		pub ParentRelayLocation: Location = Location::parent();
 	}
 
-/// AssetTransactor for handling the relay chain token
-pub type FungibleTransactor = FungibleAdapter<
-    // Use this implementation of the `fungible::*` traits.
-    // `Balances` is the name given to the balances pallet in this particular recipe.
-    // Any implementation of the traits would suffice.
-    Balances,
-    // This transactor deals with the native token of the Relay Chain.
-    // This token is referenced by the Location of the Relay Chain relative to this chain
-    // -- Location::parent().
-    IsConcrete<ParentRelayLocation>,
-    // How to convert an XCM Location into a local account id.
-    // This is also something that's configured in the XCM executor.
-    LocationToAccountId,
-    // The type for account ids, only needed because `fungible` is generic over it.
-    AccountId,
-    // Not tracking teleports.
-    // This recipe only uses reserve asset transfers to handle the Relay Chain token.
-    ()
->;
+    /// AssetTransactor for handling the relay chain token
+    pub type FungibleTransactor = FungibleAdapter<
+        // Use this implementation of the `fungible::*` traits.
+        // `Balances` is the name given to the balances pallet in this particular recipe.
+        // Any implementation of the traits would suffice.
+        Balances,
+        // This transactor deals with the native token of the Relay Chain.
+        // This token is referenced by the Location of the Relay Chain relative to this chain
+        // -- Location::parent().
+        IsConcrete<ParentRelayLocation>,
+        // How to convert an XCM Location into a local account id.
+        // This is also something that's configured in the XCM executor.
+        LocationToAccountId,
+        // The type for account ids, only needed because `fungible` is generic over it.
+        AccountId,
+        // Not tracking teleports.
+        // This recipe only uses reserve asset transfers to handle the Relay Chain token.
+        ()
+    >;
 
-pub type AssetTransactor = FungibleTransactor;
+    /// Actual configuration item that'll be set in the XCM config.
+    /// A tuple could be used here to have multiple transactors, each (potentially) handling
+    /// different assets.
+    /// In this recipe, we only have one.
+    pub type AssetTransactor = FungibleTransactor;
+}
+
+/// Configuration related to token reserves
+mod is_reserve {
+    use super::*;
+
+    parameter_types! {
+		/// Reserves are specified using a pair `(AssetFilter, Location)`.
+		/// Each pair means that the specified Location is a reserve for all the assets in AssetsFilter.
+		/// Here, we are specifying that the Relay Chain is the reserve location for its native token.
+		pub RelayTokenForRelay: (AssetFilter, Location) =
+		  (Wild(AllOf { id: AssetId(Parent.into()), fun: WildFungible }), Parent.into());
+	}
+
+    /// The wrapper type xcm_builder::Case is needed in order to use this in the configuration.
+    pub type IsReserve = xcm_builder::Case<RelayTokenForRelay>;
+}
 
 /// This is the type we use to convert an (incoming) XCM origin into a local `Origin` instance,
 /// ready for dispatching a transaction with Xcm's `Transact`. There is an `OriginKind` which can
@@ -146,72 +159,64 @@ impl Contains<Location> for ParentOrParentsExecutivePlurality {
 }
 
 pub type Barrier = TrailingSetTopicAsId<
-    DenyThenTry<
-        DenyReserveTransferToRelayChain,
-        (
-            TakeWeightCredit,
-            WithComputedOrigin<
-                (
-                    AllowTopLevelPaidExecutionFrom<Everything>,
-                    AllowExplicitUnpaidExecutionFrom<ParentOrParentsExecutivePlurality>,
-                    // ^^^ Parent and its exec plurality get free execution
-                ),
-                UniversalLocation,
-                ConstU32<8>
-            >,
-        )
-    >
+    (
+        // Weight that is paid for may be consumed.
+        TakeWeightCredit,
+        // Expected responses are OK.
+        AllowKnownQueryResponses<PolkadotXcm>,
+        WithComputedOrigin<
+            (
+                // If the message is one that immediately attemps to pay for execution, then allow it.
+                AllowTopLevelPaidExecutionFrom<Everything>,
+                // Subscriptions for version tracking are OK.
+                AllowSubscriptionsFrom<Everything>,
+            ),
+            UniversalLocation,
+            ConstU32<8>
+        >,
+    )
 >;
-
-parameter_types! {
-		/// Reserves are specified using a pair `(AssetFilter, Location)`.
-		/// Each pair means that the specified Location is a reserve for all the assets in AssetsFilter.
-		/// Here, we are specifying that the Relay Chain is the reserve location for its native token.
-		pub RelayTokenForRelay: (AssetFilter, Location) =
-		  (Wild(AllOf { id: AssetId(Parent.into()), fun: WildFungible }), Parent.into());
-	}
-
-/// The wrapper type xcm_builder::Case is needed in order to use this in the configuration.
-pub type IsReserve = xcm_builder::Case<RelayTokenForRelay>;
 
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
-    type RuntimeCall = RuntimeCall;
-    type XcmSender = XcmRouter;
-    // How to withdraw and deposit an asset.
-    type AssetTransactor = AssetTransactor;
-    type OriginConverter = XcmOriginToTransactDispatchOrigin;
-    type IsReserve = IsReserve;
-    type IsTeleporter = (); // Teleporting is disabled.
-    type UniversalLocation = UniversalLocation;
-    type Barrier = Barrier;
-    type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
-    type Trader = UsingComponents<
-        WeightToFee,
-        RelayLocation,
-        AccountId,
-        Balances,
-        ToAuthor<Runtime>
-    >;
-    type ResponseHandler = PolkadotXcm;
-    type AssetTrap = PolkadotXcm;
-    type AssetClaims = PolkadotXcm;
-    type SubscriptionService = PolkadotXcm;
-    type PalletInstancesInfo = AllPalletsWithSystem;
-    type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
-    type AssetLocker = ();
-    type AssetExchanger = ();
-    type FeeManager = ();
-    type MessageExporter = ();
-    type UniversalAliases = Nothing;
-    type CallDispatcher = RuntimeCall;
-    type SafeCallFilter = Everything;
-    type Aliasers = Nothing;
-    type TransactionalProcessor = FrameTransactionalProcessor;
-    type HrmpNewChannelOpenRequestHandler = ();
-    type HrmpChannelAcceptedHandler = ();
-    type HrmpChannelClosingHandler = ();
-    type XcmRecorder = PolkadotXcm;
+	type RuntimeCall = RuntimeCall;
+	type XcmSender = ();
+	type XcmEventEmitter = ();
+	type AssetTransactor = asset_transactor::AssetTransactor;
+	type OriginConverter = ();
+	// The declaration of which Locations are reserves for which Assets.
+	type IsReserve = is_reserve::IsReserve;
+	type IsTeleporter = ();
+	type UniversalLocation = UniversalLocation;
+	// This is not safe, you should use `xcm_builder::AllowTopLevelPaidExecutionFrom<T>` in a
+	// production chain
+	type Barrier = Barrier;
+	type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
+	type Trader =
+		UsingComponents<WeightToFee, RelayLocation, AccountId, Balances, ToAuthor<Runtime>>;
+	type ResponseHandler = PolkadotXcm;
+	type AssetTrap = PolkadotXcm;
+	type AssetClaims = PolkadotXcm;
+	type SubscriptionService = PolkadotXcm;
+	type PalletInstancesInfo = AllPalletsWithSystem;
+	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
+	type AssetLocker = ();
+	type AssetExchanger = ();
+	type AssetClaims = ();
+	type SubscriptionService = ();
+	type PalletInstancesInfo = ();
+	type FeeManager = ();
+	type MaxAssetsIntoHolding = ConstU32<1>;
+	type MessageExporter = ();
+	type UniversalAliases = Nothing;
+	type CallDispatcher = RuntimeCall;
+	type SafeCallFilter = Everything;
+	type Aliasers = Nothing;
+	type TransactionalProcessor = FrameTransactionalProcessor;
+	type HrmpNewChannelOpenRequestHandler = ();
+	type HrmpChannelAcceptedHandler = ();
+	type HrmpChannelClosingHandler = ();
+	type XcmRecorder = PolkadotXcm;
 }
 
 /// No local origins on this chain are allowed to dispatch XCM sends/executions.
@@ -238,7 +243,7 @@ impl pallet_xcm::Config for Runtime {
     // Needs to be `Everything` for local testing.
     type XcmExecutor = XcmExecutor<XcmConfig>;
     type XcmTeleportFilter = Everything;
-    type XcmReserveTransferFilter = Nothing;
+    type XcmReserveTransferFilter = Everything;
     type Weigher = FixedWeightBounds<UnitWeightCost, RuntimeCall, MaxInstructions>;
     type UniversalLocation = UniversalLocation;
     type RuntimeOrigin = RuntimeOrigin;
