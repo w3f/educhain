@@ -14,40 +14,22 @@
 Parachain developed and maintained by Technical Education team at Web3 Foundation. To be used for creating
 tutorials on a wide range of [Polkadot SDK](https://github.com/paritytech/polkadot-sdk) enabled features.
 
-
-## Template Structure
-
-* ⏫ This template provides a starting point to build a [parachain](https://wiki.polkadot.network/docs/learn-parachains).
-
-* ☁️ It is based on the [Cumulus](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/cumulus/index.html) framework.
-
-* 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
-such as a [Balances pallet](https://paritytech.github.io/polkadot-sdk/master/pallet_balances/index.html).
-
-* 👉 Learn more about parachains [here](https://wiki.polkadot.network/docs/learn-parachains)
-
-A Polkadot SDK based project such as this one consists of:
-
-* 💿 a [Node](./node/README.md) - the binary application.
-* 🧮 the [Runtime](./runtime/README.md) - the core logic of the parachain.
-* 🎨 the [Pallets](./pallets/README.md) - from which the runtime is constructed.
-
 ## Getting Started
 
-* 🦀 The template is using the Rust language.
+* 🦀 The repository is using the Rust language.
 
 * 👉 Check the
 [Rust installation instructions](https://www.rust-lang.org/tools/install) for your system.
 
 * 🛠️ Depending on your operating system and Rust version, there might be additional
-packages required to compile this template - please take note of the Rust compiler output.
+packages required to compile this repository - please take note of the Rust compiler output.
 
 ### Build
 
 🔨 Use the following command to build the node without launching it:
 
 ```sh
-cargo build --package educhain-node --release
+cargo build --release
 ```
 
 🐳 Alternatively, build the docker image:
@@ -75,13 +57,20 @@ export PATH="./target/release/:$PATH"
 
 This way, we can conveniently use them in the following steps.
 
-👥 The following command starts a local development chain, with a single relay chain node and a single parachain collator:
+👥 The following command starts a local development chain, with a single relay chain node and a single parachain collator. This also assumes you have generated a chain specification:
+
 
 ```sh
-zombienet --provider native spawn ./zombienet.toml
+sh dev.sh
+```
+
+Alternatively, you may run the following, assuming you have a chain specification already:
+
+```sh
+zombienet --provider native spawn zombienet-omni-node.toml
 
 # Alternatively, the npm version:
-npx --yes @zombienet/cli --provider native spawn ./zombienet.toml
+npx --yes @zombienet/cli --provider native spawn zombienet-omni-node.toml
 ```
 
 Development chains:
