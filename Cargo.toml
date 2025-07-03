@@ -7,7 +7,7 @@ edition = "2021"
 
 [workspace]
 members = [
-    "node",
+    # "node",
     "pallets/template",
     "runtime",
 ]
