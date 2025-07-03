@@ -181,7 +181,6 @@ pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = ();
-	type XcmEventEmitter = ();
 	type AssetTransactor = asset_transactor::AssetTransactor;
 	type OriginConverter = ();
 	// The declaration of which Locations are reserves for which Assets.
@@ -202,11 +201,7 @@ impl xcm_executor::Config for XcmConfig {
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
 	type AssetLocker = ();
 	type AssetExchanger = ();
-	type AssetClaims = ();
-	type SubscriptionService = ();
-	type PalletInstancesInfo = ();
 	type FeeManager = ();
-	type MaxAssetsIntoHolding = ConstU32<1>;
 	type MessageExporter = ();
 	type UniversalAliases = Nothing;
 	type CallDispatcher = RuntimeCall;

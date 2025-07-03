@@ -40,44 +40,11 @@ docker build . -t polkadot-sdk-parachain-template
 
 ### Local Development Chain
 
-🧟 This project uses [Zombienet](https://github.com/paritytech/zombienet) to orchestrate the relaychain and parachain nodes.
-You can grab a [released binary](https://github.com/paritytech/zombienet/releases/latest) or use an [npm version](https://www.npmjs.com/package/@zombienet/cli).
-
-This template produces a parachain node.
-You still need a relaychain node - you can download the `polkadot`
-(and the accompanying `polkadot-prepare-worker` and `polkadot-execute-worker`)
-binaries from [Polkadot SDK releases](https://github.com/paritytech/polkadot-sdk/releases/latest).
-
-Make sure to bring the parachain node - as well as `polkadot`, `polkadot-prepare-worker`, `polkadot-execute-worker`,
-and `zombienet` - into `PATH` like so:
+This project uses [pop! CLI](https://github.com/r0gue-io/pop-cli) to run a complete local setup:
 
 ```sh
-export PATH="./target/release/:$PATH"
+pop up network -f ./pop-paseo-testnet-toml
 ```
-
-This way, we can conveniently use them in the following steps.
-
-👥 The following command starts a local development chain, with a single relay chain node and a single parachain collator. This also assumes you have generated a chain specification:
-
-
-```sh
-sh dev.sh
-```
-
-Alternatively, you may run the following, assuming you have a chain specification already:
-
-```sh
-zombienet --provider native spawn zombienet-omni-node.toml
-
-# Alternatively, the npm version:
-npx --yes @zombienet/cli --provider native spawn zombienet-omni-node.toml
-```
-
-Development chains:
-
-* 🧹 Do not persist the state.
-* 💰 Are preconfigured with a genesis state that includes several prefunded development accounts.
-* 🧑‍⚖️ Development accounts are used as validators, collators, and `sudo` accounts.
 
 ### Connect with the Polkadot-JS Apps Front-End
 
@@ -85,6 +52,8 @@ Development chains:
 hosted version of the Polkadot/Substrate Portal:
 [relay chain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944)
 and [parachain](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9988).
+
+Please note that if running locally, you must use the URLs given in the terminal when running `pop` (or Zombienet).
 
 * 🪐 A hosted version is also
 available on [IPFS](https://dotapps.io/).
