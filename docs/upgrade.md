@@ -2,7 +2,7 @@
 
 > **⚠️ You need access to a *sudo* account to authorize and apply upgrades!**
 
-Every parachain runtime (that is, the code inside of `src/runtime/*`) can be boiled down to a single `.wasm` blob.  This blob is what the relay chain uses to validate state transitions from the parachain's collators.  Part of the reason behind this design was the concept of forkless upgrades, where essentially we can replace the WebAssembly blob with another, upgraded version.
+Every parachain runtime (the code inside of `src/runtime/*`) can be boiled down to a single `.wasm` blob.  This blob is what the relay chain uses to validate state transitions from the parachain's collators.  Part of the reason behind this design was to enable [**forkless upgrades**](https://wiki.polkadot.network/docs/learn-runtime-upgrades), where essentially we can replace the WebAssembly blob with an upgraded blob, which contains the upgraded business logic of our runtime.
 
 On solo chains, it's usually as easy as calling `system.setCode(new_wasm)`, which quite literally replaces the WebAssembly runtime with another within the storage layer of the node(s) and will be utilized after the extrinsic is executed.
 
@@ -17,14 +17,15 @@ On a parachain, the process is essentially *two* steps instead of *one* due to t
 Getting your WASM blob is as simple as compiling your runtime:
 
 ```sh
+# Assuming you are in the root of your node
 cargo build --release
 ```
 
-Your blob should be under `target/release/wbuild/educhain-runtime/educhain_runtime.compressed.wasm`
+Post compilation, your blob should be located within: `target/release/wbuild/educhain-runtime/educhain_runtime.compressed.wasm`, where `*_runtime` is the name of your chain.
 
 ## Obtaining your runtime hash
 
-Since `system.authorizeUpgrade` requires a `Blake2b_256` hash of the runtime, [which you can get via this tool.](https://toolkitbay.com/tkb/tool/BLAKE2b_256).  You can also  get the hash of the file via the `system.authorizeUpgrade` extrinsic in the PolkadotJS UI, and hash the file there.
+Since `system.authorizeUpgrade` requires a `Blake2b_256` hash of the runtime, [which you can get via this tool.](https://toolkitbay.com/tkb/tool/BLAKE2b_256).  You can also get the hash of the file via the `system.authorizeUpgrade` extrinsic in the PolkadotJS UI, and hash the file there.
 
 ## Upgrade Via PolkadotJS
 
