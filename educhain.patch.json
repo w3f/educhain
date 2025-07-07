@@ -1,20 +1,4 @@
 {
-    "balances": {
-      "balances": [
-        [
-          "5Fzv6JLSY6ThUcXQtuVWtzFJCtAPM4AbMi2arByGQ4aNfbZa",
-          1152921504606846976
-        ],
-        [
-          "5DXMHc7tEAKSir4TJAfPWjpuxDvt5hAkZzr5g8Q3hhARw98P",
-          1152921504606846976
-        ],
-        [
-          "5EqrD2DhV85DHS8PSZ3BrSxRipnbqTAvgNNQs4wc5n5u69HN",
-          1152921504606846976
-        ]
-      ]
-    },
     "collatorSelection": {
       "candidacyBond": 16000000000,
       "invulnerables": [
@@ -26,7 +10,7 @@
       "parachainId": 4518
     },
     "polkadotXcm": {
-      "safeXcmVersion": 4
+      "safeXcmVersion": 5
     },
     "session": {
       "keys": [
