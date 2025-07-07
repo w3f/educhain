@@ -41,7 +41,7 @@ docker build . -t polkadot-sdk-parachain-template
 
 ### Generate Artifacts for Deployment
 
-We use [pop! CLI] to generate the artifacts: 
+We use [pop! CLI](https://github.com/r0gue-io/pop-cli) to generate the artifacts: 
 
 ```sh
 pop build spec \
