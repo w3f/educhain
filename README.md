@@ -38,6 +38,40 @@ cargo build --release
 docker build . -t polkadot-sdk-parachain-template
 ```
 
+
+### Generate Artifacts for Deployment
+
+We use [pop! CLI] to generate the artifacts: 
+
+```sh
+pop build spec \
+  --output ./artifacts/latest_raw_chain_spec.json \
+  --chain ./artifacts/latest_plain_chain_spec.json \
+  --genesis-state \
+  --genesis-code \
+  --type live
+```
+
+If you make runtime changes and want to generate a new chainspec + the patch, use the `deploy/gen_base_chain_spec.sh` script, then run the above to generate the artifacts. Keep in mind you may have to change some details, such as the name, protocol ID, etc to its original state: 
+
+```json
+{
+  "name": "Educhain Paseo",
+  "id": "live",
+  "chainType": "Live",
+  "bootNodes": [],
+  "telemetryEndpoints": null,
+  "protocolId": "educhain-paseo-live",
+  "para_id": 4518,
+  "relay_chain": "paseo",
+  "properties": {
+    "tokenDecimals": 12,
+    "tokenSymbol": "PAS"
+  },
+  ...
+}
+```
+
 ### Local Development Chain
 
 This project uses [pop! CLI](https://github.com/r0gue-io/pop-cli) to run a complete local setup:
