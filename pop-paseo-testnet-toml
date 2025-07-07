@@ -21,7 +21,7 @@ args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
 
 [[parachains]]
 id = 4518
-chain_spec_path = "./artifacts/latest_plain_chain_spec.json"
+chain_spec_path = "./artifacts/dev_plain.json"
 
 [parachains.collator]
 name = "charlie"

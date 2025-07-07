@@ -6,7 +6,7 @@
   "telemetryEndpoints": null,
   "protocolId": "educhain-paseo-live",
   "para_id": 4518,
-  "relay_chain": "paseo-local",
+  "relay_chain": "paseo",
   "properties": {
     "tokenDecimals": 12,
     "tokenSymbol": "PAS"
