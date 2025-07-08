@@ -10,7 +10,7 @@
       "parachainId": 4518
     },
     "polkadotXcm": {
-      "safeXcmVersion": 5
+      "safeXcmVersion": 4
     },
     "session": {
       "keys": [

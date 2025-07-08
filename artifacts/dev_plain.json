@@ -1,10 +1,10 @@
 {
-  "name": "Educhain Paseo",
-  "id": "live",
-  "chainType": "Live",
+  "name": "Educhain Paseo Local",
+  "id": "local",
+  "chainType": "Local",
   "bootNodes": [],
   "telemetryEndpoints": null,
-  "protocolId": "educhain-paseo-live",
+  "protocolId": "educhain-paseo-local",
   "para_id": 4518,
   "relay_chain": "paseo-local",
   "properties": {
@@ -27,7 +27,7 @@
           "parachainId": 4518
         },
         "polkadotXcm": {
-          "safeXcmVersion": 5
+          "safeXcmVersion": 4
         },
         "session": {
           "keys": [
