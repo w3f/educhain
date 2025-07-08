@@ -1,0 +1,30 @@
+[relaychain]
+chain = "paseo-local"
+
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+ws_port = 9944
+
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+ws_port = 9955
+
+[[parachains]]
+id = 1000
+chain = "asset-hub-paseo-local"
+
+[[parachains.collators]]
+name = "asset-hub"
+args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
+
+[[parachains]]
+id = 4518
+chain_spec_path = "./artifacts/dev_plain.json"
+
+[parachains.collator]
+name = "charlie"
+ws_port = 9988
+default_command = "polkadot-omni-node"
+args = [ "-lparachain=error,xcm=trace"]

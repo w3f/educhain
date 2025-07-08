@@ -1,6 +1,6 @@
 [relaychain]
 default_command = "polkadot"
-chain = "rococo-local"
+chain_spec_path = "./test/specs/paseo-local.json"
 
 [[relaychain.nodes]]
 name = "alice"
@@ -13,11 +13,21 @@ validator = true
 ws_port = 9955
 
 [[parachains]]
-id = 2000
-chain_spec_path = "./chain_spec.json"
+id = 1000
+chain_spec_path = "./test/specs/asset-hub-paseo-local.json"
+
+[parachains.collator]
+name = "dave"
+ws_port = 9988
+command = "polkadot-omni-node"
+args = [ "-lparachain=error,xcm=trace" ]
+
+[[parachains]]
+id = 4518
+chain_spec_path = "./artifacts/latest_plain_chain_spec.json"
 
 [parachains.collator]
 name = "charlie"
 ws_port = 9988
 command = "polkadot-omni-node"
-args = [ "-lparachain=error,xcm=trace" ]
+args = [ "-lparachain=error,xcm=trace"]
