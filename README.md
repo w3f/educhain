@@ -65,7 +65,7 @@ If you make runtime changes and want to generate a new chainspec + the patch, us
   "para_id": 4518,
   "relay_chain": "paseo",
   "properties": {
-    "tokenDecimals": 12,
+    "tokenDecimals": 10,
     "tokenSymbol": "PAS"
   },
   ...
