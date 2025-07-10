@@ -10,7 +10,7 @@
     "tokenSymbol": "EDU"
   },
   "relay_chain": "paseo",
-  "para_id": 4518,
+  "para_id": 4883,
   "codeSubstitutes": {},
   "genesis": {
     "raw": {
