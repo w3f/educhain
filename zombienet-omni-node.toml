@@ -23,7 +23,7 @@ command = "polkadot-omni-node"
 args = [ "-lparachain=error,xcm=trace" ]
 
 [[parachains]]
-id = 4518
+id = 4883
 chain_spec_path = "./artifacts/latest_plain_chain_spec.json"
 
 [parachains.collator]

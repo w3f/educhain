@@ -20,7 +20,7 @@ name = "asset-hub"
 args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
 
 [[parachains]]
-id = 4518
+id = 4883
 chain_spec_path = "./artifacts/dev_plain.json"
 
 [parachains.collator]

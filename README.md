@@ -62,7 +62,7 @@ If you make runtime changes and want to generate a new chainspec + the patch, us
   "bootNodes": [],
   "telemetryEndpoints": null,
   "protocolId": "educhain-paseo-live",
-  "para_id": 4518,
+  "para_id": 4883,
   "relay_chain": "paseo",
   "properties": {
     "tokenDecimals": 10,
