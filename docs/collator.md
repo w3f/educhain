@@ -126,20 +126,24 @@ However, if wish rotate keys, then we need to ensure that the mapping is properl
 Once you've achieved a stable setup, you can look into automating the launch of your collator upon startup. Here is an example of a service which automatically starts a shell script using `systemd` on Ubuntu Linux:
 
 - `start.node.sh`:
+
 ```sh
 polkadot-omni-node --name C2_EDU \
---collator \
---chain plain-parachain-chainspec.json \
---base-path ./educhain \
---rpc-cors=all \
---rpc-methods=safe \
---port 30333 \
---rpc-port 8844 \
--- \
---chain paseo \
---sync warp \
---blocks-pruning 256
---state-pruning 256
+    --collator \
+    --chain latest_plain_chain_spec-raw.json \
+    --rpc-cors=all \
+    --base-path ./educhain-paseo \
+    --port 30333 \
+    --rpc-methods=safe \
+    --rpc-port 8844 \
+    -ltxpool=trace \
+    --pool-type fork-aware \
+    --authoring slot-based \
+    -- \
+    --chain paseo \
+    --sync fast \
+    --blocks-pruning 256 \
+    --state-pruning 256
 ```
 
 > Note that `--rpc-methods=safe` disables certain RPC calls from the outside world.  If you wish to call these unsafe calls externally, you may remove `--rpc-methods=safe`.  It is prudent that for production environments, you ensure that no one can access these crucial calls (i.e., setting the keys in your node).
