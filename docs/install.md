@@ -11,7 +11,6 @@ cargo install --git https://github.com/paritytech/polkadot-sdk --tag polkadot-v1
 ```
 
 
-
 > **You can change `--tag` to the specific release of your choice.**
 
 Which will allow you to run the `polkadot-parachain`:

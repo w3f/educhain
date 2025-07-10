@@ -5,7 +5,7 @@ There are two types of coretime:
 - Bulk coretime - rent computation for an amount of time in advance (i.e., 28 days), requires renewal.
 - On-demand coretime - buy computation on-demand on a per block basis, requires sending an extrinsic to order a block.
 
-For Educhain, we mostly use on-demand coretime and place order when we need to test something.
+For Educhain, we primarily use on-demand coretime and place order when we need to test something.
 
 ## Ordering on-demand coretime
 
