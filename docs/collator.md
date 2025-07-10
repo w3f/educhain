@@ -75,23 +75,23 @@ For an explanation on the types of keys, their specific types, and how to genera
 To run a collator, one needs to make sure that:
 
 - The node is synced with the relay chain (a local copy is needed, pruning is *highly* recommended)
-- The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through the [polkadot-parachain](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) `key insert` command
+- The corresponding private key of the session key (for aura) in the chain spec is inserted, either through rpc or through the [`polkadot-omni-node`](install.md#the-omninode) `key insert` command
 - To receive collator rewards, the session key and invulnerable address need to be linked. Otherwise, it will default to the first invulnerable in the configuration
 
 > **Note**: that it is recommended to insert the keys locally in your node, as RPC methods should not be exposed for external calls. In order for the below to work, `--rpc-methods` must be set to `unsafe`, or not set at all.
 
 ![Set Aura key RPC](./img/collator/set-collator-aura-key.png)
 
-Alternatively, with [`polkadot-parachain`, as seen in the Parity DevOps handbook.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html#insert-a-specific-key-onto-a-node-keystore-using-the-node-binary)
+Alternatively, with [`polkadot-omni-node`, as seen in the Parity DevOps handbook.](https://paritytech.github.io/devops-guide/explanations/keys_accounts.html#insert-a-specific-key-onto-a-node-keystore-using-the-node-binary)
 
 ### Running the collator
 
 Once your session keys are properly inserted, you can run your collator.
 
-This sample command runs a collator using the [`polkadot-parachain` (or "omninode")](https://github.com/paritytech/polkadot-sdk/tree/master/cumulus/polkadot-parachain) binary:
+This sample command runs a collator using the [`polkadot-omni-node`](./install.md#the-omninode) binary:
 
 ```sh
-polkadot-parachain --name COLLATOR_NAME \
+polkadot-omni-node --name COLLATOR_NAME \
 --collator \
 --chain plain-parachain-chainspec.json \
 --base-path ./educhain \
@@ -127,7 +127,7 @@ Once you've achieved a stable setup, you can look into automating the launch of 
 
 - `start.node.sh`:
 ```sh
-polkadot-parachain --name C2_EDU \
+polkadot-omni-node --name C2_EDU \
 --collator \
 --chain plain-parachain-chainspec.json \
 --base-path ./educhain \
@@ -181,7 +181,7 @@ root@ubuntu-s-2vcpu-4gb-amd-nyc3-01:~# systemctl status collator
         CPU: 8h 23min 34.532s
      CGroup: /system.slice/collator.service
              ├─132465 /bin/sh start.node.sh
-             └─132466 polkadot-parachain --name C2_EDU --collator --chain plain-parachain-chainspec.json --base-path ./educhain --rpc-cors=all>
+             └─132466 polkadot-omni-node --name C2_EDU --collator --chain plain-parachain-chainspec.json --base-path ./educhain --rpc-cors=all>
 
 Jun 10 20:48:00 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:00 [Relaychain] ♻️  Reorg on #10834776,0xf566…ab31 to #10834776,0x1>
 Jun 10 20:48:00 ubuntu-s-2vcpu-4gb-amd-nyc3-01 sh[132466]: 2024-06-10 20:48:00 [Relaychain] ✨ Imported #10834776 (0x1583…c83f)
