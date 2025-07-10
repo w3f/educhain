@@ -24,16 +24,12 @@ use polkadot_runtime_common::impls::ToAuthor;
 use xcm::latest::prelude::*;
 use xcm_builder::{
     AccountId32Aliases,
-    AllowExplicitUnpaidExecutionFrom,
     AllowTopLevelPaidExecutionFrom,
-    DenyReserveTransferToRelayChain,
-    DenyThenTry,
     EnsureXcmOrigin,
     FixedWeightBounds,
     FrameTransactionalProcessor,
     FungibleAdapter,
     IsConcrete,
-    NativeAsset,
     ParentIsPreset,
     RelayChainAsNative,
     SiblingParachainAsNative,
@@ -57,8 +53,10 @@ parameter_types! {
 	pub RelayChainOrigin: RuntimeOrigin = cumulus_pallet_xcm::Origin::Relay.into();
 	// For the real deployment, it is recommended to set `RelayNetwork` according to the relay chain
 	// and prepend `UniversalLocation` with `GlobalConsensus(RelayNetwork::get())`.
-	pub UniversalLocation: InteriorLocation = [GlobalConsensus(NetworkId::Polkadot), Parachain(2000)].into();
-}
+	pub UniversalLocation: InteriorLocation = [
+        GlobalConsensus(NetworkId::Polkadot), 
+        Parachain(ParachainInfo::parachain_id().into())
+    ].into();}
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used
 /// when determining ownership of accounts for asset transacting and when attempting to use XCM
@@ -167,7 +165,7 @@ pub type Barrier = TrailingSetTopicAsId<
         WithComputedOrigin<
             (
                 // If the message is one that immediately attemps to pay for execution, then allow it.
-                AllowTopLevelPaidExecutionFrom<Everything>,
+                AllowTopLevelPaidExecutionFrom<ParentOrParentsExecutivePlurality>,
                 // Subscriptions for version tracking are OK.
                 AllowSubscriptionsFrom<Everything>,
             ),
