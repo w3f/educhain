@@ -27,7 +27,10 @@ The parachain is configured to recognize the relay chain (Polkadot) as its paren
 ```rust
 parameter_types! {
     pub const RelayNetwork: Option<NetworkId> = Some(NetworkId::Polkadot);
-    pub UniversalLocation: InteriorLocation = [GlobalConsensus(NetworkId::Polkadot), Parachain(PARA_ID)].into();
+    	pub UniversalLocation: InteriorLocation = [
+        GlobalConsensus(NetworkId::Polkadot), 
+        Parachain(ParachainInfo::parachain_id().into())
+    ].into();
 }
 ```
 
