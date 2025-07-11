@@ -6,6 +6,8 @@ EduChain is configured to use the **relay chain token (e.g., PAS)** as its nativ
 
 In Polkadot, a parachain can use the relay chain’s token (such as DOT or PAS) as its native currency. This is achieved by treating the relay chain as the *reserve location* for the token, and using XCM to move balances between the relay chain and parachain.
 
+A sovereign account represents the parachain on the relay chain, which is where the tokens are "reserved" while in use on the parachain. You can view EduChain's [sovereign account here.](https://paseo.subscan.io/account/13YMK2dtwE9kmdYK7XbBYiTJrVnTbSVFiYNqzNTAv3USGFWf)
+
 ### How it works
 
 - When a user transfers tokens from the relay chain to the parachain, the tokens are locked (“reserved”) on the relay chain and minted on the parachain.
