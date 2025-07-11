@@ -13,6 +13,8 @@ shipped with [FRAME](https://paritytech.github.io/polkadot-sdk/master/polkadot_s
 
 Web3 Educhain intends to address these issues by providing insights, examples and tutorials *with* documentation on how to launch and maintain a parachain.
 
+Web3 EduChain has the unique property of utilizing the relay chain's token as its own, taking advantage of Polkadot's cross consensus messaging (XCM). This means that if EduChain is deployed on Paseo, it utilizes PAS, which bypassing the need for the parachain to maintain its own token.
+
 ## Why Polkadot?
 
 Along with the efficient utility of coretime and blockspace, a parachain deployed on Polkadot has access to

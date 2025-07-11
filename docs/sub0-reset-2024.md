@@ -109,7 +109,7 @@ It takes two hours for the parachain to be on-boarded.
 If you try to start are a collator without ssetting the keys in the storage, you will be presented with the following options:
 
 ```
-Starting an authorithy without network key in ./sub0-reset/chains/live/network/secret_ed25519.
+Starting an authority without network key in ./sub0-reset/chains/live/network/secret_ed25519.
       
        This is not a safe operation because other authorities in the network may depend on your node having a stable identity.
       
