@@ -2,6 +2,9 @@
 
 EduChain is configured to use the **relay chain token (e.g., PAS)** as its native currency, leveraging Polkadot’s XCM (Cross-Consensus Messaging) for secure, reserve-backed asset transfers. This document explains the configuration and how reserve transfers work in practice.
 
+!!!info
+    The complete, working XCM configuration can be found in the EduChain repository: [`xcm_config.rs`](https://github.com/w3f/educhain/blob/main/runtime/src/configs/xcm_config.rs)
+
 ## Overview: Reserve Transfer Mechanism
 
 In Polkadot, a parachain can use the relay chain’s token (such as DOT or PAS) as its native currency. This is achieved by treating the relay chain as the *reserve location* for the token, and using XCM to move balances between the relay chain and parachain.
@@ -50,7 +53,7 @@ pub type LocationToAccountId = (
 
 ## Asset Transactor for Relay Tokens
 
-The `FungibleAdapter` enables the parachain to handle the relay chain token as its native currency:
+The `AssetTransactor` enables the parachain to handle the relay chain token as its native currency. Notably, the `FungibleAdapter` is configured such that it *only* allows assets (`IsConcrete`) from the relay chain, which is the parent in this case (`ParentRelayLocation`). This ensures that we are only dealing with assets coming from the parent, aka the relay chain:
 
 ```rust
 pub type AssetTransactor = FungibleAdapter<
@@ -112,6 +115,10 @@ impl pallet_xcm::Config for Runtime {
     // ...
 }
 ```
+
+## Finalized Configuration
+
+To view this configuration, please visit the EduChain repository and view [`xcm_config.rs`](https://github.com/w3f/educhain/blob/main/runtime/src/configs/xcm_config.rs).
 
 ## Example XCM Message
 
