@@ -13,21 +13,21 @@ A sovereign account represents the parachain on the relay chain, which is where 
 
 ### How it works
 
-- When a user transfers tokens from the relay chain to the parachain, the tokens are locked (“reserved”) on the relay chain and minted on the parachain.
-- When tokens are sent back, they are burned on the parachain and released on the relay chain.
+- When a user transfers tokens from the reserve chain to the parachain, the tokens are locked (“reserved”) on the reserve chain and minted on the parachain.
+- When tokens are sent back, they are burned on the parachain and released on the reserve chain.
 
-This mechanism ensures that the total supply remains consistent and that the relay chain always holds the actual reserves.
+This mechanism ensures that the total supply remains consistent and that the reserve chain always holds the actual reserves.
 
-- **From Relay Chain to Parachain:**  
+- **From Reserve Chain to Parachain:**  
   The relay chain locks the user’s tokens and sends an XCM message to the parachain, which mints the equivalent amount for the user.
-- **From Parachain to Relay Chain:**  
-  The parachain burns the user’s tokens and sends an XCM message to the relay chain, which releases the equivalent amount to the user’s relay chain account.
+- **From Parachain to Reserve Chain:**  
+  The parachain burns the user’s tokens and sends an XCM message to the reserve chain, which releases the equivalent amount to the user’s reserve chain account.
 
-This ensures that the parachain’s native currency is always backed by actual reserves on the relay chain.
+This ensures that the parachain’s native currency is always backed by actual reserves on the reserve chain.
 
-## Relay Network and Location
+## Reserve Chain and Location
 
-The parachain is configured to recognize the relay chain (Polkadot) as its parent and to use its network ID for account mapping:
+Our specific parachain is configured to recognize the relay chain (Polkadot) as its parent and to use its network ID for account mapping. In theory, you can use another chain, such as Asset Hub, as your reserve:
 
 ```rust
 parameter_types! {
@@ -51,10 +51,17 @@ pub type LocationToAccountId = (
 );
 ```
 
+Another option is to use `HashedDescription`, which is a newer, preferred alternative:
+
+```rust
+pub type LocationToAccountId = (
+    HashedDescription<AccountId, DescribeFamily<DescribeAllTerminal>>,
+);
+```
+
 ## Asset Transactor for Relay Tokens
 
-The `AssetTransactor` enables the parachain to handle the relay chain token as its native currency. Notably, the `FungibleAdapter` is configured such that it *only* allows assets (`IsConcrete`) from the relay chain, which is the parent in this case (`ParentRelayLocation`). This ensures that we are only dealing with assets coming from the parent, aka the relay chain:
-
+The `AssetTransactor` is responsible for handling incoming assets. Notably, the `FungibleAdapter` is configured such that it handles DOT (or the native currency of the reserve chain): 
 ```rust
 pub type AssetTransactor = FungibleAdapter<
     Balances,
@@ -147,6 +154,6 @@ To view this configuration, please visit the EduChain repository and view [`xcm_
 
 ## Resources
 
-- [Polkadot XCM Docs](https://wiki.polkadot.network/docs/learn-xcm)
-- [XCM Reserve Transfer Guide](https://paritytech.github.io/polkadot-sdk/master/xcm_docs/cookbook/relay_token_transactor/index.html)
+- [Polkadot Docs XCM Guides](https://docs.polkadot.com/develop/interoperability/xcm-guides/)
+- [Configuring a parachain to use Relay Chain native token - rustdocs guide](https://paritytech.github.io/polkadot-sdk/master/xcm_docs/cookbook/relay_token_transactor/index.html)
 - [Polkadot.js Apps](https://polkadot.js.org/apps/)
