@@ -50,6 +50,7 @@ This mapping allows the runtime to convert XCM locations (relay chain, sibling p
 ```rust
 pub type LocationToAccountId = (
     HashedDescription<AccountId, DescribeFamily<DescribeAllTerminal>>,
+    AccountId32Aliases<RelayNetwork, AccountId>
 );
 ```
 
