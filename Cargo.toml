@@ -7,9 +7,9 @@ edition = "2021"
 
 [workspace]
 members = [
-    # "node",
     "pallets/template",
     "runtime",
+    "pallets/news"
 ]
 resolver = "2"
 
