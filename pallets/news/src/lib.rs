@@ -1,31 +1,29 @@
 //! # Pallet News Provenance
 //!
-//! FRAME v2 pallet for recording and tracking provenance of news articles on EduChain.
+//! A pallet for recording and tracking provenance of news articles.
 //!
 //! ## Overview
 //!
 //! This pallet provides storage and dispatchables for:
 //! - Recording article fingerprints and provenance metadata
 //! - Mapping articles to publishers and collections
+//! - Verifying articles
 //!
 //! ## Storage
 //!
 //! - `ArticleByHash`: Maps article content hash to its record
 //! - `RootByItem`: Maps (collection_id, item_id) to article content hash
 //! - `ArticlesByPublisher`: Maps publisher to a bounded list of their article hashes
-//! - `PalletStorageVersion`: Pallet storage version for migration
 //!
 //! ## Dispatchables
 //!
 //! - `record_article`: Record a new article fingerprint
+//! - `verify_article`: Verify an existing article
 //!
 //! ## Helper Functions
 //!
 //! - `verify_signature`: Verify article signature
-//! - `insert_article`: Insert a new article record
-//! - `update_article_status`: Update status for an article
 
-// We make sure this pallet uses `no_std` for compiling to Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
 
 // Re-export pallet items so that they can be accessed from the crate namespace.
@@ -37,7 +35,6 @@ pub use pallet::*;
 mod mock;
 
 // This module contains the unit tests for this pallet.
-// Learn about pallet unit testing here: https://docs.substrate.io/test/unit-testing/
 #[cfg(test)]
 mod tests;
 
@@ -49,7 +46,6 @@ pub mod pallet {
     use sp_core::{ sr25519, H256 };
     use sp_runtime::{ traits::Verify, AnySignature, MultiSignature };
 
-    // --- Type Aliases ---
     /// Unique identifier for a collection of articles.
     pub type CollectionId = u128;
     /// Unique identifier for an item within a collection.
@@ -59,7 +55,6 @@ pub mod pallet {
     /// Optional hash representing a root of article sections.
     pub type SectionRoot = H256;
 
-    // --- Enums ---
     /// Supported hash algorithms for article content.
     #[derive(
         scale_info::TypeInfo,
@@ -119,7 +114,6 @@ pub mod pallet {
     #[pallet::pallet]
     pub struct Pallet<T>(_);
 
-    // --- Storage ---
     /// Maps content hash to article record.
     #[pallet::storage]
     pub type ArticleByHash<T: Config> = StorageMap<
@@ -152,7 +146,6 @@ pub mod pallet {
         ValueQuery
     >;
 
-    // --- Events ---
     /// Events emitted by the pallet.
     #[pallet::event]
     #[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -186,6 +179,7 @@ pub mod pallet {
         AccountIdNot32Bytes,
     }
 
+    /// Hooks for the pallet.
     #[pallet::hooks]
     impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
 
