@@ -1,7 +1,7 @@
 use crate::{ mock::*, ArticleByHash, Error, HashAlgo };
 use frame_support::{ assert_noop, assert_ok };
 use sp_core::{ sr25519, Pair, H256 };
-use sp_runtime::MultiSignature;
+use sp_runtime::{traits::IdentifyAccount, AccountId32, MultiSignature};
 
 fn make_test_signature(pair: &sr25519::Pair, hash: &H256) -> MultiSignature {
     let sig = pair.sign(hash.as_bytes());
@@ -21,20 +21,20 @@ fn record_article_works() {
         // Record article
         assert_ok!(
             News::record_article(
-                RuntimeOrigin::signed(1),
+                RuntimeOrigin::signed(pair.public().into()),
                 content_hash,
                 section_root,
                 collection_id,
                 item_id,
                 signature.clone(),
-                HashAlgo::Sha256
+                HashAlgo::Blake2b256
             )
         );
 
         // Should not allow duplicate
         assert_noop!(
             News::record_article(
-                RuntimeOrigin::signed(1),
+                RuntimeOrigin::signed(pair.public().into()),
                 content_hash,
                 section_root,
                 collection_id,
@@ -44,6 +44,6 @@ fn record_article_works() {
             ),
             Error::<Test>::ArticleAlreadyExists
         );
-		assert_eq!(ArticleByHash::<Test>::contains_key(content_hash), true);
+        assert_eq!(ArticleByHash::<Test>::contains_key(content_hash), true);
     });
 }

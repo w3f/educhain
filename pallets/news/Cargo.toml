@@ -28,6 +28,7 @@ sp-runtime.workspace = true
 [dev-dependencies]
 sp-core = { default-features = true, workspace = true }
 sp-io = { default-features = true, workspace = true }
+hex-literal = "1.0.0"
 
 [features]
 default = ["std"]

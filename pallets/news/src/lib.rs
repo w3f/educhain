@@ -207,6 +207,11 @@ pub mod pallet {
                 Error::<T>::ArticleAlreadyExists
             );
 
+            let verified = Self::verify_signature(&content_hash, &signature.encode(), &who)?;
+
+            // Verify the signer is the one who signed the article
+            ensure!(verified, Error::<T>::SignatureInvalid);
+
             // Create the article record
             let record = ArticleRecord::<T> {
                 publisher: who.clone(),
@@ -281,19 +286,19 @@ pub mod pallet {
             sig: &[u8],
             publisher: &T::AccountId
         ) -> Result<bool, Error<T>> {
-            // Try to parse the signature as sr25519
-            let signature: AnySignature = sr25519::Signature
-                ::try_from(sig)
-                .map_err(|_| Error::<T>::UnableToParseSignature)?
-                .into();
+            println!("sig length: {}", sig.len());
+            let sig_arr: [u8; 64] = sig[1..].try_into().map_err(|_| Error::<T>::UnableToParseSignature)?;
 
-            // Decode the publisher's AccountId as a sr25519 public key
+            let signature = sr25519::Signature::from_raw(sig_arr);
+
+            let any_sig: AnySignature = signature.into();
+
+            // Decode publisher as sr25519 public key
             let public: sp_core::sr25519::Public = Decode::decode(
                 &mut &publisher.encode()[..]
             ).map_err(|_| Error::<T>::AccountIdNot32Bytes)?;
 
-            // Verify the signature over the content hash bytes
-            Ok(signature.verify(hash.as_bytes(), &public))
+            Ok(any_sig.verify(hash.as_bytes(), &public))
         }
     }
 }
