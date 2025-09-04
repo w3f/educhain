@@ -39,12 +39,6 @@ pub use sp_runtime::{MultiAddress, Perbill, Permill};
 
 use weights::ExtrinsicBaseWeight;
 
-/// Import the template pallet.
-pub use pallet_parachain_template;
-
-/// Import the news pallet.
-pub use pallet_news;
-
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
 pub type Signature = MultiSignature;
 
@@ -319,9 +313,9 @@ mod runtime {
 	// Template
 	#[runtime::pallet_index(50)]
 	pub type TemplatePallet = pallet_parachain_template;
-	// Template
 	#[runtime::pallet_index(51)]
 	pub type News = pallet_news;
+
 }
 
 #[docify::export(register_validate_block)]

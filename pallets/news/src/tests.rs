@@ -1,7 +1,7 @@
 use crate::{ mock::*, ArticleByHash, Error, HashAlgo };
-use frame_support::{ assert_noop, assert_ok };
-use sp_core::{ sr25519, Pair, H256 };
-use sp_runtime::{AccountId32, MultiSignature};
+use frame::testing_prelude::*;
+use frame::deps::sp_core::{ sr25519, Pair, H256 };
+use frame::deps::sp_runtime::{ AccountId32, MultiSignature };
 
 fn make_test_signature(pair: &sr25519::Pair, hash: &H256) -> MultiSignature {
     let sig = pair.sign(hash.as_bytes());
@@ -57,12 +57,12 @@ fn verify_article_works() {
         let collection_id = 1u128;
         let item_id = 2u128;
         let signature = make_test_signature(&pair, &content_hash);
-        let publisher = pair.public().into();
+        let publisher: AccountId32 = pair.public().into();
 
         // Record article first
         assert_ok!(
             News::record_article(
-                RuntimeOrigin::signed(publisher.into()),
+                RuntimeOrigin::signed(publisher.clone()),
                 content_hash,
                 section_root,
                 collection_id,

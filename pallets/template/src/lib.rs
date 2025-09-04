@@ -46,7 +46,6 @@
 //! Run `cargo doc --package pallet-template --open` to view this pallet's documentation.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
 pub use pallet::*;
 
 #[cfg(test)]

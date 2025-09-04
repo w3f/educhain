@@ -25,9 +25,7 @@
 //! - `verify_signature`: Verify article signature
 
 #![cfg_attr(not(feature = "std"), no_std)]
-
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+pub use self::pallet::*;
 
 // FRAME pallets require their own "mock runtimes" to be able to run unit tests. This module
 // contains a mock runtime specific for testing this pallet's functionality.
@@ -38,13 +36,15 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
-#[frame_support::pallet]
+pub mod weights;
+
+#[frame::pallet]
 pub mod pallet {
-    use frame_support::{ pallet_prelude::*, BoundedVec };
-    use frame_system::{ pallet_prelude::*, WeightInfo };
-    use scale_info::TypeInfo;
-    use sp_core::{ sr25519, H256 };
-    use sp_runtime::{ traits::Verify, AnySignature, MultiSignature };
+    use frame::{
+        deps::sp_core::{ sr25519, H256 },
+        deps::sp_runtime::{ traits::Verify, AnySignature, MultiSignature },
+        prelude::*,
+    };
 
     /// Unique identifier for a collection of articles.
     pub type CollectionId = u128;
@@ -56,17 +56,7 @@ pub mod pallet {
     pub type SectionRoot = H256;
 
     /// Supported hash algorithms for article content.
-    #[derive(
-        scale_info::TypeInfo,
-        codec::Encode,
-        codec::Decode,
-        Clone,
-        Copy,
-        PartialEq,
-        Eq,
-        MaxEncodedLen,
-        Debug
-    )]
+    #[derive(TypeInfo, DecodeWithMemTracking, Encode, Decode, Clone, Copy, PartialEq, Eq, MaxEncodedLen, Debug)]
     pub enum HashAlgo {
         Sha256 = 1,
         Blake2b256 = 2,
@@ -82,7 +72,7 @@ pub mod pallet {
         #[allow(deprecated)]
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         /// A type representing the weights required by the dispatchables of this pallet.
-        type WeightInfo: WeightInfo;
+        type WeightInfo: crate::weights::WeightInfo;
     }
 
     /// Bounded vector for storing a publisher's article hashes.
@@ -92,7 +82,7 @@ pub mod pallet {
     >;
 
     /// Record representing a single article's provenance and metadata.
-    #[derive(TypeInfo, codec::Encode, codec::Decode, Clone, PartialEq, Eq, MaxEncodedLen, Debug)]
+    #[derive(TypeInfo, Encode, Decode, Clone, PartialEq, Eq, MaxEncodedLen, Debug)]
     #[scale_info(skip_type_params(T))]
     pub struct ArticleRecord<T: Config> {
         /// AccountId of the publisher (author) of the article.
@@ -294,7 +284,7 @@ pub mod pallet {
             let any_sig: AnySignature = signature.into();
 
             // Decode publisher as sr25519 public key
-            let public: sp_core::sr25519::Public = Decode::decode(
+            let public: sr25519::Public = Decode::decode(
                 &mut &publisher.encode()[..]
             ).map_err(|_| Error::<T>::AccountIdNot32Bytes)?;
 
