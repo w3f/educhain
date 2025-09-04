@@ -72,6 +72,26 @@ If you make runtime changes and want to generate a new chainspec + the patch, us
 }
 ```
 
+And for the local configuration: 
+
+```json
+{
+  "name": "Educhain Paseo Local",
+  "id": "local",
+  "chainType": "Local",
+  "bootNodes": [],
+  "telemetryEndpoints": null,
+  "protocolId": "educhain-paseo-local",
+  "para_id": 4883,
+  "relay_chain": "paseo-local",
+  "properties": {
+    "tokenDecimals": 10,
+    "tokenSymbol": "PAS"
+  },
+  ...
+}
+```
+
 ### Local Development Chain
 
 This project uses [pop! CLI](https://github.com/r0gue-io/pop-cli) to run a complete local setup:

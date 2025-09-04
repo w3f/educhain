@@ -1,4 +1,4 @@
-use frame_support::{ derive_impl, weights::constants::RocksDbWeight };
+use frame_support::{ weights::constants::RocksDbWeight };
 use frame_system::{ mocking::MockBlock, GenesisConfig };
 use sp_core::ConstU32;
 use sp_runtime::{ traits::{ConstU64, BlakeTwo256, IdentityLookup}, BuildStorage, AccountId32  };

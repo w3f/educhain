@@ -28,6 +28,7 @@ scale-info = { features = [
 smallvec = { workspace = true, default-features = true }
 docify = { workspace = true }
 pallet-parachain-template.workspace = true
+pallet-news.workspace = true
 frame-benchmarking = { optional = true, workspace = true }
 frame-executive.workspace = true
 frame-metadata-hash-extension.workspace = true

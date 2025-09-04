@@ -286,11 +286,11 @@ pub mod pallet {
             sig: &[u8],
             publisher: &T::AccountId
         ) -> Result<bool, Error<T>> {
-            println!("sig length: {}", sig.len());
-            let sig_arr: [u8; 64] = sig[1..].try_into().map_err(|_| Error::<T>::UnableToParseSignature)?;
-
+            // Slice off the first byte due to SCALE-encoded input (1 byte prefix from MultiSignature)
+            let sig_arr: [u8; 64] = sig[1..]
+                .try_into()
+                .map_err(|_| Error::<T>::UnableToParseSignature)?;
             let signature = sr25519::Signature::from_raw(sig_arr);
-
             let any_sig: AnySignature = signature.into();
 
             // Decode publisher as sr25519 public key

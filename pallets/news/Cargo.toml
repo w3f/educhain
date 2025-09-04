@@ -19,7 +19,7 @@ codec = { features = [
 scale-info = { features = [
 	"derive",
 ], workspace = true }
-sp-core = { default-features = true, workspace = true }
+sp-core = { default-features = false, workspace = true }
 frame-benchmarking = { optional = true, workspace = true }
 frame-support.workspace = true
 frame-system.workspace = true
@@ -28,7 +28,6 @@ sp-runtime.workspace = true
 [dev-dependencies]
 sp-core = { default-features = true, workspace = true }
 sp-io = { default-features = true, workspace = true }
-hex-literal = "1.0.0"
 
 [features]
 default = ["std"]

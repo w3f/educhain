@@ -480,3 +480,9 @@ impl pallet_parachain_template::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_parachain_template::weights::SubstrateWeight<Runtime>;
 }
+
+impl pallet_news::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+    type WeightInfo = ();
+    type MaxArticlesPerPublisher = ConstU32<50>;
+}
