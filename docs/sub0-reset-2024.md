@@ -59,8 +59,8 @@ More tinkering to do!
 
 - Setup the [Polkadot Parachain template](https://github.com/paritytech/polkadot-sdk-parachain-template) repository
 - Follow the installation instructions and build the parachain template
-- Explore all the commands available `./target/release/parachain-template-node --help`
-- Start the parachain node locally with `./target/release/parachain-template-node --dev` and connect to it at the endpoint `ws://127.0.0.1:9944` using Polkadot JS UI. No blocks are produced in this mode.
+- Explore all the commands available `./target/release/educhain-node --help`
+- Start the parachain node locally with `./target/release/educhain-node --dev` and connect to it at the endpoint `ws://127.0.0.1:9944` using Polkadot JS UI. No blocks are produced in this mode.
 
 ![Connect to Parachain Template Node](./img/template/parachain-template-dev.png)
 
@@ -86,13 +86,13 @@ After defining a live chain config in `chain_spec.rs` file, generate plain and r
 commands to generate genesis state and wasm. 4540 was the ParaID used to create a parachain for Sub0 Reset following the instructions on
 this document.
 
-`./target/release/parachain-template-node build-spec --disable-default-bootnode --chain live  > plain-parachain-chainspec.json`
+`./target/release/educhain-node build-spec --disable-default-bootnode --chain live  > plain-parachain-chainspec.json`
 
-`./target/release/parachain-template-node build-spec --chain plain-parachain-chainspec.json --disable-default-bootnode --raw > raw-parachain-chainspec.json`
+`./target/release/educhain-node build-spec --chain plain-parachain-chainspec.json --disable-default-bootnode --raw > raw-parachain-chainspec.json`
 
-`./target/release/parachain-template-node export-genesis-state --chain raw-parachain-chainspec.json para-4540-genesis-state`
+`./target/release/educhain-node export-genesis-state --chain raw-parachain-chainspec.json para-4540-genesis-state`
 
-`./target/release/parachain-template-node export-genesis-wasm --chain raw-parachain-chainspec.json para-4540-wasm`
+`./target/release/educhain-node export-genesis-wasm --chain raw-parachain-chainspec.json para-4540-wasm`
 
 
 ### Register Genesis State and Wasm
@@ -130,7 +130,7 @@ Below is a hacky way to start the collator without a session key in its key stor
 then use Polkadot JS UI to set the collator keys via an RPC call to the collator node. Follow the instructions on configuring the collator keys [here](collator.md#configuring-and-running-your-collator)
 
 ```
-./target/release/parachain-template-node \
+./target/release/educhain-node \
     --collator \
     --force-authoring \
     --chain raw-parachain-chainspec.json \
