@@ -3928,6 +3928,7 @@ dependencies = [
  "docify",
  "hex-literal",
  "log",
+ "pallet-news",
  "pallet-parachain-template",
  "parity-scale-codec",
  "polkadot-sdk 2503.2.0",
@@ -9152,6 +9153,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca1dbd8f9e06763b6e7b918d56fa780d8301e908316e8091a38dec764218e626"
 dependencies = [
  "log",
+ "parity-scale-codec",
+ "polkadot-sdk-frame",
+ "scale-info",
+]
+
+[[package]]
+name = "pallet-news"
+version = "0.1.0"
+dependencies = [
  "parity-scale-codec",
  "polkadot-sdk-frame",
  "scale-info",

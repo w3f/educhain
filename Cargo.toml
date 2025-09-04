@@ -10,6 +10,7 @@ default-members = ["pallets/template", "runtime"]
 members = [
     "node",
     "pallets/template",
+    "pallets/news",
     "runtime",
 ]
 resolver = "2"
@@ -17,6 +18,7 @@ resolver = "2"
 [workspace.dependencies]
 educhain-runtime = { path = "./runtime", default-features = false }
 pallet-parachain-template = { path = "./pallets/template", default-features = false }
+pallet-news = { path = "./pallets/news", default-features = false }
 clap = { version = "4.5.13" }
 color-print = { version = "0.3.4" }
 docify = { version = "0.2.9" }
@@ -43,4 +45,3 @@ panic = "unwind"
 codegen-units = 1
 inherits = "release"
 lto = true
-

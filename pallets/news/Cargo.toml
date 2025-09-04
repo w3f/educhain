@@ -1,6 +1,6 @@
 [package]
-name = "pallet-parachain-template"
-description = "FRAME pallet template for defining custom runtime logic."
+name = "pallet-news"
+description = "FRAME pallet for recording, verifying, and aggregating news articles."
 version = "0.1.0"
 license = "Unlicense"
 authors.workspace = true
