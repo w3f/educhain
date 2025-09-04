@@ -1,3 +1,4 @@
+use polkadot_sdk::*;
 use std::path::PathBuf;
 
 /// Sub-commands supported by the collator.
@@ -42,13 +43,13 @@ pub enum Subcommand {
 
 const AFTER_HELP_EXAMPLE: &str = color_print::cstr!(
 	r#"<bold><underline>Examples:</></>
-   <bold>educhain-node build-spec --disable-default-bootnode > plain-parachain-chainspec.json</>
+   <bold>parachain-template-node build-spec --disable-default-bootnode > plain-parachain-chainspec.json</>
            Export a chainspec for a local testnet in json format.
-   <bold>educhain-node --chain plain-parachain-chainspec.json --tmp -- --chain rococo-local</>
+   <bold>parachain-template-node --chain plain-parachain-chainspec.json --tmp -- --chain rococo-local</>
            Launch a full node with chain specification loaded from plain-parachain-chainspec.json.
-   <bold>educhain-node</>
+   <bold>parachain-template-node</>
            Launch a full node with default parachain <italic>local-testnet</> and relay chain <italic>rococo-local</>.
-   <bold>educhain-node --collator</>
+   <bold>parachain-template-node --collator</>
            Launch a collator with default parachain <italic>local-testnet</> and relay chain <italic>rococo-local</>.
  "#
 );

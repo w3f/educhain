@@ -25,37 +25,26 @@
 
 mod xcm_config;
 
-mod currency_helper {
-	use super::{Balance};
-	use crate::MILLIUNIT;
-	
-	pub const CENTS: Balance = 1_000 * MILLIUNIT;
-	pub const fn deposit(items: u32, bytes: u32) -> Balance {
-        items as Balance * 15 * CENTS + (bytes as Balance) * 6 * CENTS
-    }
-}
+use polkadot_sdk::{staging_parachain_info as parachain_info, staging_xcm as xcm, *};
+#[cfg(not(feature = "runtime-benchmarks"))]
+use polkadot_sdk::{staging_xcm_builder as xcm_builder, staging_xcm_executor as xcm_executor};
 
 // Substrate and Polkadot dependencies
 use cumulus_pallet_parachain_system::RelayNumberMonotonicallyIncreases;
 use cumulus_primitives_core::{AggregateMessageOrigin, ParaId};
-use crate::{OriginCaller, Signature, DAYS};
-use pallet_identity::legacy::IdentityInfo;
-use codec::{Decode, Encode, MaxEncodedLen};
-use scale_info::TypeInfo;
 use frame_support::{
 	derive_impl,
 	dispatch::DispatchClass,
 	parameter_types,
 	traits::{
 		ConstBool, ConstU32, ConstU64, ConstU8, EitherOfDiverse, TransformOrigin, VariantCountOf,
-		AsEnsureOriginWithArg, InstanceFilter
 	},
 	weights::{ConstantMultiplier, Weight},
 	PalletId,
 };
 use frame_system::{
 	limits::{BlockLength, BlockWeights},
-	EnsureRoot, EnsureSigned
+	EnsureRoot,
 };
 use pallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use parachains_common::message_queue::{NarrowOriginToSibling, ParaIdToSibling};
@@ -63,7 +52,7 @@ use polkadot_runtime_common::{
 	xcm_sender::NoPriceForMessageDelivery, BlockHashCount, SlowAdjustingFeeUpdate,
 };
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
-use sp_runtime::{Perbill, RuntimeDebug, traits::{BlakeTwo256, Verify}};
+use sp_runtime::Perbill;
 use sp_version::RuntimeVersion;
 use xcm::latest::prelude::BodyId;
 
@@ -74,7 +63,7 @@ use super::{
 	MessageQueue, Nonce, PalletInfo, ParachainSystem, Runtime, RuntimeCall, RuntimeEvent,
 	RuntimeFreezeReason, RuntimeHoldReason, RuntimeOrigin, RuntimeTask, Session, SessionKeys,
 	System, WeightToFee, XcmpQueue, AVERAGE_ON_INITIALIZE_RATIO, EXISTENTIAL_DEPOSIT, HOURS,
-	MAXIMUM_BLOCK_WEIGHT, MICROUNIT, NORMAL_DISPATCH_RATIO, SLOT_DURATION, VERSION,
+	MAXIMUM_BLOCK_WEIGHT, MICRO_UNIT, NORMAL_DISPATCH_RATIO, SLOT_DURATION, VERSION,
 };
 use xcm_config::{RelayLocation, XcmOriginToTransactDispatchOrigin};
 
@@ -140,6 +129,11 @@ impl frame_system::Config for Runtime {
 	type MaxConsumers = frame_support::traits::ConstU32<16>;
 }
 
+/// Configure the palelt weight reclaim tx.
+impl cumulus_pallet_weight_reclaim::Config for Runtime {
+	type WeightInfo = ();
+}
+
 impl pallet_timestamp::Config for Runtime {
 	/// A timestamp: milliseconds since the unix epoch.
 	type Moment = u64;
@@ -173,11 +167,12 @@ impl pallet_balances::Config for Runtime {
 	type RuntimeFreezeReason = RuntimeFreezeReason;
 	type FreezeIdentifier = RuntimeFreezeReason;
 	type MaxFreezes = VariantCountOf<RuntimeFreezeReason>;
+	type DoneSlashHandler = ();
 }
 
 parameter_types! {
 	/// Relay Chain `TransactionByteFee` / 10
-	pub const TransactionByteFee: Balance = 10 * MICROUNIT;
+	pub const TransactionByteFee: Balance = 10 * MICRO_UNIT;
 }
 
 impl pallet_transaction_payment::Config for Runtime {
@@ -187,6 +182,7 @@ impl pallet_transaction_payment::Config for Runtime {
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
 	type FeeMultiplierUpdate = SlowAdjustingFeeUpdate<Self>;
 	type OperationalFeeMultiplier = ConstU8<5>;
+	type WeightInfo = ();
 }
 
 impl pallet_sudo::Config for Runtime {
@@ -213,6 +209,7 @@ impl cumulus_pallet_parachain_system::Config for Runtime {
 	type ReservedXcmpWeight = ReservedXcmpWeight;
 	type CheckAssociatedRelayNumber = RelayNumberMonotonicallyIncreases;
 	type ConsensusHook = ConsensusHook;
+	type SelectCore = cumulus_pallet_parachain_system::DefaultCoreSelector<Runtime>;
 }
 
 impl parachain_info::Config for Runtime {}
@@ -277,164 +274,8 @@ impl pallet_session::Config for Runtime {
 	// Essentially just Aura, but let's be pedantic.
 	type SessionHandler = <SessionKeys as sp_runtime::traits::OpaqueKeys>::KeyTypeIdProviders;
 	type Keys = SessionKeys;
+	type DisablingStrategy = ();
 	type WeightInfo = ();
-}
-
-parameter_types! {
-    pub const AssetDeposit: Balance = 10 * currency_helper::CENTS;
-    pub const AssetAccountDeposit: Balance = currency_helper::deposit(1, 16);
-    pub const ApprovalDeposit: Balance = EXISTENTIAL_DEPOSIT;
-    pub const StringLimit: u32 = 50;
-    pub const MetadataDepositBase: Balance = currency_helper::deposit(1, 68);
-    pub const MetadataDepositPerByte: Balance = currency_helper::deposit(0, 1);
-    pub const RemoveItemsLimit: u32 = 1000;
-}
-impl pallet_assets::Config for Runtime {
-    type ApprovalDeposit = ApprovalDeposit;
-    type AssetAccountDeposit = AssetAccountDeposit;
-    type AssetDeposit = AssetDeposit;
-    type AssetId = u32;
-    type AssetIdParameter = codec::Compact<u32>;
-    type Balance = Balance;
-    #[cfg(feature = "runtime-benchmarks")]
-    type BenchmarkHelper = ();
-    type CallbackHandle = ();
-    type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
-    type Currency = Balances;
-    type Extra = ();
-    type ForceOrigin = EnsureRoot<AccountId>;
-    type Freezer = ();
-    type MetadataDepositBase = MetadataDepositBase;
-    type MetadataDepositPerByte = MetadataDepositPerByte;
-    type RemoveItemsLimit = RemoveItemsLimit;
-    type RuntimeEvent = RuntimeEvent;
-    type StringLimit = StringLimit;
-    type WeightInfo = pallet_assets::weights::SubstrateWeight<Runtime>;
-}
-
-parameter_types! {
-    // One storage item; key size is 32; value is size 4+4+16+32 bytes = 56 bytes.
-    pub const DepositBase: Balance = currency_helper::deposit(1, 88);
-    // Additional storage item size of 32 bytes.
-    pub const DepositFactor: Balance = currency_helper::deposit(0, 32);
-    pub const MaxSignatories: u16 = 100;
-}
-
-impl pallet_multisig::Config for Runtime {
-    type Currency = Balances;
-    type DepositBase = DepositBase;
-    type DepositFactor = DepositFactor;
-    type MaxSignatories = MaxSignatories;
-    type RuntimeCall = RuntimeCall;
-    type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_multisig::weights::SubstrateWeight<Runtime>;
-}
-
-impl pallet_utility::Config for Runtime {
-    type PalletsOrigin = OriginCaller;
-    type RuntimeCall = RuntimeCall;
-    type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_utility::weights::SubstrateWeight<Runtime>;
-}
-
-parameter_types! {
-    // Minimum 4 CENTS/byte
-    pub const BasicDeposit: Balance = currency_helper::deposit(1, 258);
-    pub const ByteDeposit: Balance = currency_helper::deposit(0, 1);
-    pub const SubAccountDeposit: Balance = currency_helper::deposit(1, 53);
-    pub const MaxSubAccounts: u32 = 100;
-    pub const MaxAdditionalFields: u32 = 100;
-    pub const MaxRegistrars: u32 = 20;
-}
-
-impl pallet_identity::Config for Runtime {
-    type BasicDeposit = BasicDeposit;
-    type ByteDeposit = ByteDeposit;
-    type Currency = Balances;
-    type ForceOrigin = EnsureRoot<Self::AccountId>;
-    type IdentityInformation = IdentityInfo<MaxAdditionalFields>;
-    type MaxRegistrars = MaxRegistrars;
-    type MaxSubAccounts = MaxSubAccounts;
-    type MaxSuffixLength = ConstU32<7>;
-    type MaxUsernameLength = ConstU32<32>;
-    type OffchainSignature = Signature;
-    type PendingUsernameExpiration = ConstU32<{ 7 * DAYS }>;
-    type RegistrarOrigin = EnsureRoot<Self::AccountId>;
-    type RuntimeEvent = RuntimeEvent;
-    type SigningPublicKey = <Signature as Verify>::Signer;
-    type Slashed = ();
-    type SubAccountDeposit = SubAccountDeposit;
-    type UsernameAuthorityOrigin = EnsureRoot<Self::AccountId>;
-    type WeightInfo = pallet_identity::weights::SubstrateWeight<Runtime>;
-}
-
-parameter_types! {
-    pub const MaxProxies: u32 = 32;
-    pub const MaxPending: u32 = 32;
-    pub const ProxyDepositBase: Balance = currency_helper::deposit(1, 40);
-    pub const AnnouncementDepositBase: Balance = currency_helper::deposit(1, 48);
-    pub const ProxyDepositFactor: Balance = currency_helper::deposit(0, 33);
-    pub const AnnouncementDepositFactor: Balance = currency_helper::deposit(0, 66);
-}
-
-/// The type used to represent the kinds of proxying allowed.
-/// If you are adding new pallets, consider adding new ProxyType variant
-#[derive(
-    Copy,
-    Clone,
-    Decode,
-    Default,
-    Encode,
-    Eq,
-    MaxEncodedLen,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    RuntimeDebug,
-    TypeInfo,
-)]
-pub enum ProxyType {
-    /// Allows to proxy all calls
-    #[default]
-    Any,
-    /// Allows all non-transfer calls
-    NonTransfer,
-    /// Allows to finish the proxy
-    CancelProxy,
-    /// Allows to operate with collators list (invulnerables, candidates, etc.)
-    Collator,
-}
-
-impl InstanceFilter<RuntimeCall> for ProxyType {
-    fn filter(&self, c: &RuntimeCall) -> bool {
-        match self {
-            ProxyType::Any => true,
-            ProxyType::NonTransfer => !matches!(c, RuntimeCall::Balances { .. }),
-            ProxyType::CancelProxy => matches!(
-                c,
-                RuntimeCall::Proxy(pallet_proxy::Call::reject_announcement { .. })
-                    | RuntimeCall::Multisig { .. }
-            ),
-            ProxyType::Collator => {
-                matches!(c, RuntimeCall::CollatorSelection { .. } | RuntimeCall::Multisig { .. })
-            }
-        }
-    }
-}
-
-impl pallet_proxy::Config for Runtime {
-    type AnnouncementDepositBase = AnnouncementDepositBase;
-    type AnnouncementDepositFactor = AnnouncementDepositFactor;
-    type CallHasher = BlakeTwo256;
-    type Currency = Balances;
-    type MaxPending = MaxPending;
-    type MaxProxies = MaxProxies;
-    type ProxyDepositBase = ProxyDepositBase;
-    type ProxyDepositFactor = ProxyDepositFactor;
-    type ProxyType = ProxyType;
-    type RuntimeCall = RuntimeCall;
-    type RuntimeEvent = RuntimeEvent;
-    type WeightInfo = pallet_proxy::weights::SubstrateWeight<Runtime>;
 }
 
 #[docify::export(aura_config)]
