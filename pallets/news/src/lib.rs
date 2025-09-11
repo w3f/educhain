@@ -52,8 +52,6 @@ pub mod pallet {
     pub type ItemId = u128;
     /// Hash of the article content (serves as a fingerprint).
     pub type ContentHash = H256;
-    /// Optional hash representing a root of article sections.
-    pub type SectionRoot = H256;
 
     /// Supported hash algorithms for article content.
     #[derive(TypeInfo, DecodeWithMemTracking, Encode, Decode, Clone, Copy, PartialEq, Eq, MaxEncodedLen, Debug)]
@@ -93,8 +91,6 @@ pub mod pallet {
         pub item_id: ItemId,
         /// Hash of the article content.
         pub content_hash: ContentHash,
-        /// Optional root hash for article sections.
-        pub section_root: Option<SectionRoot>,
         /// Signature over the content hash.
         pub signature: MultiSignature,
         /// Hash algorithm used.
@@ -183,7 +179,6 @@ pub mod pallet {
         pub fn record_article(
             origin: OriginFor<T>,
             content_hash: ContentHash,
-            section_root: Option<SectionRoot>,
             collection_id: CollectionId,
             item_id: ItemId,
             signature: MultiSignature,
@@ -208,7 +203,6 @@ pub mod pallet {
                 collection_id,
                 item_id,
                 content_hash,
-                section_root,
                 signature: signature.clone(),
                 hash_algo,
             };

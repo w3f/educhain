@@ -17,14 +17,27 @@ chain = "asset-hub-paseo-local"
 
 [[parachains.collators]]
 name = "asset-hub"
+ws_port = 9990
+rpc_port = 9935  
+args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
+
+[[parachains]]
+id = 1001
+chain = "people-paseo-local"
+
+[[parachains.collators]]
+name = "people-hub"
+ws_port = 9989
+rpc_port = 9934  
 args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
 
 [[parachains]]
 id = 4883
-chain_spec_path = "./artifacts/dev_plain.json"
+chain_spec_path = "./artifacts/dev/dev_plain_balances.json"
 
 [parachains.collator]
 name = "charlie"
 ws_port = 9988
+rpc_port = 9933
 default_command = "polkadot-omni-node"
 args = [ "-lparachain=error,xcm=trace"]
