@@ -97,7 +97,7 @@ And for the local configuration:
 This project uses [pop! CLI](https://github.com/r0gue-io/pop-cli) to run a complete local setup:
 
 ```sh
-pop up network -f ./pop-paseo-testnet-toml
+pop up network pop-paseo-testnet-toml
 ```
 
 ### Connect with the Polkadot-JS Apps Front-End

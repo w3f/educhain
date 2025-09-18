@@ -70,6 +70,9 @@ impl crate::Config for Test {
     type RuntimeEvent = RuntimeEvent;
     type WeightInfo = ();
     type MaxArticlesPerPublisher = ConstU32<50>;
+    type MaxHistoryLen = ConstU32<50>;
+    type MaxTitleLen = ConstU32<128>;
+    type MaxUrlLen = ConstU32<128>;
 }
 
 // Build genesis storage according to the mock runtime.
