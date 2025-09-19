@@ -39,20 +39,39 @@ docker build . -t polkadot-sdk-parachain-template
 ```
 
 
-### Generate Artifacts for Deployment
+### Generate Chain Artifacts
 
-We use [pop! CLI](https://github.com/r0gue-io/pop-cli) to generate the artifacts: 
+We provide two scripts for generating chain specifications:
+
+#### Development Chain Spec
+
+Use `deploy/gen_base_chain_dev_spec.sh` to generate a development chain specification for local testing:
 
 ```sh
-pop build spec \
-  --output ./artifacts/latest_raw_chain_spec.json \
-  --chain ./artifacts/latest_plain_chain_spec.json \
-  --genesis-state \
-  --genesis-code \
-  --type live
+./deploy/gen_base_chain_dev_spec.sh
 ```
 
-If you make runtime changes and want to generate a new chainspec + the patch, use the `deploy/gen_base_chain_spec.sh` script, then run the above to generate the artifacts. Keep in mind you may have to change some details, such as the name, protocol ID, etc to its original state: 
+This script builds the project and generates a development chain spec with basic parameters suitable for local testing environments. The output file will be placed in `./artifacts/dev/dev_plain_balances.json`.
+
+When using the development chain spec, you typically don't need to modify it manually, as it comes preconfigured with development defaults.
+
+#### Production Chain Spec
+
+Use `deploy/gen_base_chain_spec.sh` to generate a production-ready chain specification:
+
+```sh
+# Generate plain chain spec
+./deploy/gen_base_chain_spec.sh
+
+# Generate raw chain spec (must run the plain version first)
+./deploy/gen_base_chain_spec.sh raw
+```
+
+This script generates a more configurable chain spec that applies patches from `educhain.patch.json`. The output file will be placed in `./artifacts/latest_plain_chain_spec.json`. When run with the `raw` parameter, it converts the plain chain spec to a raw format suitable for validators.
+
+After generating the chain spec, you may need to modify certain metadata fields to match your deployment requirements:
+
+**For production (live) networks**, ensure the chain spec includes the following metadata:
 
 ```json
 {
@@ -68,11 +87,11 @@ If you make runtime changes and want to generate a new chainspec + the patch, us
     "tokenDecimals": 10,
     "tokenSymbol": "PAS"
   },
-  ...
+  // ...remaining configuration...
 }
 ```
 
-And for the local configuration: 
+**For local testing networks**, modify the metadata to reflect local settings:
 
 ```json
 {
@@ -88,9 +107,11 @@ And for the local configuration:
     "tokenDecimals": 10,
     "tokenSymbol": "PAS"
   },
-  ...
+  // ...remaining configuration...
 }
 ```
+
+If you make runtime changes and want to generate a new chainspec, first run the appropriate script, then manually verify and edit these metadata fields to ensure they match your deployment target.
 
 ### Local Development Chain
 

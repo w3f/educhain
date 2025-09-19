@@ -46,6 +46,7 @@ runtime-benchmarks = [
 	"cumulus-pallet-parachain-system/runtime-benchmarks",
 	"hex-literal",
 	"pallet-parachain-template/runtime-benchmarks",
+	"pallet-news/runtime-benchmarks",
 	"polkadot-sdk/runtime-benchmarks",
 ]
 

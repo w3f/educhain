@@ -36,6 +36,9 @@ mod tests;
 
 pub mod weights;
 
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+
 #[frame::pallet]
 pub mod pallet {
     use frame::{ deps::sp_runtime::{ AccountId32, MultiSignature }, prelude::*, traits::Verify };
