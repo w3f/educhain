@@ -28,16 +28,18 @@
 
 pub use self::pallet::*;
 
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+#[cfg(feature = "runtime-benchmarks")]
+pub use benchmarking::BenchmarkHelper;
+
+pub mod weights;
+
 // FRAME test scaffolding
 #[cfg(test)]
 mod mock;
 #[cfg(test)]
 mod tests;
-
-pub mod weights;
-
-#[cfg(feature = "runtime-benchmarks")]
-mod benchmarking;
 
 #[frame::pallet]
 pub mod pallet {
@@ -68,6 +70,8 @@ pub mod pallet {
         Blake2b256 = 2,
     }
 
+    use crate::weights::WeightInfo;
+
     #[pallet::config]
     pub trait Config: frame_system::Config {
         /// Max number of anchor articles per publisher.
@@ -86,7 +90,10 @@ pub mod pallet {
         #[allow(deprecated)]
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         /// Weights.
-        type WeightInfo: crate::weights::WeightInfo;
+        type WeightInfo: WeightInfo;
+        /// Helper to create a signature to be benchmarked.
+        #[cfg(feature = "runtime-benchmarks")]
+        type BenchmarkHelper: crate::BenchmarkHelper<MultiSignature, Self::AccountId>;
     }
 
     /// Bounded vector for storing a publisher's article **anchors** (first versions).
@@ -246,7 +253,7 @@ pub mod pallet {
         /// - **Verifies** the provided `signature` matches the extrinsic signer over `content_hash`.
         /// - Initializes history with the anchor.
         #[pallet::call_index(0)]
-        #[pallet::weight(5000)]
+        #[pallet::weight(T::WeightInfo::record_article())]
         pub fn record_article(
             origin: OriginFor<T>,
             content_hash: ContentHash,
@@ -262,22 +269,22 @@ pub mod pallet {
 
             // Ensure content hash is unique
             Self::ensure_content_hash_unique(&content_hash)?;
-            
+
             // Verify signature
             Self::verify_signature(&publisher, &content_hash, &signature)?;
 
             // Create and store article record
             let record = Self::create_article_record(
-                publisher.clone(), 
-                content_hash, 
-                collection_id, 
-                item_id, 
-                title, 
-                canonical_url, 
-                signature, 
-                hash_algo, 
-                word_count, 
-                0, // Initial updates count
+                publisher.clone(),
+                content_hash,
+                collection_id,
+                item_id,
+                title,
+                canonical_url,
+                signature,
+                hash_algo,
+                word_count,
+                0 // Initial updates count
             );
             Self::store_new_article(record, publisher, content_hash, collection_id, item_id)?;
 
@@ -289,7 +296,7 @@ pub mod pallet {
         /// - Only the **original publisher** can update.
         /// - Appends the new hash to the anchor's history and increments update counter.
         #[pallet::call_index(1)]
-        #[pallet::weight(5000)]
+        #[pallet::weight(T::WeightInfo::update_article())]
         pub fn update_article(
             origin: OriginFor<T>,
             old_hash: ContentHash,
@@ -376,28 +383,29 @@ pub mod pallet {
             );
             Ok(())
         }
-        
+
         /// Verifies that the signature provided by the publisher is valid for the content hash
         fn verify_signature(
-            publisher: &T::AccountId, 
-            content_hash: &ContentHash, 
+            publisher: &T::AccountId,
+            content_hash: &ContentHash,
             signature: &MultiSignature
         ) -> DispatchResult {
             let bytes = publisher.encode();
-            let account_id32 = AccountId32::try_from(&bytes[..])
-                .map_err(|_| Error::<T>::AccountIdNot32Bytes)?;
+            let account_id32 = AccountId32::try_from(&bytes[..]).map_err(
+                |_| Error::<T>::AccountIdNot32Bytes
+            )?;
 
             // Wrap content_hash in <Bytes></Bytes> tags for verification
             let mut wrapped_msg = b"<Bytes>".to_vec();
             wrapped_msg.extend_from_slice(content_hash.as_bytes());
             wrapped_msg.extend_from_slice(b"</Bytes>");
-            
+
             let ok = signature.verify(&wrapped_msg[..], &account_id32);
             ensure!(ok, Error::<T>::SignatureInvalid);
-            
+
             Ok(())
         }
-        
+
         /// Creates a new ArticleRecord instance with the given parameters
         fn create_article_record(
             publisher: T::AccountId,
@@ -409,7 +417,7 @@ pub mod pallet {
             signature: MultiSignature,
             hash_algo: HashAlgo,
             word_count: u32,
-            updates: u32,
+            updates: u32
         ) -> ArticleRecord<T> {
             ArticleRecord::<T> {
                 title,
@@ -425,14 +433,14 @@ pub mod pallet {
                 updates,
             }
         }
-        
+
         /// Stores a new article, updates necessary indices, and emits events
         fn store_new_article(
-            record: ArticleRecord<T>, 
+            record: ArticleRecord<T>,
             publisher: T::AccountId,
             content_hash: ContentHash,
             collection_id: CollectionId,
-            item_id: ItemId,
+            item_id: ItemId
         ) -> DispatchResult {
             // Persist the article record
             ArticleByHash::<T>::insert(&content_hash, &record);
@@ -457,7 +465,7 @@ pub mod pallet {
                 publisher,
                 content_hash,
             });
-            
+
             Ok(())
         }
     }

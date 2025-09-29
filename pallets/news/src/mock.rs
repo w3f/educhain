@@ -73,6 +73,8 @@ impl crate::Config for Test {
     type MaxHistoryLen = ConstU32<50>;
     type MaxTitleLen = ConstU32<128>;
     type MaxUrlLen = ConstU32<128>;
+    #[cfg(feature = "runtime-benchmarks")]
+    type BenchmarkHelper = ();
 }
 
 // Build genesis storage according to the mock runtime.

@@ -361,4 +361,6 @@ impl pallet_news::Config for Runtime {
     type MaxHistoryLen = ConstU32<50>;
     type MaxTitleLen = ConstU32<128>;
     type MaxUrlLen = ConstU32<128>;
+    #[cfg(feature = "runtime-benchmarks")]
+    type BenchmarkHelper = ();
 }
