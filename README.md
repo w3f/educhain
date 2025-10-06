@@ -121,6 +121,15 @@ This project uses [pop! CLI](https://github.com/r0gue-io/pop-cli) to run a compl
 pop up network pop-paseo-testnet-toml
 ```
 
+### Example Clients / Solutions
+
+#### EduNews - Demo Article Verification System
+
+EduNews is an educational prototype that illustrates a potential solution for verifying article authenticity and provenance using blockchain technology. This learning project combines multiple specialized chains within the Polkadot ecosystem (including EduChain):
+
+  - [EduNews SubXT CLI](https://github.com/w3f/edunews-subxt)
+  - [EduNews Vue App](https://github.com/w3f/edunews)
+
 ### Connect with the Polkadot-JS Apps Front-End
 
 * 🌐 You can interact with your local node using the
