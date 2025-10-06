@@ -313,6 +313,9 @@ mod runtime {
 	// Template
 	#[runtime::pallet_index(50)]
 	pub type TemplatePallet = pallet_parachain_template;
+	#[runtime::pallet_index(51)]
+	pub type News = pallet_news;
+
 }
 
 #[docify::export(register_validate_block)]
