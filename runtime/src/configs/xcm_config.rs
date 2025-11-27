@@ -9,7 +9,7 @@ use polkadot_sdk::{
 
 use frame_support::{
 	parameter_types,
-	traits::{ConstU32, Contains, Everything, Nothing},
+	traits::{ConstU32, Contains, Everything, Nothing, ContainsPair},
 	weights::Weight,
 };
 use frame_system::EnsureRoot;
@@ -50,20 +50,6 @@ pub type LocationToAccountId = (
 	// Straight up local `AccountId32` origins just alias directly to `AccountId`.
 	AccountId32Aliases<RelayNetwork, AccountId>,
 );
-
-/// Means for transacting assets on this chain.
-pub type LocalAssetTransactor = FungibleAdapter<
-	// Use this currency:
-	Balances,
-	// Use this currency when it is a fungible asset matching the given location or name:
-	IsConcrete<RelayLocation>,
-	// Do a simple punn to convert an AccountId32 Location into a native chain account ID:
-	LocationToAccountId,
-	// Our chain's account ID type (we can't get away without mentioning it explicitly):
-	AccountId,
-	// We don't track any teleports.
-	(),
->;
 
 /// This is the type we use to convert an (incoming) XCM origin into a local `Origin` instance,
 /// ready for dispatching a transaction with Xcm's `Transact`. There is an `OriginKind` which can
@@ -143,16 +129,36 @@ mod asset_transactor {
 mod is_reserve {
 	use super::*;
 
-	parameter_types! {
-		/// Reserves are specified using a pair `(AssetFilter, Location)`.
-		/// Each pair means that the specified Location is a reserve for all the assets in AssetsFilter.
-		/// Here, we are specifying that the Relay Chain is the reserve location for its native token.
-		pub RelayTokenForRelay: (AssetFilter, Location) =
-			(Wild(AllOf { id: AssetId(Parent.into()), fun: WildFungible }), Parent.into());
+	/// Simple implementation of `ContainsPair<Asset, Location>` that will
+	/// allow PAS (Paseo native token) from Asset Hub.
+	pub struct PasFromAssetHub;
+	impl ContainsPair<Asset, Location> for PasFromAssetHub {
+		fn contains(asset: &Asset, location: &Location) -> bool {
+			let is_pas = match asset {
+				Asset {
+					id: AssetId(asset_id),
+					fun: Fungible(_),
+				} => {
+					// The identifier of PAS (Paseo native token).
+					// The relative location from this parachain to the Relay Chain.
+					// Even though PAS is identified by the location of the Relay Chain,
+					// the reserve is Asset Hub.
+					matches!(asset_id.unpack(), (1, []))
+				},
+				// If it's not fungible we return false.
+				_ => false,
+			};
+			let is_from_asset_hub = matches!(
+				location.unpack(),
+				// The relative location of Asset Hub on Paseo.
+				(1, [Parachain(1000)])
+			);
+			is_pas && is_from_asset_hub
+		}
 	}
 
-	/// The wrapper type xcm_builder::Case is needed in order to use this in the configuration.
-	pub type IsReserve = xcm_builder::Case<RelayTokenForRelay>;
+	/// All locations we trust as reserves for particular assets.
+	pub type IsReserve = PasFromAssetHub;
 }
 
 pub struct XcmConfig;
@@ -208,7 +214,7 @@ impl pallet_xcm::Config for Runtime {
 	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmRouter = XcmRouter;
 	type ExecuteXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
-	type XcmExecuteFilter = Nothing;
+	type XcmExecuteFilter = Everything;
 	// ^ Disable dispatchable execute on the XCM pallet.
 	// Needs to be `Everything` for local testing.
 	type XcmExecutor = XcmExecutor<XcmConfig>;

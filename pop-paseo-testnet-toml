@@ -22,11 +22,22 @@ args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
 
 [[parachains]]
 id = 4883
-chain_spec_path = "./artifacts/dev/dev_plain_balances.json"
+chain_spec_path = "./artifacts/latest_plain_chain_spec.json"
 
 [parachains.collator]
 name = "charlie"
 ws_port = 9988
 rpc_port = 9935
-default_command = "polkadot-omni-node"
 args = [ "-lparachain=error,xcm=trace"]
+
+[[hrmp_channels]]
+sender = 1000
+recipient = 4883
+max_capacity = 1000
+max_message_size = 5000
+
+[[hrmp_channels]]
+sender = 4883
+recipient = 1000
+max_capacity = 1000
+max_message_size = 8000
