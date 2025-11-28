@@ -1,25 +1,47 @@
-# Dependencies
+# Installation & Prerequisites
 
-[The Polkadot Developer Documentation details how to install the necessary prerequisites](https://docs.polkadot.com/develop/parachains/install-polkadot-sdk/), including Rust and its tooling. You will need `cargo`, amongst other dependencies, before progressing.
+Before you start building, you'll need to set up your development environment.
 
-## The Omninode
+## 1. Basic Dependencies
 
-The `polkadot-omni-node` can be used a universal collator instance for running most of the parachain and can be installed follows:
+First, ensure you have the necessary prerequisites installed, including Rust and its tooling.
+
+[Polkadot SDK Installation Guide](https://docs.polkadot.com/develop/parachains/install-polkadot-sdk/){ .md-button }
+
+You will need `cargo` and other standard development tools.
+
+## 2. The Omninode
+
+The `polkadot-omni-node` is a universal collator instance that can run most parachains. Install it using Cargo:
 
 ```sh
 cargo install polkadot-omni-node
 ```
 
-## Chain Spec Builder
+## 3. Chain Spec Builder
 
-The [`chain-spec-builder`](https://paritytech.github.io/polkadot-sdk/master/staging_chain_spec_builder/index.html) tool is used for building a chain specification from a Wasm binary. It can be installed as follows:
+The [`chain-spec-builder`](https://paritytech.github.io/polkadot-sdk/master/staging_chain_spec_builder/index.html) tool is essential for creating a chain specification from a Wasm binary.
 
 ```sh
 cargo install staging-chain-spec-builder
 ```
 
-You may find more information in the link above and in the [Polkadot Developer Documentation](https://docs.polkadot.com/develop/parachains/deployment/generate-chain-specs/).
+For more details, refer to the [Polkadot Developer Documentation](https://docs.polkadot.com/develop/parachains/deployment/generate-chain-specs/).
 
-## pop! CLI
+## 4. pop! CLI
 
-[`pop-cli`](https://github.com/r0gue-io/pop-cli?tab=readme-ov-file#install) can be used to spin up a local development network with a parachain and relay chain setup.
+The [`pop-cli`](https://github.com/r0gue-io/pop-cli) is a powerful tool to spin up local development networks with a parachain and relay chain setup.
+
+=== "Cargo"
+
+    ```sh
+    cargo install --force --locked pop-cli
+    ```
+
+=== "Binary"
+
+    Check the [pop-cli releases page](https://github.com/r0gue-io/pop-cli/releases) for pre-built binaries.
+
+Once installed, you're ready to launch your chain!
+
+[Launch Your Chain](./launch.md){ .md-button .md-button--primary }

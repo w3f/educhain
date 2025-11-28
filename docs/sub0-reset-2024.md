@@ -2,52 +2,45 @@
 
 ## Launch your Appchain to Production
 
-The journey of any production grade application always starts on a test network. Polkadot is privileged to have a high quality testnet: 
-[Paseo Network](https://github.com/paseo-network), maintained by the community. Paseo network mirrors Polkadot and its system chain
-runtimes, making it an ideal play ground for testing apps as well as appchains! 
+The journey of any production-grade application starts on a test network. Polkadot's [Paseo Network](https://github.com/paseo-network) mirrors Polkadot and its system chain runtimes, making it the ideal playground for testing appchains.
 
-## Who is the audience?
+## Audience
 
-Anyone who wants to understand the process of launching their own chain on Polkadot and to leverage the powerful system chain integration options available. Some pre-requisite skills that help:
+This workshop is for anyone who wants to understand the process of launching their own chain on Polkadot and leveraging system chain integrations.
 
-- familiarity with Polkadot JS UI
-- have Substrate runtime development experience
-- tinkered with [minimal chain](https://github.com/paritytech/polkadot-sdk-minimal-template) and [solochain](https://github.com/paritytech/polkadot-sdk-solochain-template) templates
+**Prerequisites:**
+*   Familiarity with Polkadot JS UI.
+*   Substrate runtime development experience.
+*   Experience with [minimal](https://github.com/paritytech/polkadot-sdk-minimal-template) or [solochain](https://github.com/paritytech/polkadot-sdk-solochain-template) templates.
 
-## Having Trouble following the instructions?
+!!! tip "Stuck?"
+    If you get overwhelmed, you can find the complete code for this workshop [here](https://github.com/DrW3RK/polkadot-sdk-parachain-template/commit/7be19b80afa5c5df8c284f02ca50e22b76088510).
 
-As there are several moving parts, it is undertsandable that first time learners of Polkadot SDK can get a bit  overwhelmed. For
-the code changes that need to be made to successfully complete this workshop,  you can find the repository 
-[here](https://github.com/DrW3RK/polkadot-sdk-parachain-template/commit/7be19b80afa5c5df8c284f02ca50e22b76088510)
+## Workshop Tasks
 
-## Tasks
+### Phase 1: Preparation (Before Workshop)
 
-### Before attending the workshop
+- **(Easy)** [Register a ParaID](#register-a-paraid) on Paseo Network.
+- **(Easy)** Build the [parachain template](#build-parachain-template).
+- **(Intermediate)** Build [Chainspec](#chain-spec-with-genesis-state-and-wasm) with custom collator keys.
+- **(Easy)** Register genesis state and wasm blob of the parachain.
+- **(Easy)** Run collator nodes and set collator keys.
 
-- (Easy) [Register a ParaID](#register-a-paraid) on Paseo Network
-- (Easy) Build the [parachain template](#build-parachain-template)
+### Phase 2: Live Action (During Workshop)
 
-- (Intermediate) Build [Chainspec](#chain-spec-with-genesis-state-and-wasm) with custom collator keys
-- (Easy) Register genesis state and wasm blob of the parachain
-- (Easy) Run collator nodes and set collator keys
+**After onboarding:**
 
-### During the Workshop
+- **(Easy)** Produce the first parachain block on-demand.
 
-After the parachain is onboarded
+**System Chain Integrations:**
 
-- (Easy) Produce the first parachain block on-demand
+- **(Intermediate)** [Establish a communication channel](#establish-hrmp-channel-with-asset-hub) with Paseo Asset Hub.
+- **(Intermediate)** Register the parachain native token as a foreign asset on Paseo Asset Hub.
 
-Integrations with System chains
+### Phase 3: Next Steps (After Workshop)
 
-- (Intermediate) [Establish a communication channel](#establish-hrmp-channel-with-asset-hub) with Paseo Asset Hub
-- (Intermediate) Register the parachain native token as a foreign asset on Paseo Asset Hub
-
-### After the Workshop
-
-More tinkering to do!
-
-- (Intermediate) Add a new pallet to the parachain runtime
-- (Advanced) Perform a runtime upgrade
+- **(Intermediate)** Add a new pallet to the parachain runtime.
+- **(Advanced)** Perform a runtime upgrade.
 
 ### Register a ParaID
 
@@ -105,6 +98,24 @@ It takes two hours for the parachain to be on-boarded.
 
 
 ### Set Collator Session Keys
+
+The session key needs to be inserted into the collator's keystore so it can sign blocks.
+
+```sh
+./target/release/educhain-node key insert 
+  --base-path /tmp/parachain/alice 
+  --chain raw-parachain-chainspec.json 
+  --scheme Sr25519 
+  --suri "//Alice" 
+  --key-type aura
+```
+
+Verify the key was inserted:
+
+```sh
+ls /tmp/parachain/alice/chains/para-4540/keystore
+```
+
 
 If you try to start are a collator without ssetting the keys in the storage, you will be presented with the following options:
 
