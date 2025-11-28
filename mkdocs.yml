@@ -7,6 +7,8 @@ edit_uri: tree/main/docs
 
 theme:
   name: material
+  logo: img/logo_transparent.png
+  favicon: img/favicon.ico
   font:
     text: Space Grotesk
     code: Space Mono
