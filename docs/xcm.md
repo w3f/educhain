@@ -193,30 +193,67 @@ To view this configuration, please visit the EduChain repository and view [`xcm_
 
 ## Common Issues
 
-*   **TooExpensive:** Not enough fee or weight limit. Use `weightLimit: "Unlimited"` and ensure fees are covered.
 *   **Unrecognized asset:** Asset location or format is incorrect. Use the correct `parents` and `interior` fields.
-*   **Filtered:** If `XcmExecuteFilter` is set to `Nothing`, outbound transfers will fail. Ensure it's set to `Everything` for bidirectional transfers.
+*   **Filtered:** If `XcmExecuteFilter` is set to `Nothing`, outbound transfers will fail.
 *   **Reserve not recognized:** Ensure transfers come from Asset Hub (Parachain 1000), not directly from the relay chain.
 
 ## Testing Transfers
 
-To test the configuration:
+To test the configuration, you can use the `polkadotXcm.execute` extrinsic to send XCM messages.
 
-1.  **Receive PAS from Asset Hub:**
-    *   Send PAS from Asset Hub to your EduChain account
-    *   Verify balance increases on EduChain
+### From EduChain to Asset Hub
 
-2.  **Send PAS back to Paseo:**
-    *   Use the `limitedReserveTransferAssets` extrinsic
-    *   Destination: Paseo relay chain
-    *   Asset: PAS (identified as `Parent`)
-    *   Verify balance decreases on EduChain and increases on Paseo
+To send PAS tokens from EduChain to Asset Hub, construct an XCM message with the following instructions:
 
-3.  **Send PAS to Asset Hub:**
-    *   Use the `limitedReserveTransferAssets` extrinsic
-    *   Destination: Asset Hub (Parachain 1000)
-    *   Asset: PAS
-    *   Verify bidirectional transfers work
+| Instruction | Purpose | Parameters |
+|-------------|---------|------------|
+| `WithdrawAsset` | Withdraw PAS from sender's account | **Asset ID:** `{ parents: 1, interior: Here }` (relay chain token)<br>**Amount:** Transfer amount in plancks |
+| `InitiateReserveWithdraw` | Send tokens to Asset Hub (the reserve) | **Assets:** `Wild(AllCounted(1))`<br>**Reserve:** `{ parents: 1, interior: X1(Parachain(1000)) }` (Asset Hub)<br>**XCM Program:** See sub-instructions below |
+| `BuyExecution` | Pay for execution on Asset Hub | **Fees:** Same asset, ~50% of transfer amount<br>**Weight Limit:** `Unlimited` |
+| `DepositAsset` | Deposit tokens to beneficiary | **Assets:** `Wild(AllCounted(1))`<br>**Beneficiary:** `{ parents: 0, interior: X1(AccountId32({ id: beneficiary_bytes })) }` |
+
+**Parameter Details:**
+
+*   `beneficiary_bytes` - The recipient's account ID as a 32-byte array. In PAPI Dev Console or Polkadot.JS UI, this is the decoded SS58 address.
+*   Transfer amount should be in plancks (smallest unit). For example, 1 PAS = 10^10 plancks.
+
+**Max Weight:** `{ ref_time: 2_000_000_000, proof_size: 200_000 }`
+
+### From Asset Hub to EduChain
+
+To send PAS tokens from Asset Hub to EduChain, construct an XCM message with the following instructions:
+
+| Instruction | Purpose | Parameters |
+|-------------|---------|------------|
+| `WithdrawAsset` | Withdraw PAS from sender's account on Asset Hub | **Asset ID:** `{ parents: 1, interior: Here }` (relay chain token)<br>**Amount:** Transfer amount in plancks |
+| `DepositReserveAsset` | Send tokens to EduChain (Asset Hub holds reserve) | **Assets:** `Wild(AllCounted(1))`<br>**Destination:** `{ parents: 1, interior: X1(Parachain(educhain_id)) }` (EduChain)<br>**XCM Program:** See sub-instructions below |
+| `BuyExecution` | Pay for execution on EduChain | **Fees:** Same asset, ~50% of transfer amount<br>**Weight Limit:** `Unlimited` |
+| `DepositAsset` | Deposit tokens to beneficiary | **Assets:** `Wild(AllCounted(1))`<br>**Beneficiary:** `{ parents: 0, interior: X1(AccountId32({ id: beneficiary_bytes })) }` |
+
+**Parameter Details:**
+
+*   `educhain_id` - EduChain's parachain ID on Paseo (e.g., 4883).
+*   `beneficiary_bytes` - The recipient's account ID as a 32-byte array. In PAPI Dev Console or Polkadot.JS UI, this is the decoded SS58 address.
+*   Transfer amount should be in plancks (smallest unit). For example, 1 PAS = 10^10 plancks.
+
+**Max Weight:** `{ ref_time: 2_000_000_000, proof_size: 200_000 }`
+
+!!! tip "Key Differences"
+    - **From EduChain:** Use `InitiateReserveWithdraw` (tokens going to reserve)
+    - **From Asset Hub:** Use `DepositReserveAsset` (tokens leaving reserve)
+    - Both require `XcmExecuteFilter = Everything` on EduChain for execution
+
+### Verification Steps
+
+After sending transfers:
+
+1.  **From EduChain to Asset Hub:**
+    *   Check balance decreases on EduChain
+    *   Check balance increases on Asset Hub
+
+2.  **From Asset Hub to EduChain:**
+    *   Check balance decreases on Asset Hub
+    *   Check balance increases on EduChain
 
 ## Resources
 
