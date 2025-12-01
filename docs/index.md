@@ -2,38 +2,36 @@
 
 Educating Web3 through [Polkadot SDK.](https://github.com/paritytech/polkadot-sdk)
 
-> [**Educhain On-demand Parachain is now live on Paseo**](https://polkadot.js.org/apps/?rpc=wss://rpc.web3educhain.xyz:443#/explorer)
+!!! success "Live on Paseo"
+    **Educhain On-demand Parachain is now live on Paseo!**  
+    [View on Polkadot.js Apps](https://polkadot.js.org/apps/?rpc=wss://rpc.web3educhain.xyz:443#/explorer)
 
 ## Why Educhain?
 
-When creating the [Web3 Educhain](https://github.com/w3f/educhain) project, there were around 50 parachains on the Polkadot network but no
-concrete guides on launching and maintaining a production-grade parachain. There are also very limited 
-tutorials that demonstrate the [Polkadot SDK](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/index.html) features that are 
-shipped with [FRAME](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html) library.
+When we started the [Web3 Educhain](https://github.com/w3f/educhain) project, there were around 50 parachains on the Polkadot network, but concrete guides on launching and maintaining a production-grade parachain were scarce. Tutorials demonstrating the [Polkadot SDK](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/index.html) features shipped with the [FRAME](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html) library were also limited.
 
-Web3 Educhain intends to address these issues by providing insights, examples and tutorials *with* documentation on how to launch and maintain a parachain.
+Web3 Educhain addresses these gaps by providing insights, examples, and tutorials *alongside* documentation on how to launch and maintain a parachain.
 
-Web3 EduChain has the unique property of utilizing the relay chain's token as its own, taking advantage of Polkadot's cross consensus messaging (XCM). This means that if EduChain is deployed on Paseo, it utilizes PAS, which bypassing the need for the parachain to maintain its own token.
+!!! note "Unique Feature"
+    Web3 EduChain utilizes the relay chain's token as its own, leveraging Polkadot's Cross-Consensus Messaging (XCM). If EduChain is deployed on Paseo, it uses **PAS**, bypassing the need to maintain a separate token.
 
 ## Why Polkadot?
 
-Along with the efficient utility of coretime and blockspace, a parachain deployed on Polkadot has access to
+Beyond efficient coretime and blockspace utility, a parachain deployed on Polkadot gains access to:
 
-- Multi-billion dollar crypto-economic security backed finality from block number one.
-- Secure interoperability with multiple chains within and outside of the Polkadot ecosystem.
-- Customizable blockchain runtimes written in Rust and executed as Wasm code.
-- Decentralized network and networking stack with light-client prioritized design.
-- Visionary, intellectual, smart (and at times oversmart) developer community.
-- Polkadot OpenGov and its Treasury, which pays [OECD grade salaries](https://polkadot-fellows.github.io/dashboard/#/membership) to the Technical Fellowship and funds numerous development initiatives through bounties.
+*   **Shared Security:** Multi-billion dollar crypto-economic security and finality from block one.
+*   **Interoperability:** Secure communication with multiple chains within and outside the Polkadot ecosystem.
+*   **Wasm Runtimes:** Customizable blockchain runtimes written in Rust and executed as Wasm code.
+*   **Decentralization:** A robust network and networking stack designed with light clients in mind.
+*   **Community:** A visionary and intellectual developer community.
+*   **OpenGov:** A treasury that funds development initiatives and pays [OECD-grade salaries](https://polkadot-fellows.github.io/dashboard/#/membership) to the Technical Fellowship.
 
-With Agile Coretime, parachains can now produce blocks continuously or on demand. By activating Async Backing, parachains can produce blocks every 6 seconds whose transactions get finalized in 20-60 seconds, and
-[around 800 TPS](https://polkadot.network/blog/the-way-to-a-10x-throughput-lift-on-parachains/). 
+With **Agile Coretime**, parachains can produce blocks continuously or on-demand. By activating **Async Backing**, parachains can achieve 6-second block times with 20-60 second finality and [around 800 TPS](https://polkadot.network/blog/the-way-to-a-10x-throughput-lift-on-parachains/).
 
-With [elastic scaling](https://github.com/paritytech/polkadot-sdk/issues/1829), the throughput of 
-parachains is expected to improve further, with multiple cores being utilized at the same time. In the near future, parachains can subscribe to the parachains 
-service of the [JAM chain](https://graypaper.com/), which enables advanced features that makes blockchain 
-technology feasible for the majority of its use cases.
+With [elastic scaling](https://github.com/paritytech/polkadot-sdk/issues/1829), parachain throughput will improve further by utilizing multiple cores simultaneously. In the near future, parachains can subscribe to the [JAM chain](https://graypaper.com/) service, enabling advanced features that make blockchain technology feasible for a wider range of use cases.
 
 ## Launch a Parachain
 
-With the available templates, you can now launch a production-grade blockchain in a day! To learn how, navigate to the next page.
+With the available templates, you can launch a production-grade blockchain in a day! 
+
+[Get Started with Installation](./install.md){ .md-button .md-button--primary }

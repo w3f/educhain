@@ -1,37 +1,45 @@
 
 # XCM Configuration
 
-EduChain is configured to use the **relay chain token (e.g., PAS)** as its native currency, leveraging Polkadot’s XCM (Cross-Consensus Messaging) for secure, reserve-backed asset transfers. This document explains the configuration and how reserve transfers work in practice.
+EduChain uses the **relay chain token (PAS)** as its native currency. This leverages Polkadot’s XCM (Cross-Consensus Messaging) for secure, reserve-backed asset transfers.
 
-!!!info
-    The complete, working XCM configuration can be found in the EduChain repository: [`xcm_config.rs`](https://github.com/w3f/educhain/blob/main/runtime/src/configs/xcm_config.rs)
+!!! info "Configuration File"
+    The complete XCM configuration is in [`xcm_config.rs`](https://github.com/w3f/educhain/blob/main/runtime/src/configs/xcm_config.rs).
 
-## Overview: Reserve Transfer Mechanism
+## Reserve Transfer Mechanism
 
-In Polkadot, a parachain can use the relay chain’s token (such as DOT or PAS) as its native currency. This is achieved by treating the relay chain as the *reserve location* for the token, and using XCM to move balances between the relay chain and parachain.
+In this model, the relay chain (or Asset Hub) acts as the **reserve location**.
 
-> **Note:**
-> While EduChain currently uses the relay chain as the reserve for its native token, it is now possible—and in many cases preferable—to use **Asset Hub** as the reserve location. Post-Asset Hub Migration (AHM), Asset Hub will be the source of truth for assets, and parachains are encouraged to use it as the reserve. The configuration is very similar, and you can already use Asset Hub as your reserve today.
-
-A sovereign account represents the parachain on the reserve chain, which is where the tokens are "reserved" while in use on the parachain. You can view EduChain's [current sovereign account here.](https://paseo.subscan.io/account/13YMK2dtwE9kmdYK7XbBYiTJrVnTbSVFiYNqzNTAv3USGFWf)
+*   **Reserve Chain:** Holds the actual tokens (locked).
+*   **Parachain:** Mints/burns wrapped representations.
 
 ### How it works
 
-- When a user transfers tokens from the reserve chain to the parachain, the tokens are locked (“reserved”) on the reserve chain and minted on the parachain.
-- When tokens are sent back, they are burned on the parachain and released on the reserve chain.
+1.  **Inbound (Reserve -> Parachain):**
+    *   User sends tokens from Reserve.
+    *   Reserve locks tokens.
+    *   XCM message sent to Parachain.
+    *   Parachain mints equivalent amount.
 
-This mechanism ensures that the total supply remains consistent and that the reserve chain always holds the actual reserves.
+2.  **Outbound (Parachain -> Reserve):**
+    *   User sends tokens from Parachain.
+    *   Parachain burns tokens.
+    *   XCM message sent to Reserve.
+    *   Reserve releases tokens to user.
 
-- **From Reserve Chain to Parachain:**  
-  The reserve chain locks the user’s tokens and sends an XCM message to the parachain, which mints the equivalent amount for the user.
-- **From Parachain to Reserve Chain:**  
-  The parachain burns the user’s tokens and sends an XCM message to the reserve chain, which releases the equivalent amount to the user’s reserve chain account.
+!!! note "Asset Hub Migration"
+    While EduChain currently uses the relay chain as the reserve, **Asset Hub** is the recommended reserve location for the future. The configuration is similar.
 
-This ensures that the parachain’s native currency is always backed by actual reserves on the reserve chain (i.e., Asset Hub, if configured).
+## Sovereign Account
 
-## Reserve Chain and Location
+The sovereign account represents the parachain on the reserve chain.
+[View EduChain's Sovereign Account](https://paseo.subscan.io/account/13YMK2dtwE9kmdYK7XbBYiTJrVnTbSVFiYNqzNTAv3USGFWf)
 
-EduChain is currently configured to recognize the relay chain (Polkadot) as its parent and to use its network ID for account mapping. However, you can use another chain, such as Asset Hub, as your reserve.
+## Configuration Details
+
+### Reserve Chain Location
+
+EduChain recognizes the relay chain as its parent.
 
 ```rust
 parameter_types! {
@@ -43,9 +51,9 @@ parameter_types! {
 }
 ```
 
-## Location to AccountId Mapping
+### Location to AccountId Mapping
 
-This mapping allows the runtime to convert XCM locations (relay chain, sibling parachains, AccountId32) into local account IDs. The **preferred approach** is to use `HashedDescription`, which is more flexible and future-proof:
+We use `HashedDescription` to convert XCM locations into local account IDs. This is flexible and future-proof.
 
 ```rust
 pub type LocationToAccountId = (

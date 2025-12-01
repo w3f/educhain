@@ -4,19 +4,63 @@ repo_url: https://github.com/w3f/educhain
 site_description: Educating Web3 through Polkadot SDK
 copyright: No Rights Reserved
 edit_uri: tree/main/docs
+
 theme:
-  name: readthedocs
+  name: material
+  logo: img/logo_transparent.png
+  favicon: img/favicon.ico
+  font:
+    text: Space Grotesk
+    code: Space Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+  palette: 
+    - scheme: slate
+      primary: black
+      accent: lime
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+    - scheme: default
+      primary: black
+      accent: lime
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
 extra_css:
   - css/custom.css
-nav:
-  - 'index.md'
-  - 'launch.md'
-  - 'install.md'
-  - 'collator.md'
-  - 'ordering-coretime.md'
-  - 'upgrade.md'
-  - 'xcm.md'
-  - 'asset-hub.md'
-  - 'sub0-reset-2024.md'
+
 markdown_extensions:
   - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true 
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: install.md
+    - Launch Your Chain: launch.md
+  - Operations:
+    - Collator Setup: collator.md
+    - Coretime Management: ordering-coretime.md
+    - Runtime Upgrades: upgrade.md
+  - Interoperability:
+    - XCM Configuration: xcm.md
+    - Asset Hub Integration: asset-hub.md
+  - Workshops:
+    - Sub0 Reset 2024: sub0-reset-2024.md

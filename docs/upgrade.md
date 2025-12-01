@@ -1,43 +1,49 @@
 # Upgrading Your Runtime
 
-> **⚠️ You need access to a *sudo* account to authorize and apply upgrades!**
+!!! danger "Sudo Required"
+    **You need access to a *sudo* account to authorize and apply upgrades!**
 
-Every parachain runtime (that is, the code inside of `src/runtime/*`) can be boiled down to a single `.wasm` blob.  This blob is what the relay chain uses to validate state transitions from the parachain's collators.  Part of the reason behind this design was the concept of forkless upgrades, where essentially we can replace the WebAssembly blob with another, upgraded version.
+Every parachain runtime (the code in `src/runtime/*`) compiles to a single `.wasm` blob. The relay chain uses this blob to validate state transitions. "Forkless upgrades" simply mean replacing this WebAssembly blob with a new one.
 
-On solo chains, it's usually as easy as calling `system.setCode(new_wasm)`, which replaces the WebAssembly runtime with another within the storage layer of the node(s) and will be utilized after the extrinsic is executed.
+## The Parachain Upgrade Process
 
-On a parachain, the process is essentially *two* steps instead of *one* due to the involvement of the relay chain, which must be notified before you upgrade your parachain's code using the `system.authorizeUpgrade` extrinsic, then you can apply that upgrade using `system.applyAuthorizedUpgrade`.  This lets the relay chain know that:
+On a solo chain, you just call `system.setCode`. On a parachain, it's a **two-step process** because the relay chain must be notified:
 
-1. An upgrade is going to commence, and it expects a new state transition function for validation (`system.authorizeUpgrade`)
-2. The upgrade / new code gets applied (`system.applyAuthorizedUpgrade`)
+1.  **Authorize:** `system.authorizeUpgrade` - Notify the relay chain of the impending upgrade (requires the hash of the new runtime).
+2.  **Apply:** `system.applyAuthorizedUpgrade` - Upload the new code.
 
+## 1. Compile your WASM Blob
 
-## Compiling your WASM Blob
-
-Getting your WASM blob is as simple as compiling your runtime:
+Compile your runtime in release mode:
 
 ```sh
 cargo build --release
 ```
 
-Your blob should be under `target/release/wbuild/educhain-runtime/educhain_runtime.compressed.wasm`
+The artifact will be at: `target/release/wbuild/educhain-runtime/educhain_runtime.compressed.wasm`
 
-## Obtaining your runtime hash
+## 2. Obtain Runtime Hash
 
-Since `system.authorizeUpgrade` requires a `Blake2b_256` hash of the runtime, [which you can get via this tool.](https://toolkitbay.com/tkb/tool/BLAKE2b_256).  You can also get the hash of the file via the `system.authorizeUpgrade` extrinsic in the PolkadotJS UI, and hash the file there.
+You need the `Blake2b_256` hash of your new runtime file.
 
-## Upgrade Via PolkadotJS
+*   **Option A:** Use [this online tool](https://toolkitbay.com/tkb/tool/BLAKE2b_256).
+*   **Option B:** Upload the file in PolkadotJS UI (under `system.authorizeUpgrade`) to see the hash, then copy it.
 
-1. With your hash, authorize the upgrade (`system.authorizeUpgrade`) (replace `HASH_HERE` with your new hash and `YOUR_RPC_HERE` with your RPC URL). Keep in mind this done on the parachain:
+## 3. Perform the Upgrade
 
-2. If you're using on-demand coretime, ensure you order a block accordingly.  You should see the upgrade being queued.
+=== "PolkadotJS UI"
 
-3. Call `system.applyAuthorizedUpgrade` and upload your *compressed* (i.e., `educhain_runtime.compressed.wasm`) WASM blob.  *Be sure to also order coretime if needed!*
+    1.  **Authorize:** Call `system.authorizeUpgrade` with your new runtime hash.
+        *   *Note: This is done on the parachain.*
+    2.  **Wait:** If using on-demand coretime, order a block to process the transaction. You should see the upgrade queued.
+    3.  **Apply:** Call `system.applyAuthorizedUpgrade` and upload your **compressed** WASM blob (`educhain_runtime.compressed.wasm`).
+        *   *Don't forget to order coretime if needed!*
 
-## Upgrade Via Substrate Frontend
+=== "Substrate Frontend"
 
-> **⚠️ You will need to [clone a modified version of the template](https://github.com/CrackTheCode016/substrate-front-end-template) in order to perform this upgrade!**
-> **Change `src/config/development.json` to feature your node as well!**
+    !!! warning "Prerequisites"
+        *   Clone the [modified frontend template](https://github.com/CrackTheCode016/substrate-front-end-template).
+        *   Update `src/config/development.json` with your node details.
 
-This requires a few more steps, but you could also use the frontend template's upgrade function.  Remember to still use the pallet interactor to authorize the upgrade.
+    You can use the frontend template's upgrade function, but remember to still use the pallet interactor to **authorize** the upgrade first.
 

@@ -1,45 +1,98 @@
-@font-face {
-  font-family: "Unbounded";
-  src: url("../fonts/Unbounded-Variable.woff2") format("woff2-variations");
-  font-weight: 100 900;
+/* ==========================================================================
+   Hacker Theme Overrides
+   ========================================================================== */
+
+:root {
+  --md-text-font: "Space Grotesk", sans-serif;
+  --md-code-font: "Space Mono", monospace;
 }
 
-body {
-  font-family: var(--sansFontFamily);
+/* Force black background for Slate theme */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #000000;
+  --md-bg-color: #000000;
+  --md-code-bg-color: #121212;
+  --md-admonition-bg-color: #121212;
+  --md-footer-bg-color: #000000;
+  --md-footer-bg-color--dark: #000000;
+}
+
+/* Make the header transparent/black */
+.md-header {
+  background-color: #000000 !important;
+  border-bottom: 1px solid #333;
+}
+
+.md-tabs {
+  background-color: #000000 !important;
+  border-bottom: 1px solid #333;
+}
+
+/* Typography tweaks */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+h1 {
+  border-bottom: 2px solid var(--md-accent-fg-color);
+  display: inline-block;
+  padding-bottom: 0.2em;
+}
+
+/* Code block styling */
+.md-typeset pre > code {
+  border: 1px solid #333;
+  border-radius: 0;
+}
+
+/* Button styling */
+.md-button {
+  border-radius: 0;
+  border: 1px solid var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color);
+  background: transparent;
+  font-family: var(--md-code-font);
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.md-button:hover {
+  background: var(--md-accent-fg-color);
+  color: #000000;
+}
+
+.md-button--primary {
+  background: var(--md-accent-fg-color);
+  color: #000000;
+}
+
+.md-button--primary:hover {
+  background: transparent;
+  color: var(--md-accent-fg-color);
+}
+
+/* Navigation tweaks */
+.md-nav__link--active {
+  font-weight: bold;
+  color: var(--md-accent-fg-color) !important;
 }
 
 .wy-side-nav-search {
-  background-color: #E6007A;
+  background-color: #000000;
 }
+
 .wy-menu-vertical a:active {
-  background-color: #E6007A;
-}
-
-/* ==========================================================================
-   Typography
-   ========================================================================== */
-
-h1 {
-  /* 
-    custom font-family needs to be once assigned directly to class from font-face definition
-    otherwise it will be omitted in the css bundle by webpack
-  */
-  font-family: "Unbounded", sans-serif !important;
-  line-height: 1.333333;
-  padding-top: 1.2rem;
+  background-color: var(--md-accent-fg-color);
+  color: #000000;
 }
 
 .wy-side-nav-search input {
-  border-radius: 4px !important;
-  border: none;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--sansFontFamily);
+  border-radius: 0 !important;
+  border: 1px solid #333;
+  background: #000000;
+  color: #ffffff;
 }
 
 .h1,

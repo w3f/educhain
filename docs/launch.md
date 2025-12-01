@@ -1,49 +1,62 @@
 # Launching on Paseo
 
-EduChain is modelled after the [Polkadot SDK Parachain Template](https://github.com/paritytech/polkadot-sdk-parachain-template). It is a ecosystem-standard template maintained by Parity and includes the necessary configuration to deploy to a relay chain.
+EduChain is modeled after the [Polkadot SDK Parachain Template](https://github.com/paritytech/polkadot-sdk-parachain-template). It is an ecosystem-standard template maintained by Parity and includes the necessary configuration to deploy to a relay chain.
 
-The [Polkadot Developer Documentation offers an end-to-end tutorial](https://docs.polkadot.com/tutorials/polkadot-sdk/parachains/zero-to-hero/) for developing and launching a parachain on the [Paseo Testnet](https://github.com/paseo-network).
+!!! tip "Zero to Hero"
+    The [Polkadot Developer Documentation offers an end-to-end tutorial](https://docs.polkadot.com/tutorials/polkadot-sdk/parachains/zero-to-hero/) for developing and launching a parachain on the [Paseo Testnet](https://github.com/paseo-network).
 
 ## Personalize Template
 
-In a single shot, you can (almost) rebrand the runtime template to your own project by replacing 
-the occurrences of `parachain-runtime` and `parachain_runtime` with your project name.
+You can rebrand the runtime template to your own project by replacing occurrences of `parachain-runtime` and `parachain_runtime` with your project name.
 
-You may also add, remove, or create new pallets and add them to the runtime.  Adding new pallets involves correctly configuring their associated types in [`runtime/src/configs/lib.rs`](https://github.com/w3f/educhain/blob/main/runtime/src/configs/mod.rs), then adding the pallet as part of the runtime in the [`#[frame_support::runtime]`](https://github.com/w3f/educhain/blob/main/runtime/src/lib.rs#L245) macro, added in the following manner: 
+### Adding Pallets
+
+You can add, remove, or create new pallets. Adding new pallets involves:
+
+1.  Configuring their associated types in [`runtime/src/configs/mod.rs`](https://github.com/w3f/educhain/blob/main/runtime/src/configs/mod.rs).
+2.  Adding the pallet to the runtime in the [`#[frame_support::runtime]`](https://github.com/w3f/educhain/blob/main/runtime/src/lib.rs#L245) macro:
 
 ```rust
 #[runtime::pallet_index(0)]
 pub type System = frame_system;
 ```
 
-You can view more about [how pallets work](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html#pallets) in the Polkadot SDK Rust docs.
+For more details, see [how pallets work](https://paritytech.github.io/polkadot-sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html#pallets) in the Polkadot SDK docs.
 
 ## Generating Build Artifacts
 
 ### Genesis Configuration
 
-The genesis config can be used to also configure the initial state of your pallets.  For more information on the genesis config, [see these Polkadot SDK docs.](https://docs.polkadot.com/develop/parachains/intro-polkadot-sdk/#frame) For generating a chain spec, you can either view our process here or refer to the [chain spec builder docs.](https://docs.polkadot.com/develop/parachains/deployment/generate-chain-specs/).
+The genesis config sets the initial state of your pallets. See the [Polkadot SDK docs](https://docs.polkadot.com/develop/parachains/intro-polkadot-sdk/#frame) for more info.
 
-It is common that most of the tutorials and templates use Alice or Bob keys for the root, collator and session keys. It is obvious that these should be replaced by custom keys. It is recommended that you use an account created on a cold wallet for the root account. 
+!!! warning "Security Notice"
+    Most tutorials use Alice or Bob keys for root, collator, and session keys. **Always replace these with custom keys for production.**
+    
+    *   **Root Account:** Use a cold wallet.
+    *   **Collator Key:** Use a cold wallet.
+    *   **Session Key:** Can be generated from a hot wallet (rotated often).
 
-It is also important for the collator key and its session key to be different. The collator key is recommended to be created on a cold wallet and the session key can be generated from a hot wallet, as you need to enter its seed/private key into the collator's key store to start producing blocks. The session keys are rotated often for this reason.
+### Streamlining with pop! CLI
 
-### Streamlining the process with pop! CLI
-
-For an all-inclusive solution, you may also use [pop! CLI](https://github.com/r0gue-io/pop-cli), which takes care of [deployment](https://learn.onpop.io/chains/guides/launch-a-chain), [local networks](https://learn.onpop.io/chains/guides/launch-a-chain/running-your-parachain) and [runtime upgrades](https://learn.onpop.io/chains/guides/test-runtime-upgrades), [generating chain specifications, WASM, and genesis state](https://learn.onpop.io/chains/guides/launch-a-chain/launch-a-chain-to-paseo#generate-the-chain-spec) in one tool.
+For an all-inclusive solution, use [pop! CLI](https://github.com/r0gue-io/pop-cli). It handles:
+*   [Deployment](https://learn.onpop.io/chains/guides/launch-a-chain)
+*   [Local networks](https://learn.onpop.io/chains/guides/launch-a-chain/running-your-parachain)
+*   [Runtime upgrades](https://learn.onpop.io/chains/guides/test-runtime-upgrades)
+*   [Generating chain specifications, WASM, and genesis state](https://learn.onpop.io/chains/guides/launch-a-chain/launch-a-chain-to-paseo#generate-the-chain-spec)
 
 ## Collator Node Setup 
 
-You can spin up a collator on your local machine or on a cloud instance of your choice. Educhain node runs as 
-a [Digital Ocean droplet](https://www.digitalocean.com/pricing/droplets). 
+You can spin up a collator on your local machine or a cloud instance. Educhain nodes run as [Digital Ocean droplets](https://www.digitalocean.com/pricing/droplets).
 
-If you like to interact with your collator through the [Polkadot JS UI](https://polkadot.js.org/), the connection needs to be secured via SSL. This requires securing a domain (such as web3educhain.xyz) and then setting up SSL to access your server instance for the RPC address to be able to interact with it using Polkadot JS UI. Securing via SSL requires a proxy setup for the RPC interfaces of your node.
+To interact with your collator via [Polkadot JS UI](https://polkadot.js.org/), you need a secure connection (SSL). This requires:
+1.  A domain (e.g., `web3educhain.xyz`).
+2.  SSL setup with a proxy for the RPC interfaces.
 
-See [the collator section](./collator.md) to learn more about collator node setup and launch.
+[See the Collator Setup Guide](./collator.md){ .md-button }
 
 ## Local Development
 
-To run and test Educhain locally, `pop-cli` can be used (install it [here](https://github.com/r0gue-io/pop-cli)).  Once installed, you can customize the Zombienet configuration included. This will spawn a relay chain node and parachain collator nodes, which can be accessed through Polkadot JS UI:
+To run and test Educhain locally, use `pop-cli`. You can customize the included Zombienet configuration to spawn a relay chain node and parachain collator nodes:
 
 ```sh
 pop up network -f ./pop-paseo-testnet-toml

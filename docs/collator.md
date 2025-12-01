@@ -1,67 +1,83 @@
 
 # Collator Setup
 
-A collator is a node that collates the transactions on the parachain network into blocks and sends them for validation to the relay chain network. Hence, parachain transactions achieve finality when the parablock is validated, and their Proof of Validity is finalized on the relay chain. Hence, the security assumptions of the collator node are minimal as the transaction validity checks happen on the relay chain. A parachain can work fine with a single or small collator set. If you plan to decentralize the parachain network, the network needs just one honest collator to avoid the problem of transaction censorship.
+A collator is a node that collates transactions on the parachain network into blocks and sends them to the relay chain for validation. Finality is achieved when the parablock is validated and its Proof of Validity is finalized on the relay chain.
 
-Typically, a large decentralized parachain network would have a large set of collators, dedicated parachain nodes (often acting as bootnodes), and a set of RPC nodes *separately*.
+Because transaction validity checks happen on the relay chain, collator security assumptions are minimal. A parachain can function with a single honest collator to avoid censorship.
 
-> **For testing, it is possible to allow for a single collator to provide RPC capabilities. In production, setting up your collators and RPCs on separate machines with proper load balancing and security is recommended.**
+!!! info "Network Topology"
+    A large decentralized parachain network typically consists of:
+    
+    *   **Collators:** Produce blocks.
+    *   **Bootnodes:** Dedicated nodes for network discovery.
+    *   **RPC Nodes:** Handle external API requests (separate from collators).
 
-If you wish to connect an RPC Node through its IP address, then the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template) can be used, as it allows for insecure WebSocket connections. For using Polkadot JS UI to access an RPC node on a remote machine, you will need a [secure WebSocket connection](#setting-up-ssl-and-nginx-proxy). For an RPC node instance a local machine, both UIs work seamlessly. 
+!!! warning "Production Advice"
+    For testing, a single node can act as both collator and RPC. **In production, separate these roles.** Use distinct machines with proper load balancing and security.
+
+## Connecting to your Node
+
+*   **Insecure WebSocket:** If connecting via IP, use the [Substrate frontend template](https://github.com/substrate-developer-hub/substrate-front-end-template).
+*   **Secure WebSocket (WSS):** Required for [Polkadot JS UI](https://polkadot.js.org/) on remote machines. This needs [SSL setup](#setting-up-ssl-and-nginx-proxy).
+*   **Localhost:** Both UIs work seamlessly.
 
 ## The Collator Selection Pallet
 
-Assuming you plan on using the [`collator-selection`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet (which is typically the default in most of the templates, and it is also what Educhain uses), there are two terms you need to be familiar with: 
+Educhain uses the [`collator-selection`](https://paritytech.github.io/polkadot-sdk/master/pallet_collator_selection/index.html) pallet. Key terms:
 
-- **Candidates** - Accounts that have registered for becoming collators typically by bonding a deposit. These accounts receive authorization to collate if they meet the requirements set by the network. This ensures a permissionless way of registering to becoming a collator.
-- **Invulnerables** - Accounts that are *guaranteed* to participate in block production, irrespective of the bonding requirements. If the collator selection mechanism is Aura, they will participate in block production round-robin style.
+*   **Candidates:** Accounts that register to become collators (usually by bonding tokens). This is permissionless.
+*   **Invulnerables:** Accounts *guaranteed* to participate in block production (e.g., bootnodes). They are added/removed via governance (sudo/root).
 
-Candidates can add or remove themselves from collation on a live network. **Invulnerables**, however, can only be added or removed through an account with sudo or root privileges. They are also usually specified in the chain spec as the "bootnodes".  It is wise to add at least one collator in your chain_spec - and one that you can start easily. That way you can always gurantee a collator that can produce blocks.
+!!! tip "Chain Spec Tip"
+    Add at least one **Invulnerable** collator in your `chain_spec` that you can start easily. This guarantees block production from genesis.
 
 ## Node Roles & Resources
 
-For simplicity, EduChain runs a single node with multiple roles (as an RPC node *and* collator). However, for robustness, it is recommended that you split the network operations into several instances of nodes, i.e., a separate VPS/instance for an RPC and collator node.
+EduChain runs a single node with multiple roles (RPC + Collator) for simplicity. For robustness, split these:
 
-For more information and details about different roles, refer to the [Parity DevOps Guide.](https://paritytech.github.io/devops-guide/deployments/roles.html)
+*   **RPC Node:** Handles user queries.
+*   **Collator Node:** Produces blocks.
 
-## Setting up collators in the chain spec
+Refer to the [Parity DevOps Guide](https://paritytech.github.io/devops-guide/deployments/roles.html) for details.
 
-If you are using the parachain template, you can configure a [patch file](https://github.com/w3f/educhain/blob/main/educhain.patch.json) to generate a chain specification, wherein you can setup:
+## Setting up Collators in Chain Spec
 
-- The initial *public* session key(s).
-- The collator(s) public keys which are used for setting its identity and a destination for rewards (if any).
+If using the parachain template, configure a [patch file](https://github.com/w3f/educhain/blob/main/educhain.patch.json) to set:
 
-As an example, EduChain sets **two** initial collator and session public keys for Aura, allowing the chain to hit the ground running with two collators which are not running with Bob or Alice keys:
+1.  Initial *public* session key(s).
+2.  Collator public keys (identity and reward destination).
+
+Example configuration for two initial collators:
 
 ```json
 // Collator accounts that produce blocks and earn rewards.
 "collatorSelection": {
     "candidacyBond": 16000000000,
     "invulnerables": [
-    "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
-    "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi"
+        "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+        "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi"
     ]
 },
 
-// Note: The private key of these session keys needs to be inserted into the collator node for it to start producing blocks.
+// Note: The private key of these session keys needs to be inserted into the collator node.
 "session": {
     "keys": [
-    [
-        "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
-        "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
-        {
-        "aura": "5Ck7qhcDuEScRc4Sg1MXYkA8HW8cx8EdaxoW7cva5sGrTWQZ"
-        }
-    ],
-    [
-        "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
-        "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
-        {
-        "aura": "5CkZxLvH2UjBtWLoddGaavPVAv88o1Cww1aWa8UPz9Sw4iyv"
-        }
+        [
+            "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+            "5DLxwPqG2EsY93P6ii3LY1nsT59kSccZK7LJN7Vsv6DGt6Tg",
+            {
+                "aura": "5Ck7qhcDuEScRc4Sg1MXYkA8HW8cx8EdaxoW7cva5sGrTWQZ"
+            }
+        ],
+        [
+            "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+            "5DAPBz3PHJnVDFmLs67TL91NxCWZ6yyUBddgBGQgFYYxpGBi",
+            {
+                "aura": "5CkZxLvH2UjBtWLoddGaavPVAv88o1Cww1aWa8UPz9Sw4iyv"
+            }
+        ]
     ]
-    ]
-},
+}
 ```
 
 You may notice that the collator and aura/session keys are different. For security reasons, the collator key should be stored in a secure location, i.e., a hardware wallet. The session key can change, and is effectively linked to the invulnerable key.
