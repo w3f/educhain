@@ -14,6 +14,8 @@
 Parachain developed and maintained by Technical Education team at Web3 Foundation. To be used for creating
 tutorials on a wide range of [Polkadot SDK](https://github.com/paritytech/polkadot-sdk) enabled features.
 
+📚 **[View the full documentation at web3educhain.xyz](https://web3educhain.xyz/)**
+
 ## Getting Started
 
 * 🦀 The repository is using the Rust language.
@@ -39,39 +41,32 @@ docker build . -t polkadot-sdk-parachain-template
 ```
 
 
-### Generate Chain Artifacts
+### Building Chain Specifications
 
-We provide two scripts for generating chain specifications:
+Generate chain specifications using `chain-spec-builder` and `polkadot-omni-node`.
 
-#### Development Chain Spec
+**Quick Start:**
 
-Use `deploy/gen_base_chain_dev_spec.sh` to generate a development chain specification for local testing:
+```bash
+# Development with funded accounts (no need for reserve transfers)
+./scripts/build-chain-spec.sh dev with-balances
 
-```sh
-./deploy/gen_base_chain_dev_spec.sh
+# Production with educhain.patch.json
+./scripts/build-chain-spec.sh live
 ```
 
-This script builds the project and generates a development chain spec with basic parameters suitable for local testing environments. The output file will be placed in `./artifacts/dev/dev_plain_balances.json`.
+**Outputs** (in `./artifacts`):
 
-When using the development chain spec, you typically don't need to modify it manually, as it comes preconfigured with development defaults.
+- `dev_plain_balances.json` - Dev spec with pre-funded accounts
+- `latest_plain_chain_spec.json` - Production plain spec
+- `latest_raw_chain_spec.json` - Production raw spec
+- `para-genesis-state`, `para-genesis-wasm` - Genesis artifacts for relay registration
 
-#### Production Chain Spec
+#### Chain Spec Metadata
 
-Use `deploy/gen_base_chain_spec.sh` to generate a production-ready chain specification:
+The `educhain.patch.json` file contains production configuration for Paseo testnet (ParaID 4883).
 
-```sh
-# Generate plain chain spec
-./deploy/gen_base_chain_spec.sh
-
-# Generate raw chain spec (must run the plain version first)
-./deploy/gen_base_chain_spec.sh raw
-```
-
-This script generates a more configurable chain spec that applies patches from `educhain.patch.json`. The output file will be placed in `./artifacts/latest_plain_chain_spec.json`. When run with the `raw` parameter, it converts the plain chain spec to a raw format suitable for validators.
-
-After generating the chain spec, you may need to modify certain metadata fields to match your deployment requirements:
-
-**For production (live) networks**, ensure the chain spec includes the following metadata:
+**For production (live) networks:**
 
 ```json
 {
@@ -86,12 +81,11 @@ After generating the chain spec, you may need to modify certain metadata fields 
   "properties": {
     "tokenDecimals": 10,
     "tokenSymbol": "PAS"
-  },
-  // ...remaining configuration...
+  }
 }
 ```
 
-**For local testing networks**, modify the metadata to reflect local settings:
+**For local testing networks:**
 
 ```json
 {
@@ -106,20 +100,25 @@ After generating the chain spec, you may need to modify certain metadata fields 
   "properties": {
     "tokenDecimals": 10,
     "tokenSymbol": "PAS"
-  },
-  // ...remaining configuration...
+  }
 }
 ```
 
-If you make runtime changes and want to generate a new chainspec, first run the appropriate script, then manually verify and edit these metadata fields to ensure they match your deployment target.
+For detailed instructions, see [Building Chain Specs](./docs/build-chain-spec.md).
 
-### Local Development Chain
+### Local Testing
 
-This project uses [pop! CLI](https://github.com/r0gue-io/pop-cli) to run a complete local setup:
+Test locally using pop CLI:
 
 ```sh
-pop up network pop-paseo-testnet-toml
+# Using development chain spec (with pre-funded accounts)
+pop up network -f ./pop-paseo-testnet-dev-toml
+
+# Using production chain spec
+pop up network -f ./pop-paseo-testnet-toml
 ```
+
+See [Using pop CLI](./docs/pop-cli.md) for more details.
 
 ### Example Clients / Solutions
 
@@ -156,6 +155,8 @@ available on [IPFS](https://dotapps.io/).
 [Code of Conduct](https://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CODE_OF_CONDUCT.md).
 
 ## Getting Help
+
+* 📚 **[EduChain Documentation](https://web3educhain.xyz/)** - Complete guides and tutorials
 
 * 🧑‍🏫 To learn about Polkadot in general, [Polkadot.network](https://polkadot.network/) website is a good starting point.
 

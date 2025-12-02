@@ -17,3 +17,7 @@ ENV/
 env.bak/
 venv.bak/
 makeablock/
+
+# Artifacts - exclude genesis state and wasm from tracking
+artifacts/para-genesis-state
+artifacts/para-genesis-wasm

@@ -54,6 +54,8 @@ nav:
   - Home: index.md
   - Getting Started:
     - Installation: install.md
+    - Building Chain Specs: build-chain-spec.md
+    - Using pop CLI: pop-cli.md
     - Launch Your Chain: launch.md
   - Operations:
     - Collator Setup: collator.md
