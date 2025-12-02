@@ -36,13 +36,17 @@ The genesis config sets the initial state of your pallets. See the [Polkadot SDK
     *   **Collator Key:** Use a cold wallet.
     *   **Session Key:** Can be generated from a hot wallet (rotated often).
 
-### Streamlining with pop! CLI
+### Local Development with pop CLI
 
-For an all-inclusive solution, use [pop! CLI](https://github.com/r0gue-io/pop-cli). It handles:
-*   [Deployment](https://learn.onpop.io/chains/guides/launch-a-chain)
-*   [Local networks](https://learn.onpop.io/chains/guides/launch-a-chain/running-your-parachain)
-*   [Runtime upgrades](https://learn.onpop.io/chains/guides/test-runtime-upgrades)
-*   [Generating chain specifications, WASM, and genesis state](https://learn.onpop.io/chains/guides/launch-a-chain/launch-a-chain-to-paseo#generate-the-chain-spec)
+Use [pop CLI](./pop-cli.md) to test your parachain locally.
+
+Launch a local testnet:
+
+```sh
+pop up network -f ./pop-paseo-testnet-toml
+```
+
+This spawns a local Paseo relay chain and your parachain for testing.
 
 ## Collator Node Setup 
 
@@ -54,13 +58,15 @@ To interact with your collator via [Polkadot JS UI](https://polkadot.js.org/), y
 
 [See the Collator Setup Guide](./collator.md){ .md-button }
 
-## Local Development
+## Local Testing
 
-To run and test Educhain locally, use `pop-cli`. You can customize the included Zombienet configuration to spawn a relay chain node and parachain collator nodes:
+Run EduChain locally using pop CLI with the included Zombienet configuration:
 
 ```sh
 pop up network -f ./pop-paseo-testnet-toml
 ```
+
+This spawns a relay chain node and parachain collator nodes. See [Using pop CLI](./pop-cli.md) for more options.
 
 ## Block Production
 
