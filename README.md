@@ -14,6 +14,8 @@
 Parachain developed and maintained by Technical Education team at Web3 Foundation. To be used for creating
 tutorials on a wide range of [Polkadot SDK](https://github.com/paritytech/polkadot-sdk) enabled features.
 
+📚 **[View the full documentation at web3educhain.xyz](https://web3educhain.xyz/)**
+
 ## Getting Started
 
 * 🦀 The repository is using the Rust language.
@@ -149,6 +151,8 @@ available on [IPFS](https://dotapps.io/).
 [Code of Conduct](https://github.com/paritytech/polkadot-sdk/blob/master/docs/contributor/CODE_OF_CONDUCT.md).
 
 ## Getting Help
+
+* 📚 **[EduChain Documentation](https://web3educhain.xyz/)** - Complete guides and tutorials
 
 * 🧑‍🏫 To learn about Polkadot in general, [Polkadot.network](https://polkadot.network/) website is a good starting point.
 
