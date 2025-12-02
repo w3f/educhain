@@ -201,16 +201,6 @@ The `educhain.patch.json` file contains:
 }
 ```
 
-## Testing Your Chain Spec
-
-Use pop CLI to test your chain spec locally:
-
-```bash
-pop up network -f ./pop-paseo-testnet-toml
-```
-
-This launches a local relay chain and your parachain for testing.
-
 ## Related Resources
 
 - [Using pop CLI](pop-cli.md) - Local testing with pop CLI

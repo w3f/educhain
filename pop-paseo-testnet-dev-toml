@@ -1,0 +1,43 @@
+[relaychain]
+chain = "paseo-local"
+
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+ws_port = 9944
+
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+ws_port = 9955
+
+[[parachains]]
+id = 1000
+chain = "asset-hub-paseo-local"
+
+[[parachains.collators]]
+name = "asset-hub"
+rpc_port = 9933
+args = ["-lxcm=trace,lsystem::events=trace,lruntime=trace"]
+
+[[parachains]]
+id = 4883
+chain_spec_path = "./artifacts/dev_plain_balances.json"
+
+[parachains.collator]
+name = "charlie"
+ws_port = 9988
+rpc_port = 9935
+args = [ "-lparachain=error,xcm=trace"]
+
+[[hrmp_channels]]
+sender = 1000
+recipient = 4883
+max_capacity = 1000
+max_message_size = 5000
+
+[[hrmp_channels]]
+sender = 4883
+recipient = 1000
+max_capacity = 1000
+max_message_size = 8000

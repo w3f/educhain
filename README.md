@@ -111,6 +111,10 @@ For detailed instructions, see [Building Chain Specs](./docs/build-chain-spec.md
 Test locally using pop CLI:
 
 ```sh
+# Using development chain spec (with pre-funded accounts)
+pop up network -f ./pop-paseo-testnet-dev-toml
+
+# Using production chain spec
 pop up network -f ./pop-paseo-testnet-toml
 ```
 
